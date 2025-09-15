@@ -1,8 +1,10 @@
 import torch.nn as nn
 import torch
 
+
 class SimpleSegHead(nn.Module):
     """简单分割头：一层卷积 + 上采样（可选）。"""
+
     def __init__(self, in_channels: int, upsample_to_input: bool = True):
         super().__init__()
         self.conv = nn.Sequential(
@@ -15,5 +17,7 @@ class SimpleSegHead(nn.Module):
     def forward(self, feats, input_size=None):
         x = self.conv(feats)
         if self.upsample and input_size is not None:
-            x = torch.nn.functional.interpolate(x, size=input_size, mode="bilinear", align_corners=False)
+            x = torch.nn.functional.interpolate(
+                x, size=input_size, mode="bilinear", align_corners=False
+            )
         return x

@@ -4,20 +4,28 @@ import torch
 from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
 
+
 class PathologyDataset(Dataset):
     """
     病理切片 Patch 数据集
     - 读取图像 patch、对应 mask 与分类标签
     - 支持 (image, mask) 同步 transform
     """
-    def __init__(self, images_dir: str, masks_dir: str, labels_file: str, transform: Optional[callable]=None):
+
+    def __init__(
+        self,
+        images_dir: str,
+        masks_dir: str,
+        labels_file: str,
+        transform: Optional[callable] = None,
+    ):
         self.images_dir = images_dir
         self.masks_dir = masks_dir
-        with open(labels_file, 'r', encoding='utf-8') as f:
+        with open(labels_file, "r", encoding="utf-8") as f:
             lines = [l.strip() for l in f if l.strip()]
         self.labels_dict = {}
         for line in lines:
-            name, label = line.split(',')
+            name, label = line.split(",")
             self.labels_dict[name] = int(label)
         self.filenames = list(self.labels_dict.keys())
         self.transform = transform
