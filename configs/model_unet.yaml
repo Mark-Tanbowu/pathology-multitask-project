@@ -1,0 +1,4 @@
+# 示例：当你用更强的分割头时的配置（占位）
+model:
+  backbone: resnet34
+  num_classes: 1
