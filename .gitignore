@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+env/
+venv/
+
+# Data
+data/raw/
+data/processed/
+*.dvc
+*.pt
+*.pth
+*.ckpt
+wandb/
+mlruns/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS/IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Hydra
+multirun/
+outputs/

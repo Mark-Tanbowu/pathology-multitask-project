@@ -1,0 +1,30 @@
+# 训练/验证默认配置
+seed: 42
+device: auto        # auto/cpu/cuda
+num_epochs: 5
+batch_size: 8
+num_workers: 2
+lr: 1e-4
+
+data:
+  train_images: data/train/images
+  train_masks:  data/train/masks
+  train_labels: data/train/labels.csv
+  val_images:   data/val/images
+  val_masks:    data/val/masks
+  val_labels:   data/val/labels.csv
+
+model:
+  backbone: resnet18
+  num_classes: 1
+  seg_upsample_to_input: true
+
+loss:
+  seg: bce_with_logits
+  cls: bce_with_logits
+  seg_weight: 1.0
+  cls_weight: 1.0
+
+log:
+  save_dir: outputs
+  save_ckpt: true
