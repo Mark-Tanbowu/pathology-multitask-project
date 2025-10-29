@@ -1,17 +1,22 @@
+hydra:
+  run:
+    dir: .
+
 # 训练/验证默认配置
 seed: 42
-device: auto        # auto/cpu/cuda
-num_epochs: 5
+device: cpu        # auto/cpu/cuda
+num_epochs: 10
 batch_size: 8
-num_workers: 2
+num_workers: 0
+#cpu环境下防止锁死
 lr: 1e-4
 
 data:
-  train_images: data/train/images
-  train_masks:  data/train/masks
+  train_images: data/train/images_fixed
+  train_masks:  data/train/masks_fixed
   train_labels: data/train/labels.csv
-  val_images:   data/val/images
-  val_masks:    data/val/masks
+  val_images:   data/val/images_fixed
+  val_masks:    data/val/masks_fixed
   val_labels:   data/val/labels.csv
 
 model:

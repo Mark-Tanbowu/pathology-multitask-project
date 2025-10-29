@@ -9,7 +9,7 @@ import torch
 from PIL import Image
 
 from src.models.multitask_model import MultiTaskModel
-from src.utils.visualization import save_overlay
+from src.utils.visualizer import save_overlay
 
 
 def main():

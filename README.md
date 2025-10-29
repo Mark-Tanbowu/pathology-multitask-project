@@ -26,59 +26,115 @@ python -m src.engine.infer --image demo/demo_patch.png --mask_out demo/pred_mask
 
 ## 目录结构
 ```text
-📂 pathology-multitask-project/
-├── README.md
-├── requirements.txt
-├── .gitignore
-├── .pre-commit-config.yaml
-├── .github/workflows/ci.yml
-├── configs/
-│   ├── defaults.yaml
-│   └── model_unet.yaml              # 示例：替换更强的分割头
-├── data/
-│   ├── raw/                         # DVC/LFS 管理的大文件（.gitignore）
-│   └── processed/
-├── notebooks/
-│   └── README.md
-├── scripts/
-│   ├── run_train.py
-│   └── run_infer.py
-├── src/
-│   ├── preprocessing/
-│   │   └── wsi_tiling.py
-│   ├── datasets/
-│   │   ├── camelyon_dataset.py
-│   │   └── transforms.py
-│   ├── models/
-│   │   ├── backbone.py
-│   │   ├── segmentation.py
-│   │   ├── classification.py
-│   │   └── multitask_model.py
-│   ├── losses/
+📁 pathology-multitask-project/
+├── 一、项目配置与自动化管理/
+│   ├── README.md                        # 项目总体说明文档：介绍研究背景、使用方式、模型架构与结果展示
+│   ├── requirements.txt                 # Python依赖包清单，列出运行项目所需库（供 pip install 使用）
+│   ├── pyproject.toml                   # Python构建配置文件（兼容Poetry/pip），定义依赖与元信息
+│   ├── .gitignore                       # Git忽略规则，排除模型权重、日志、缓存、临时数据等文件
+│   ├── .pre-commit-config.yaml          # 预提交钩子配置，提交代码前自动执行格式化、Lint检查与测试
+│   │
+│   ├── .github/
+│   │   └── workflows/
+│   │       └── ci.yml                   # GitHub Actions持续集成配置文件，实现自动化测试、构建与代码质量审查
+│   │
+│   ├── .hydra/                          # Hydra运行时生成目录（自动创建）
+│   │   ├── config.yaml                  # 当前运行完整参数快照（保存模型、训练、数据配置）
+│   │   ├── hydra.yaml                   # Hydra自身配置文件，控制输出目录、日志记录等
+│   │   └── overrides.yaml               # 命令行参数覆盖记录，便于实验复现
+│   │
+│   └── configs/                         # Hydra配置模板目录
+│       ├── defaults.yaml                # 默认实验参数配置（模型、路径、优化器、学习率等）
+│       └── model_unet.yaml              # U-Net模型结构配置，用于定义分割网络结构参数
+│
+├── 二、数据与预处理模块/
+│   ├── data/                            # 数据目录
+│   │   ├── raw/                         # 原始数据（未处理WSI切片及掩码）
+│   │   │   ├── .gitkeep                 # 占位文件，保证空目录被Git追踪
+│   │   │   ├── train/
+│   │   │   │   ├── images/              # 原始训练图像
+│   │   │   │   ├── masks/               # 对应像素级掩码
+│   │   │   │   ├── images_fixed/        # 尺寸、颜色或格式修正后的训练图像
+│   │   │   │   ├── masks_fixed/         # 处理后的掩码文件
+│   │   │   │   └── labels.csv           # 训练集标签文件（图像级分类标签）
+│   │   │   └── val/
+│   │   │       ├── images/              # 验证集图像
+│   │   │       ├── masks/               # 验证集掩码
+│   │   │       ├── images_fixed/
+│   │   │       ├── masks_fixed/
+│   │   │       └── labels.csv
+│   │   └── processed/                   # 预处理后数据（如裁剪、归一化）
+│   │       └── .gitkeep
+│   │
+│   └── src/preprocessing/
+│       └── wsi_tiling.py                # Whole Slide Image 切片脚本，将大图切为可训练的tile块
+│
+├── 三、核心模型与算法模块/
+│   ├── src/datasets/                    # 数据加载与增强模块
 │   │   ├── __init__.py
-│   │   ├── dice.py
-│   │   └── combined.py
-│   ├── engine/
-│   │   ├── train.py
-│   │   ├── validate.py
-│   │   └── infer.py
-│   └── utils/
-│       ├── metrics.py
-│       ├── visualization.py
-│       └── misc.py
-├── tests/
-│   └── test_smoke.py
-└── web_demo/
-    └── app.py                       # Streamlit 演示（可选）
-```
+│   │   ├── camelyon_dataset.py          # CAMELYON数据集类，定义图像、掩码与标签的读取逻辑
+│   │   └── transforms.py                # 数据增强函数（旋转、翻转、归一化等）
+│   │
+│   ├── src/models/                      # 模型结构定义
+│   │   ├── __init__.py
+│   │   ├── backbone.py                  # 主干网络（ResNet、MobileNet、EfficientNet等）
+│   │   ├── segmentation.py              # 分割分支（U-Net结构）
+│   │   ├── classification.py            # 分类分支（整图分类输出）
+│   │   └── multitask_model.py           # 多任务联合模型，整合共享编码器与双任务输出
+│   │
+│   ├── src/losses/                      # 损失函数模块
+│   │   ├── __init__.py
+│   │   ├── dice.py                      # Dice损失（用于分割任务，衡量区域重叠度）
+│   │   ├── combined.py                  # 联合损失函数（综合分割与分类任务的加权）
+│   │   └── losses.py                    # 其他损失封装（交叉熵、BCE、Focal Loss等）
+│   │
+│   ├── src/engine/                      # 训练与验证引擎
+│   │   ├── __init__.py
+│   │   ├── train.py                     # 模型训练主循环（前向传播、反向更新、日志记录）
+│   │   ├── validate.py                  # 验证过程（计算IoU、F1等指标）
+│   │   ├── infer.py                     # 模型推理接口，支持单图或批量预测
+│   │   └── train.log                    # 训练引擎日志文件（记录训练进度与性能）
+│   │
+│   ├── src/lightning/                   # 预留的PyTorch Lightning封装（可用于未来模块化训练）
+│   │   └── __init__.py
+│   │
+│   └── src/utils/                       # 通用工具模块
+│       ├── __init__.py
+│       ├── metrics.py                   # 模型评估指标（IoU、Dice、Accuracy、Precision、Recall等）
+│       ├── visualizer.py                # 可视化工具（预测结果叠加显示、训练曲线绘制）
+│       ├── misc.py                      # 杂项工具函数（日志记录、路径管理、配置加载）
+│       └── dice.py                      # 独立Dice指标计算工具，用于快速验证模型输出
+│
+├── 四、训练脚本与实验控制/
+│   ├── scripts/run_train.py             # 模型训练主脚本（整合Hydra配置与训练引擎）
+│   ├── scripts/run_infer.py             # 推理脚本（加载模型并进行预测）
+│   ├── scripts/train.ps1                # Windows PowerShell版本训练启动脚本
+│   └── scripts/train.sh                 # Linux/Mac Shell版本训练启动脚本
+│
+├── 五、训练结果与输出管理/
+│   ├── outputs/checkpoints/             # 模型权重保存目录（如 best.pt、last.pt）
+│   ├── outputs/best.pt                  # 当前最优模型权重文件
+│   ├── outputs/loss_visualization.png   # 训练损失变化曲线图
+│   └── outputs/train.log                # 训练日志文件（记录每轮epoch的loss与指标）
+│
+├── 六、测试与验证模块/
+│   ├── tests/test_dice.py               # 验证Dice损失与指标计算的正确性
+│   └── tests/test_smoke.py              # 冒烟测试：确保核心模块可运行、不崩溃
+│
+├── 七、Web演示与可视化接口/
+│   ├── web_demo/app.py                  # Flask/Gradio前端演示接口，支持图像上传与模型预测展示
+│   └── web_demo/.gitignore              # 忽略Web上传缓存与临时文件
+│
+└── 八、文档与辅助资料/
+    ├── demo/test.png                    # 模型预测示例图片
+    ├── notebooks/README.md              # Jupyter笔记本说明文件，记录实验步骤与结果
+    ├── notebooks/.gitkeep               # 占位文件
+    ├── note.md                          # 研究笔记（模型设计与实验思路）
+    ├── problem.md                       # 过程问题记录与调试总结
+    └── train.log                        # 全局训练日志（模型在不同阶段的性能汇总）
 
-## 关键设计
-- **Trunk-based Development**：main 受保护，短分支 + PR 审核。
-- **数据与权重**：建议使用 DVC/云端远端；仓库仅保存指针与小样本。
-- **配置管理**：Hydra YAML；`configs/defaults.yaml` 可一键切参。
-- **可替换组件**：`models/` 下可自由替换骨干与分割/分类头。
-- **评估与可视化**：`utils/` 提供 Dice、AUC、叠加可视化等工具。
-- **CI**：GitHub Actions 进行 lint/测试/快速推理检查。
+
+```
 
 ## 免责声明
 本模板用于科研教学参考；在真实临床场景前，必须进行充分验证与伦理审查。

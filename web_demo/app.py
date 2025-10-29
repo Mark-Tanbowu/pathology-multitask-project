@@ -4,7 +4,7 @@ import torch
 from PIL import Image
 
 from src.models.multitask_model import MultiTaskModel
-from src.utils.visualization import overlay_mask
+from src.utils.visualizer import overlay_mask
 
 st.set_page_config(page_title="Pathology Multitask Demo", layout="wide")
 st.title("病理多任务演示：分割 + 分类")

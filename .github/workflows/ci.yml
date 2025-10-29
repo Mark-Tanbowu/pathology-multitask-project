@@ -1,29 +1,83 @@
-name: CI
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+# ↑ 让 VS Code 识别 GitHub Actions 语法，消除“未解析的操作/参数引用”警告
+
+name: CI Pipeline  # 工作流名称，出现在 GitHub Actions 界面上
 
 on:
-  push:
+  push:            # 当有 push 或 PR 时触发
   pull_request:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build:           # 主 Job 名称（可改为 lint-test-train 等更语义化的名字）
+    runs-on: ubuntu-latest  # 运行环境，可改为 windows-latest 测试兼容性
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      # -----------------------------------------------------
+      # 🧱 1️⃣ 检出仓库代码
+      # -----------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # -----------------------------------------------------
+      # 🐍 2️⃣ 设置 Python 环境并启用 pip 缓存
+      # cache: 'pip' 会根据 requirements.txt 哈希值缓存依赖包
+      # -----------------------------------------------------
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - name: Install deps
+          cache: 'pip'
+
+      # -----------------------------------------------------
+      # 📦 3️⃣ 安装项目依赖
+      # pip 缓存会使这一部分显著提速
+      # -----------------------------------------------------
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Lint
-        run: |
-          black --check .
-          isort --check-only .
-          ruff check .
-      - name: Tests
+
+      # -----------------------------------------------------
+      # 🔍 4️⃣ 运行 pre-commit（统一代码风格检查）
+      # 会自动执行 black, isort, ruff, mypy 等钩子
+      # -----------------------------------------------------
+      - name: Run pre-commit hooks
+        uses: pre-commit/action@v3.0.1
+
+      # -----------------------------------------------------
+      # 🧪 5️⃣ 运行单元测试
+      # pytest -q 模式静默输出，只显示简洁结果
+      # -----------------------------------------------------
+      - name: Run tests
         run: |
           python -m pytest -q
+
+      # -----------------------------------------------------
+      # 🚀 6️⃣ 冒烟推理（快速验证推理脚本是否能运行）
+      # 这一步不需要 GPU，仅 dry_run 测试加载逻辑
+      # -----------------------------------------------------
       - name: Smoke inference
         run: |
           python -m src.engine.infer --dry_run 1
+
+      # -----------------------------------------------------
+      # 🔥 7️⃣ 冒烟训练（1 epoch 的快速训练）
+      # 通过 Hydra 参数覆盖设置短训练，验证模型能跑通
+      # -----------------------------------------------------
+      - name: Smoke train (1 epoch sanity check)
+        run: |
+          python -m src.engine.train num_epochs=1 batch_size=2 num_workers=0 device=cpu
+
+      # -----------------------------------------------------
+      # 📤 8️⃣ 上传日志与 Hydra 配置文件作为构建产物
+      # 便于调试、复现实验环境
+      # -----------------------------------------------------
+      - name: Upload logs and configs
+        if: always()   # 即使前面步骤失败也会执行
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-outputs
+          path: |
+            outputs/**/*.log
+            outputs/**/.hydra/*
+            outputs/**/metrics.json
