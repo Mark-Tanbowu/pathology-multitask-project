@@ -34,4 +34,4 @@ mypy>=1.8
 
 # 测试
 pytest>=8.0
-PyYAML~=6.0.1
+PyYAML>=6.0.1
