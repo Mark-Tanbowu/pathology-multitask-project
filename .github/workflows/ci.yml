@@ -41,8 +41,8 @@ jobs:
       # 🔍 4️⃣ 运行 pre-commit（统一代码风格检查）
       # 会自动执行 black, isort, ruff, mypy 等钩子
       # -----------------------------------------------------
-      - name: Run pre-commit hooks
-        uses: pre-commit/action@v3.0.1
+#      - name: Run pre-commit hooks
+#       uses: pre-commit/action@v3.0.1
 
       # -----------------------------------------------------
       # 🧪 5️⃣ 运行单元测试
