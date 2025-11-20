@@ -16,13 +16,23 @@ pip install -r requirements.txt
 # data/val/images/*.png,   data/val/masks/*_mask.png,   data/val/labels.csv
 
 # 4) 训练（Hydra 配置）
-python -m src.engine.train
+python -m src.engine.train  # 默认使用 Dummy 数据快速冒烟
 
 # 5) 推理
 python -m src.engine.infer --image demo/demo_patch.png --mask_out demo/pred_mask.png --overlay_out demo/overlay.png
 ```
 
 > **提示**：如果你在 Windows 且没有 GPU，可在本地做小样本验证；正式训练建议使用 Colab/Kaggle/远端服务器。
+
+### 关于 Dummy 数据与真实数据
+- 默认配置 (`configs/defaults.yaml`) 会启用 `data.use_dummy=true`，生成随机图像/掩膜/标签完成端到端跑通。
+- 当你准备好 CAMELYON16/17 等数据时，将 `use_dummy` 设为 `false` 并填好对应路径即可。
+
+### 可选增强模块
+- `optional_modules/lightweight_backbones/`: MobileNet/EfficientNet 编码器示例，便于构建轻量模型。
+- `optional_modules/attention_modules/`: SE/CBAM 注意力模块，示例说明如何在新文件中组合使用。
+- `optional_modules/dynamic_loss/`: GradNorm/DWA 动态权重算法，可在自定义训练脚本中调用。
+> 这些模块**不会改动 baseline 源码**，仅通过继承/组合方式演示接入。
 
 ## 目录结构
 ```text

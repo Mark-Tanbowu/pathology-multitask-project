@@ -1,23 +1,25 @@
-"""
-分类头的作用 把编码器的卷积特征图转化为类别logits 全局池化-展平-全连接
-输入的时来自backbone的feats，形状(N,C,H,W)    输出分类logits 形状(N,num_classes)
+"""多任务病理模型的分类头。
+
+- 复用编码器最高层特征，避免额外计算；
+- 通过全局平均池化将特征压缩为 1×1，强调整体形态信息；
+- 末端线性层兼容二分类/多分类，保持接口统一。
 """
 
+from __future__ import annotations
 
+import torch
 import torch.nn as nn
 
 
-class SimpleClsHead(nn.Module):
-    """简单分类头：全局池化 + 全连接。"""
+class ClassificationHead(nn.Module):
+    def __init__(self, in_channels: int, num_classes: int = 1, dropout: float = 0.0):
+        super().__init__()
+        # 结构：全局池化 → 展平 → （可选 Dropout）→ 全连接
+        layers = [nn.AdaptiveAvgPool2d((1, 1)), nn.Flatten()]
+        if dropout > 0:
+            layers.append(nn.Dropout(dropout))
+        layers.append(nn.Linear(in_channels, num_classes))
+        self.head = nn.Sequential(*layers)
 
-    def __init__(self, in_channels: int, num_classes: int = 1):
-        #in_channels 输入通道数 一定要和backbone部分的输出通道一致。 num_classes：分类数默认为1，便于二分类
-        super().__init__()#初始化父类，注册子模块以及缓冲区
-        self.head = nn.Sequential(#用nn.Sequential串起三步前向算子
-            nn.AdaptiveAvgPool2d((1, 1)),#自适应全局平均池化 把所有H,W转化为1,1 例如(N,C,H,W)转化为(N,C,1,1)
-            nn.Flatten(),#展平成二维(N,C)为全连接层做准备
-            nn.Linear(in_channels, num_classes),
-        )
-
-    def forward(self, feats):#前向传播递给上述内容展开 期望 feats 的形状为 (N, in_channels, H, W)；返回 (N, num_classes)。
+    def forward(self, feats: torch.Tensor) -> torch.Tensor:
         return self.head(feats)
