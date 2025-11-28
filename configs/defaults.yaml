@@ -1,34 +1,39 @@
 hydra:
   run:
-    dir: .
+    dir: ./outputs/${now:%Y%m%d_%H%M%S}
 
-# 训练/验证默认配置
 seed: 42
-device: cpu        # auto/cpu/cuda
-num_epochs: 10
-batch_size: 8
+device: cpu
+num_epochs: 2
+batch_size: 2
 num_workers: 0
-#cpu环境下防止锁死
-lr: 1e-4
+lr: 1e-3
 
 data:
+  use_dummy: true
+  dummy:
+    train_samples: 8
+    val_samples: 4
+    image_size: 128
   train_images: data/train/images_fixed
-  train_masks:  data/train/masks_fixed
+  train_masks: data/train/masks_fixed
   train_labels: data/train/labels.csv
-  val_images:   data/val/images_fixed
-  val_masks:    data/val/masks_fixed
-  val_labels:   data/val/labels.csv
+  val_images: data/val/images_fixed
+  val_masks: data/val/masks_fixed
+  val_labels: data/val/labels.csv
 
 model:
   backbone: resnet18
   num_classes: 1
   seg_upsample_to_input: true
+  pretrained: false
 
 loss:
   seg: bce_with_logits
-  cls: bce_with_logits
+  cls: bce
   seg_weight: 1.0
   cls_weight: 1.0
+  dice_weight: 0.5
 
 log:
   save_dir: outputs

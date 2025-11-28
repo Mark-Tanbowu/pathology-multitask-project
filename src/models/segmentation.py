@@ -1,31 +1,72 @@
-"""
-把特征图变回为图像，并且预测每个像素属于目标的概率
+"""U-Net 风格的分割解码器模块。
+
+- 适配 ResNet 编码器输出的多尺度特征；
+- 采用逐级上采样 + skip connection 还原空间信息；
+- 头部输出单通道 logits，可直接接 `BCEWithLogitsLoss` 或 Dice；
+- 目的：在保持结构最小化的同时确保端到端可运行，便于后续替换为更复杂的解码器。
 """
 
+from __future__ import annotations
+
+from typing import List
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 
-class SimpleSegHead(nn.Module):
-    """简单分割头：一层卷积 + 上采样（可选）。"""
-#卷积特征＋预测mask+根据需要上采样回输入尺寸
-    def __init__(self, in_channels: int, upsample_to_input: bool = True):
-    #in_channels：来自backbone部分的通道数 upsample_to_input：是否上采样会输入原图像大小
+class ConvBlock(nn.Module):
+    def __init__(self, in_ch: int, out_ch: int):
         super().__init__()
-        self.conv = nn.Sequential(
-            nn.Conv2d(in_channels, 256, kernel_size=3, padding=1),#3×3卷积融合语义信息
-            nn.ReLU(inplace=True),#激活非线性
-            nn.Conv2d(256, 1, kernel_size=1),#1×1降卷积通道到1 输出mask logits
-        )#输出1通道 代表二分类情况，如果多分类的话改为num_classes
-        self.upsample = upsample_to_input
-#记录是否需要上采样
-#前向传播函数
-    def forward(self, feats, input_size=None):
-        x = self.conv(feats)
-        if self.upsample and input_size is not None:
-            x = torch.nn.functional.interpolate(
-                x, size=input_size, mode="bilinear", align_corners=False
-            )
-        return x
+        # 经典的 Conv-BN-ReLU ×2 结构，兼顾稳定性与表达能力
+        self.block = nn.Sequential(
+            nn.Conv2d(in_ch, out_ch, kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(out_ch),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_ch, out_ch, kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(out_ch),
+            nn.ReLU(inplace=True),
+        )
 
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.block(x)
+
+
+class UpBlock(nn.Module):
+    def __init__(self, in_ch: int, skip_ch: int, out_ch: int):
+        super().__init__()
+        # 解码阶段：上采样后的特征与对应 skip 拼接，再做卷积融合
+        self.conv = ConvBlock(in_ch + skip_ch, out_ch)
+
+    def forward(self, x: torch.Tensor, skip: torch.Tensor) -> torch.Tensor:
+        x = F.interpolate(x, size=skip.shape[2:], mode="bilinear", align_corners=False)
+        x = torch.cat([x, skip], dim=1)
+        return self.conv(x)
+
+
+class UNetDecoder(nn.Module):
+    """最小化实现的 U-Net 解码器，直接消费 ResNet 编码器输出。
+
+    设计要点：
+        - 通过四级上采样逐步恢复分辨率，保持计算开销可控；
+        - channel 设计与 ResNet18/34 默认输出对齐，无需额外适配层；
+        - 末端使用 1×1 卷积生成单通道 logits，便于后续 Sigmoid/阈值化。
+    """
+
+    def __init__(self, encoder_channels: List[int]):
+        super().__init__()
+        enc_ch = encoder_channels
+        self.up1 = UpBlock(enc_ch[-1], enc_ch[-2], 256)
+        self.up2 = UpBlock(256, enc_ch[-3], 128)
+        self.up3 = UpBlock(128, enc_ch[-4], 64)
+        self.up4 = ConvBlock(64 + enc_ch[-5], 64)
+        self.head = nn.Conv2d(64, 1, kernel_size=1)
+
+    def forward(self, features: torch.Tensor, skips: List[torch.Tensor]) -> torch.Tensor:
+        # 解码顺序与 encoder skip 顺序相反：最深特征先与最深 skip 结合
+        x = self.up1(features, skips[0])
+        x = self.up2(x, skips[1])
+        x = self.up3(x, skips[2])
+        # 最浅层 skip 通道数较少，直接使用 ConvBlock 融合
+        x = self.up4(torch.cat([F.interpolate(x, size=skips[3].shape[2:], mode="bilinear", align_corners=False), skips[3]], dim=1))
+        return self.head(x)

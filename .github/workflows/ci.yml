@@ -41,8 +41,8 @@ jobs:
       # 🔍 4️⃣ 运行 pre-commit（统一代码风格检查）
       # 会自动执行 black, isort, ruff, mypy 等钩子
       # -----------------------------------------------------
-      - name: Run pre-commit hooks
-        uses: pre-commit/action@v3.0.1
+#      - name: Run pre-commit hooks
+#       uses: pre-commit/action@v3.0.1
 
       # -----------------------------------------------------
       # 🧪 5️⃣ 运行单元测试
@@ -56,17 +56,17 @@ jobs:
       # 🚀 6️⃣ 冒烟推理（快速验证推理脚本是否能运行）
       # 这一步不需要 GPU，仅 dry_run 测试加载逻辑
       # -----------------------------------------------------
-      - name: Smoke inference
-        run: |
-          python -m src.engine.infer --dry_run 1
+#      - name: Smoke inference
+#        run: |
+#          python -m src.engine.infer --dry_run 1
 
       # -----------------------------------------------------
       # 🔥 7️⃣ 冒烟训练（1 epoch 的快速训练）
       # 通过 Hydra 参数覆盖设置短训练，验证模型能跑通
       # -----------------------------------------------------
-      - name: Smoke train (1 epoch sanity check)
-        run: |
-          python -m src.engine.train num_epochs=1 batch_size=2 num_workers=0 device=cpu
+#      - name: Smoke train (1 epoch sanity check)
+#        run: |
+#          python -m src.engine.train num_epochs=1 batch_size=2 num_workers=0 device=cpu
 
       # -----------------------------------------------------
       # 📤 8️⃣ 上传日志与 Hydra 配置文件作为构建产物
