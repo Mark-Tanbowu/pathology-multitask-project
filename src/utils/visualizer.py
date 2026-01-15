@@ -15,7 +15,7 @@ class LossVisualizer:
     每次调用 update() 自动刷新曲线并保存。
     """
 
-    def __init__(self, save_dir: str = "outputs/"):
+    def __init__(self, save_dir: str = "."):
         self.save_dir = save_dir
         self.history = {"epoch": [], "train_total": [], "val_total": [], "dice": [], "acc": []}
         os.makedirs(save_dir, exist_ok=True)

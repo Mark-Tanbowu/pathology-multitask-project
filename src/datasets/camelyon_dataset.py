@@ -1,5 +1,5 @@
 import os
-from typing import Callable, Optional, Tuple
+from typing import Callable, Optional, Sequence, Tuple
 
 import torch
 from torch.utils.data import Dataset
@@ -26,6 +26,8 @@ class PathologyDataset(Dataset):
         labels_file: str,
         transform: Optional[Callable] = None,
         debug_log: bool = True,  # 是否打印详细日志（仅首样本）
+        normalize_mean: Optional[Sequence[float]] = None,
+        normalize_std: Optional[Sequence[float]] = None,
     ):
         """
         Args:
@@ -48,7 +50,14 @@ class PathologyDataset(Dataset):
             self.labels_dict[name] = int(label)
 
         self.filenames = list(self.labels_dict.keys())
+        self.label_list = [self.labels_dict[name] for name in self.filenames]
         self.transform = transform
+        self.normalize_mean = (
+            torch.tensor(normalize_mean).view(3, 1, 1) if normalize_mean is not None else None
+        )
+        self.normalize_std = (
+            torch.tensor(normalize_std).view(3, 1, 1) if normalize_std is not None else None
+        )
 
         if debug_log:
             print("=" * 70)
@@ -62,7 +71,7 @@ class PathologyDataset(Dataset):
     def __len__(self) -> int:
         return len(self.filenames)
 
-    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, str]:
         fname = self.filenames[idx]
         img_path = os.path.join(self.images_dir, fname + ".bmp")
         mask_path = os.path.join(self.masks_dir, fname + "_anno.bmp")
@@ -96,6 +105,10 @@ class PathologyDataset(Dataset):
         if self.transform:
             image_tensor, mask_tensor = self.transform((image_tensor, mask_tensor))
 
+        # ImageNet 预训练要求的标准化（只对图像）
+        if self.normalize_mean is not None and self.normalize_std is not None:
+            image_tensor = (image_tensor - self.normalize_mean) / self.normalize_std
+
         # ---------- 调试日志 ----------
         if self.debug_log and idx == 0:
             print("\n[DEBUG] ✅ 样本加载成功")
@@ -109,7 +122,7 @@ class PathologyDataset(Dataset):
             print(f"  分类标签: {label.item()}")
             print("=" * 70)
 
-        return image_tensor, mask_tensor, label
+        return image_tensor, mask_tensor, label, fname
 
 
 # ================ 冒烟测试 ================

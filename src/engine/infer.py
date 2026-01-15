@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import argparse
 import os
+from datetime import datetime
+from pathlib import Path
 from typing import Optional
 
 import matplotlib.pyplot as plt
@@ -19,6 +21,7 @@ from PIL import Image
 from src.models.multitask_model import MultiTaskModel
 from src.utils.visualizer import save_overlay
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 def load_image(path: str, image_size: Optional[int] = None) -> torch.Tensor:
     image = Image.open(path).convert("RGB")
@@ -42,11 +45,24 @@ def main() -> None:
         print("[DRY RUN] Inference CLI is wired correctly.")
         return
 
+    run_id = datetime.now().strftime("%Y%m%d_%H%M")
+    run_dir = str((PROJECT_ROOT / "run" / run_id).resolve())
+    os.makedirs(run_dir, exist_ok=True)
+    if not os.path.isabs(args.mask_out):
+        args.mask_out = os.path.join(run_dir, args.mask_out)
+    if not os.path.isabs(args.overlay_out):
+        args.overlay_out = os.path.join(run_dir, args.overlay_out)
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = MultiTaskModel().to(device)
     if args.ckpt and os.path.exists(args.ckpt):
         state = torch.load(args.ckpt, map_location=device)
-        model.load_state_dict(state["model"])
+        if isinstance(state, dict) and "model_state_dict" in state:
+            model.load_state_dict(state["model_state_dict"])
+        elif isinstance(state, dict) and "model" in state:
+            model.load_state_dict(state["model"])
+        else:
+            model.load_state_dict(state)
         print(f"Loaded checkpoint from {args.ckpt}")
     model.eval()
 

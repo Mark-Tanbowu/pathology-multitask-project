@@ -17,8 +17,9 @@ class ChannelAttention(nn.Module):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # 兼容旧版 PyTorch：torch.max 不支持 dim=tuple，改用 amax
         avg = torch.mean(x, dim=(2, 3))
-        max_val, _ = torch.max(x, dim=(2, 3))
+        max_val = torch.amax(x, dim=(2, 3))
         attn = self.mlp(avg) + self.mlp(max_val)
         return torch.sigmoid(attn).unsqueeze(-1).unsqueeze(-1)
 

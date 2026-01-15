@@ -1,40 +1,147 @@
+# Default Hydra config for multitask training/eval.
+
+# Hydra 运行输出目录（每次运行一个时间戳文件夹）
 hydra:
   run:
-    dir: ./outputs/${now:%Y%m%d_%H%M%S}
+    dir: ./run/${now:%Y%m%d_%H%M}
 
-seed: 42
+# 随机种子（保证可复现）
+seed: 234
+# 设备选择：cpu | cuda | auto（由代码判定）
 device: cpu
-num_epochs: 2
-batch_size: 2
+# 训练轮数
+num_epochs: 40
+# 批大小
+batch_size: 5
+# DataLoader 的 worker 数量（Windows 建议 0）
 num_workers: 0
-lr: 1e-3
+# 学习率
+lr: 0.0005
 
+# 任务开关：可单独启用分割/分类
+tasks:
+  enable_seg: true  # 分割任务
+  enable_cls: true  # 分类任务
+
+# 数据相关配置
 data:
-  use_dummy: true
-  dummy:
-    train_samples: 8
-    val_samples: 4
-    image_size: 128
+  # 是否使用 dummy 数据（调通流程用）
+  use_dummy: false
+  # 归一化策略：none | imagenet
+  normalize: imagenet
+  # ImageNet 均值/方差（normalize=imagenet 时生效）
+  imagenet_mean: [0.485, 0.456, 0.406]
+  imagenet_std: [0.229, 0.224, 0.225]
+  # 真实数据路径（相对项目根目录）
   train_images: data/train/images_fixed
   train_masks: data/train/masks_fixed
   train_labels: data/train/labels.csv
   val_images: data/val/images_fixed
   val_masks: data/val/masks_fixed
   val_labels: data/val/labels.csv
+  test_images: data/test/images_fixed
+  test_masks: data/test/masks_fixed
+  test_labels: data/test/labels.csv
+  # dummy 数据配置（use_dummy=true 时生效）
+  dummy:
+    train_samples: 8
+    val_samples: 4
+    test_samples: 4
+    image_size: 128
 
+# 数据增强配置（仅训练集使用）
+aug:
+  # 水平翻转概率
+  flip_p: 0.5
+  # 仿射变换参数
+  affine:
+    degrees: 10.0
+    translate: 0.05
+    scale_range: [0.95, 1.05]
+    shear: 5.0
+    p: 0.7
+  # 弹性形变参数
+  elastic:
+    alpha: 0.05
+    grid_size: 4
+    p: 0.3
+
+# 采样/加载器相关开关
+loader:
+  # 是否使用分层采样（分类正负样本比例控制）
+  stratified_train: true
+  stratified_val: true
+  # 训练集正样本比例（分层采样时生效）
+  train_positive_ratio: 0.38
+  # 训练集是否丢弃最后不足一批的样本
+  train_drop_last: false
+  # 验证集正样本比例（分层采样时生效）
+  val_positive_ratio: 0.51
+
+# 模型相关配置
 model:
-  backbone: resnet18
+  # 编码器骨干：resnet18 | resnet34 | mobilenet_v2 等
+  backbone: mobilenet_v2
+  # 分类头类别数（二分类=1）
   num_classes: 1
+  # 分割输出是否上采样到输入分辨率
   seg_upsample_to_input: true
-  pretrained: false
+  # 是否加载预训练权重
+  pretrained: true
+  # MobileNet 宽度倍率（仅 mobilenet_v2 生效）
+  mobilenet_width_mult: 1.0
+  # 是否使用轻量解码器（轻量骨干推荐 true）
+  use_light_decoder: true
+  # 注意力开关：none | se | cbam
+  attention: none
+  # 注意力位置：encoder | decoder | both
+  attention_location: decoder
+  # 显式指定编码器/解码器注意力（优先于 attention/attention_location）
+  encoder_attention: null
+  decoder_attention: null
+  # 注意力通道压缩率
+  attention_reduction: 16
+  # 指定解码器注意力层（如 [up4]）
+  decoder_attention_layers: [up4]
 
+# 损失函数配置
 loss:
+  # 分割损失类型（当前仅记录；实现以 combined.py 为准）
   seg: bce_with_logits
-  cls: bce
+  # 分割/分类权重
   seg_weight: 1.0
   cls_weight: 1.0
+  # Dice 损失比例（seg_loss = dice_weight * dice + (1-dice_weight) * bce）
   dice_weight: 0.5
+  # 分类损失类型：bce | ce
+  cls: bce
+  # 动态加权策略：fixed | uncertainty | gradnorm
+  weighting: fixed
+  # 不确定性加权开关（旧兼容字段）
+  use_uncertainty: false
+  # 不确定性权重初始化（log_sigma）
+  uncertainty_init: 0.0
+  # GradNorm 的 alpha
+  gradnorm_alpha: 1.5
 
+# 日志与输出路径（均基于 hydra:runtime.output_dir）
 log:
-  save_dir: outputs
+  # 训练计时日志输出目录
+  save_timing_dir: ${hydra:runtime.output_dir}
+  # 训练主日志与 checkpoint 目录
+  save_dir: ${hydra:runtime.output_dir}
+  # 是否保存最佳权重
   save_ckpt: true
+  # 训练指标参数输出目录
+  params_dir: ${hydra:runtime.output_dir}
+  # ROC 曲线输出目录（放在每次 run 的子文件夹）
+  roc_dir: ${hydra:runtime.output_dir}/roc
+
+# 评估/测试配置
+eval:
+  # 手动指定 checkpoint（为空则找最新 best.pt）
+  ckpt: null
+  # 评估指标输出目录
+  save_dir: ${log.params_dir}
+  # 是否保存 ROC 曲线
+  save_roc: true

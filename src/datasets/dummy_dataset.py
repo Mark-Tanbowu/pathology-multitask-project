@@ -14,7 +14,7 @@
 from __future__ import annotations
 
 import random
-from typing import Optional, Tuple
+from typing import Optional, Sequence, Tuple
 
 import torch
 from torch.utils.data import Dataset
@@ -30,20 +30,37 @@ class DummyPathologyDataset(Dataset):
         seed: 固定随机种子，保证不同机器上的合成数据一致可复现。
     """
 
-    def __init__(self, length: int = 32, image_size: int = 256, num_classes: int = 1, seed: int = 42):
+    def __init__(
+        self,
+        length: int = 32,
+        image_size: int = 256,
+        num_classes: int = 1,
+        seed: int = 42,
+        normalize_mean: Optional[Sequence[float]] = None,
+        normalize_std: Optional[Sequence[float]] = None,
+    ):
         super().__init__()
         random.seed(seed)
         self.length = length
         self.image_size = image_size
         self.num_classes = num_classes
+        self.label_list = [0 for _ in range(length)]
+        self.normalize_mean = (
+            torch.tensor(normalize_mean).view(3, 1, 1) if normalize_mean is not None else None
+        )
+        self.normalize_std = (
+            torch.tensor(normalize_std).view(3, 1, 1) if normalize_std is not None else None
+        )
 
     def __len__(self) -> int:
         return self.length
 
-    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, str]:
         # 1) 生成伪造的 RGB 病理 patch：用随机噪声代替颜色纹理
         h = w = self.image_size
         image = torch.rand(3, h, w)
+        if self.normalize_mean is not None and self.normalize_std is not None:
+            image = (image - self.normalize_mean) / self.normalize_std
         mask = torch.zeros(1, h, w)
 
         # 2) 构造简单的伪“肿瘤”区域：随机圆形，模拟局部病灶且确保分割标签非空
@@ -55,8 +72,13 @@ class DummyPathologyDataset(Dataset):
 
         if self.num_classes == 1:
             # 3) 二分类：根据伪掩码面积生成 0/1 标签，保证分类头与分割头对齐
-            label = torch.tensor(float(mask_circle.float().mean() > 0.1)).unsqueeze(0)
+            label_value = float(mask_circle.float().mean() > 0.1)
+            label = torch.tensor(label_value)
+            self.label_list[idx] = int(label_value)
         else:
             # 4) 多分类：随机类别，主要用于结构验证；真实场景替换为 CSV 读取即可
-            label = torch.tensor(random.randint(0, self.num_classes - 1))
-        return image, mask, label
+            label_value = random.randint(0, self.num_classes - 1)
+            label = torch.tensor(label_value)
+            self.label_list[idx] = label_value
+        sample_name = f"dummy_{idx}"
+        return image, mask, label, sample_name
