@@ -22,7 +22,12 @@ from omegaconf import DictConfig, OmegaConf
 from sklearn.metrics import auc, roc_curve
 from torch.utils.data import DataLoader
 
-from src.datasets import DummyPathologyDataset, PathologyDataset, StratifiedBatchSampler
+from src.datasets import (
+    DummyPathologyDataset,
+    PathologyDataset,
+    StratifiedBatchSampler,
+    WsiPatchDataset,
+)
 from src.datasets.transforms import BaseAug
 from src.losses import GradNorm, MultiTaskLoss
 from src.models.multitask_model import MultiTaskModel
@@ -107,6 +112,38 @@ def build_datasets(cfg: DictConfig) -> Tuple[torch.utils.data.Dataset, torch.uti
             image_size=cfg.data.dummy.image_size,
             num_classes=cfg.model.num_classes,
             seed=cfg.seed + 1,
+            normalize_mean=normalize_mean,
+            normalize_std=normalize_std,
+        )
+    elif cfg.data.get("use_manifest", False):
+        aug_cfg = cfg.get("aug")
+        if aug_cfg is None:
+            transform = BaseAug()
+        else:
+            affine_kwargs = OmegaConf.to_container(aug_cfg.get("affine", {}), resolve=True)
+            elastic_kwargs = OmegaConf.to_container(aug_cfg.get("elastic", {}), resolve=True)
+            transform = BaseAug(
+                flip_p=float(aug_cfg.get("flip_p", 0.5)),
+                affine_kwargs=affine_kwargs,
+                elastic_kwargs=elastic_kwargs,
+            )
+        train_manifest = resolve_path(cfg.data.get("train_manifest", cfg.prepare.manifest_path))
+        val_manifest = resolve_path(cfg.data.get("val_manifest", cfg.prepare.manifest_path))
+        masks_dir = resolve_path(cfg.prepare.masks_dir)
+        mask_suffix = str(cfg.prepare.get("mask_suffix", "_mask.tif"))
+        train_ds = WsiPatchDataset(
+            train_manifest,
+            masks_dir,
+            mask_suffix=mask_suffix,
+            transform=transform,
+            normalize_mean=normalize_mean,
+            normalize_std=normalize_std,
+        )
+        val_ds = WsiPatchDataset(
+            val_manifest,
+            masks_dir,
+            mask_suffix=mask_suffix,
+            transform=None,
             normalize_mean=normalize_mean,
             normalize_std=normalize_std,
         )

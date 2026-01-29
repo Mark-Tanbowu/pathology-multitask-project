@@ -6,12 +6,29 @@ import random
 from pathlib import Path
 from typing import Iterable
 
-from prepare.patch_labeling import label_from_overlap, overlap_ratio_from_polygons
+import numpy as np
+import yaml
+
+from prepare.patch_labeling import (
+    label_from_overlap,
+    overlap_ratio_from_mask,
+    overlap_ratio_from_polygons,
+)
 from prepare.tissue_mask import build_tissue_mask, mask_coverage
 from prepare.wsi_reader import SlideReader
 from prepare.xml_annotations import load_asap_xml
 
 SLIDE_EXTS = {".tif", ".tiff", ".svs", ".mrxs", ".ndpi"}
+
+try:
+    import tifffile
+except Exception:
+    tifffile = None
+
+try:
+    from PIL import Image
+except Exception:
+    Image = None
 
 
 def find_slides(slides_dir: Path) -> list[Path]:
@@ -24,9 +41,46 @@ def parse_groups(groups: str | None) -> list[str] | None:
     return [g.strip() for g in groups.split(",") if g.strip()]
 
 
+def resolve_mask_path(slide_path: Path, masks_dir: Path, mask_suffix: str) -> Path:
+    return masks_dir / f"{slide_path.stem}{mask_suffix}"
+
+
+def load_mask_array(mask_path: Path) -> np.ndarray:
+    if tifffile is not None:
+        try:
+            mask = tifffile.imread(str(mask_path))
+        except ValueError as exc:
+            msg = str(exc)
+            if "imagecodecs" in msg.lower():
+                raise RuntimeError(
+                    "tifffile 需要 imagecodecs 才能解码该压缩格式（如 LZW）。"
+                ) from exc
+            raise
+    else:
+        if Image is None:
+            raise RuntimeError("PIL not available to read mask.")
+        mask = np.asarray(Image.open(mask_path))
+
+    mask = np.asarray(mask)
+    if mask.ndim > 2:
+        mask = mask[..., 0]
+    return mask > 0
+
+
+def compute_mask_downsample(slide: SlideReader, mask: np.ndarray) -> float:
+    w0, h0 = slide.level_dimensions[0]
+    mh, mw = mask.shape[:2]
+    if mw == 0 or mh == 0:
+        raise ValueError("Mask has empty shape.")
+    ds_x = w0 / float(mw)
+    ds_y = h0 / float(mh)
+    return (ds_x + ds_y) / 2.0
+
+
 def build_manifest(
     slides_dir: Path,
     annotations_dir: Path | None,
+    masks_dir: Path | None,
     output_csv: Path,
     level: int,
     patch_size: int,
@@ -39,6 +93,8 @@ def build_manifest(
     seed: int,
     groups: Iterable[str] | None,
     max_patches_per_slide: int | None,
+    mask_suffix: str,
+    prefer_masks: bool,
 ) -> None:
     slides = find_slides(slides_dir)
     if not slides:
@@ -74,6 +130,11 @@ def build_manifest(
                 candidate = annotations_dir / f"{slide_id}.xml"
                 if candidate.exists():
                     xml_path = candidate
+            mask_path = None
+            if masks_dir is not None:
+                candidate = resolve_mask_path(slide_path, masks_dir, mask_suffix)
+                if candidate.exists():
+                    mask_path = candidate
 
             with SlideReader(slide_path) as slide:
                 if level >= len(slide.level_dimensions):
@@ -92,6 +153,12 @@ def build_manifest(
                     tissue_mask = build_tissue_mask(slide, tissue_level_use)
 
                 polygons = load_asap_xml(xml_path, include_groups=groups) if xml_path else []
+                mask = None
+                mask_downsample = None
+                if mask_path is not None:
+                    mask = load_mask_array(mask_path)
+                    mask_downsample = compute_mask_downsample(slide, mask)
+                use_mask = mask is not None and (prefer_masks or not polygons)
                 width, height = slide.level_dimensions[level]
 
                 patches_written = 0
@@ -112,9 +179,14 @@ def build_manifest(
                         else:
                             tissue_ratio = 1.0
 
-                        overlap = overlap_ratio_from_polygons(
-                            polygons, x0, y0, patch_size, patch_downsample
-                        )
+                        if use_mask and mask_downsample is not None:
+                            overlap = overlap_ratio_from_mask(
+                                mask, x0, y0, patch_size_level0, mask_downsample
+                            )
+                        else:
+                            overlap = overlap_ratio_from_polygons(
+                                polygons, x0, y0, patch_size, patch_downsample
+                            )
                         label = label_from_overlap(overlap, pos_threshold, neg_threshold)
                         if label is None:
                             continue
@@ -157,29 +229,31 @@ def build_manifest_from_config(config: dict) -> None:
     """Hydra 接入占位函数。
 
     建议配置键（不强制）：
-    - data.slides_dir
-    - data.annotations_dir
-    - data.manifest_path
-    - data.patch_level
-    - data.patch_size
-    - data.patch_stride
-    - data.tissue_level
-    - data.min_tissue
-    - data.pos_threshold
-    - data.neg_threshold
-    - data.neg_keep_prob
-    - data.seed
-    - data.groups
-    - data.max_patches_per_slide
+    - prepare.slides_dir
+    - prepare.annotations_dir
+    - prepare.masks_dir
+    - prepare.manifest_path
+    - prepare.patch_level
+    - prepare.patch_size
+    - prepare.patch_stride
+    - prepare.tissue_level
+    - prepare.min_tissue
+    - prepare.pos_threshold
+    - prepare.neg_threshold
+    - prepare.neg_keep_prob
+    - prepare.seed
+    - prepare.groups
+    - prepare.max_patches_per_slide
+    - prepare.mask_suffix
+    - prepare.prefer_masks
     """
-    data_cfg = config.get("data", {})
+    data_cfg = config.get("prepare", config.get("data", {}))
     tissue_level = data_cfg.get("tissue_level")
     max_patches = data_cfg.get("max_patches_per_slide")
     build_manifest(
         slides_dir=Path(data_cfg["slides_dir"]),
-        annotations_dir=Path(data_cfg["annotations_dir"])
-        if data_cfg.get("annotations_dir")
-        else None,
+        annotations_dir=Path(data_cfg["annotations_dir"]) if data_cfg.get("annotations_dir") else None,
+        masks_dir=Path(data_cfg["masks_dir"]) if data_cfg.get("masks_dir") else None,
         output_csv=Path(data_cfg["manifest_path"]),
         level=int(data_cfg.get("patch_level", 0)),
         patch_size=int(data_cfg.get("patch_size", 256)),
@@ -192,14 +266,25 @@ def build_manifest_from_config(config: dict) -> None:
         seed=int(data_cfg.get("seed", 42)),
         groups=parse_groups(data_cfg.get("groups", "Tumor")),
         max_patches_per_slide=int(max_patches) if max_patches is not None else None,
+        mask_suffix=str(data_cfg.get("mask_suffix", "_mask.tif")),
+        prefer_masks=bool(data_cfg.get("prefer_masks", True)),
     )
+
+
+def load_yaml_config(path: Path) -> dict:
+    with path.open("r", encoding="utf-8") as f:
+        return yaml.safe_load(f) or {}
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="生成 CAMELYON 的 patch manifest。")
-    parser.add_argument("--slides-dir", type=Path, required=True)
+    parser.add_argument("--config", type=Path, help="YAML 配置路径（优先使用）")
+    parser.add_argument("--slides-dir", type=Path)
     parser.add_argument("--annotations-dir", type=Path)
-    parser.add_argument("--output-csv", type=Path, required=True)
+    parser.add_argument("--masks-dir", type=Path)
+    parser.add_argument("--mask-suffix", type=str, default="_mask.tif")
+    parser.add_argument("--prefer-masks", action="store_true")
+    parser.add_argument("--output-csv", type=Path)
     parser.add_argument("--level", type=int, default=0)
     parser.add_argument("--patch-size", type=int, default=256)
     parser.add_argument("--stride", type=int, default=256)
@@ -216,10 +301,17 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    if args.config is not None:
+        config = load_yaml_config(args.config)
+        build_manifest_from_config(config)
+        return
+    if args.slides_dir is None or args.output_csv is None:
+        raise ValueError("需要 --slides-dir 与 --output-csv，或使用 --config。")
     groups = parse_groups(args.groups)
     build_manifest(
         slides_dir=args.slides_dir,
         annotations_dir=args.annotations_dir,
+        masks_dir=args.masks_dir,
         output_csv=args.output_csv,
         level=args.level,
         patch_size=args.patch_size,
@@ -232,6 +324,8 @@ def main() -> None:
         seed=args.seed,
         groups=groups,
         max_patches_per_slide=args.max_patches_per_slide,
+        mask_suffix=args.mask_suffix,
+        prefer_masks=args.prefer_masks,
     )
 
 

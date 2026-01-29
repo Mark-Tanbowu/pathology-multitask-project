@@ -4,35 +4,121 @@
 针对 CAMELYON16/17 等病理数据集，支持从 Patch 级训练起步，逐步扩展到 WSI 工作流。
 
 ## 快速开始（CPU / 无本地 GPU）
+下面流程按 **可最小化依赖的冒烟 → 准备真实数据 → 正式训练/推理** 来写，
+默认以 Windows/CPU 兼容为主。
+
+### 0) 环境与依赖
 ```bash
-# 1) 创建并激活环境（可选：conda 或 venv）
+# 任选一种方式创建环境
 # conda create -n patho python=3.10 -y && conda activate patho
+# python -m venv .venv && .\.venv\Scripts\activate  (Windows)
 
-# 2) 安装依赖
 pip install -r requirements.txt
-
-# 3) 准备最小数据结构（示例）
-# data/train/images/*.png, data/train/masks/*_mask.png, data/train/labels.csv
-# data/val/images/*.png,   data/val/masks/*_mask.png,   data/val/labels.csv
-
-# 4) 训练（Hydra 配置）
-python -m src.engine.train  # 默认使用 Dummy 数据快速冒烟
-
-# 5) 推理
-python -m src.engine.infer --image demo/demo_patch.png --mask_out demo/pred_mask.png --overlay_out demo/overlay.png
 ```
 
-> **提示**：如果你在 Windows 且没有 GPU，可在本地做小样本验证；正式训练建议使用 Colab/Kaggle/远端服务器。
+### 1) 冒烟跑通（不需要数据）
+默认配置里 `configs/defaults.yaml` 的 `data.use_dummy=false`，因此**直接跑会尝试读取真实数据**。
+如果你只是确认训练链路是否可跑，请显式打开 dummy：
+```bash
+python -m src.engine.train data.use_dummy=true
+```
+这会在 `run/YYYYMMDD_HHMM/` 下生成日志、曲线和 `best.pt`（若 `log.save_ckpt=true`）。
+
+### 2) 准备真实数据（Patch 级）
+模型训练读取的**默认路径与命名规则**由 `configs/defaults.yaml` 决定，且 `PathologyDataset` 约定：
+```
+data/
+  train/
+    images_fixed/    # patch 图像（.bmp）
+    masks_fixed/     # 对应掩膜（_anno.bmp）
+    labels.csv       # CSV: name,label（name 不带扩展名）
+  val/
+    images_fixed/
+    masks_fixed/
+    labels.csv
+```
+**命名示例**：
+```
+images_fixed/001.bmp
+masks_fixed/001_anno.bmp
+labels.csv: 001,1
+```
+
+如需修改目录，使用 Hydra 覆写参数即可：
+```bash
+python -m src.engine.train \
+  data.use_dummy=false \
+  data.train_images=data/train/images_fixed \
+  data.train_masks=data/train/masks_fixed \
+  data.train_labels=data/train/labels.csv \
+  data.val_images=data/val/images_fixed \
+  data.val_masks=data/val/masks_fixed \
+  data.val_labels=data/val/labels.csv
+```
+
+### 3) （可选）从 WSI 生成 Patch Manifest
+`prepare/` 目录提供了 CAMELYON 风格的 patch 生成工具链（目前未接入 Hydra）。
+最常用的是先生成 `manifest` CSV，再构建自定义 Dataset。
+```bash
+python -m prepare.manifest_builder ^
+  --slides-dir data/raw/wsi ^
+  --annotations-dir data/raw/annotations ^
+  --output-csv data/processed/patch_manifest.csv ^
+  --level 0 ^
+  --patch-size 256 ^
+  --stride 256 ^
+  --pos-threshold 0.5 ^
+  --neg-threshold 0.0
+```
+说明：
+- `x/y` 坐标是 level-0，便于 OpenSlide 直接读取。
+- `--groups` 默认 `Tumor`，如标注名不同请调整。
+- 这套工具链尚未与训练配置连通，可先用于数据审查与实验迭代。
+
+### 4) 正式训练（真实数据）
+```bash
+python -m src.engine.train data.use_dummy=false
+```
+常用覆写示例（可按需组合）：
+```bash
+python -m src.engine.train \
+  data.use_dummy=false \
+  device=cuda \
+  num_epochs=60 \
+  batch_size=8 \
+  model.backbone=resnet34 \
+  loss.weighting=gradnorm
+```
+
+### 5) 推理与可视化
+```bash
+python -m src.engine.infer ^
+  --image demo/demo_patch.png ^
+  --ckpt run/20260116_0138/best.pt ^
+  --mask_out demo/pred_mask.png ^
+  --overlay_out demo/overlay.png
+```
+如果只想验证 CLI 是否可用：
+```bash
+python -m src.engine.infer --dry_run
+```
+
+> **提示**：Windows 无 GPU 可做小样本验证；正式训练建议使用 Colab/Kaggle/远端服务器。
 
 ### 关于 Dummy 数据与真实数据
-- 默认配置 (`configs/defaults.yaml`) 会启用 `data.use_dummy=true`，生成随机图像/掩膜/标签完成端到端跑通。
-- 当你准备好 CAMELYON16/17 等数据时，将 `use_dummy` 设为 `false` 并填好对应路径即可。
+- `data.use_dummy=true`：生成随机图像/掩膜/标签用于冒烟测试。
+- `data.use_dummy=false`：读取真实数据目录（见上文结构与命名规则）。
 
 ### 可选增强模块
 - `optional_modules/lightweight_backbones/`: MobileNet/EfficientNet 编码器示例，便于构建轻量模型。
 - `optional_modules/attention_modules/`: SE/CBAM 注意力模块，示例说明如何在新文件中组合使用。
 - `optional_modules/dynamic_loss/`: GradNorm/DWA 动态权重算法，可在自定义训练脚本中调用。
 > 这些模块**不会改动 baseline 源码**，仅通过继承/组合方式演示接入。
+
+### 输出与日志位置
+- 训练输出目录由 Hydra 决定：默认 `run/YYYYMMDD_HHMM/`
+- 每次运行会保存 `train_*.log`、`metrics_*.log`、`timing_*.log`，以及可选的 `best.pt`
+- Hydra 会在 `.hydra/` 中记录 `config.yaml` / `overrides.yaml` 便于复现
 
 ## 目录结构
 ```text

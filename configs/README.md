@@ -5,6 +5,7 @@
 --------
 - `defaults.yaml`：训练/推理默认配置，含数据路径、模型、损失、日志、数据加载等键。
 - `model_unet.yaml`：可选模型配置示例，可用作替换/扩展 backbone、解码器参数。
+- `prepare.yaml`：WSI patch 采样/manifest 生成的集中配置。
 
 用途与调用
 ---------

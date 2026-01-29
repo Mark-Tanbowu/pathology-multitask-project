@@ -27,6 +27,11 @@ tasks:
 data:
   # 是否使用 dummy 数据（调通流程用）
   use_dummy: false
+  # Use manifest-based WSI dynamic patches
+  use_manifest: false
+  # Manifest paths (WSI dynamic patches)
+  train_manifest: ${prepare.manifest_path}
+  val_manifest: ${prepare.manifest_path}
   # 归一化策略：none | imagenet
   normalize: imagenet
   # ImageNet 均值/方差（normalize=imagenet 时生效）
@@ -145,3 +150,23 @@ eval:
   save_dir: ${log.params_dir}
   # 是否保存 ROC 曲线
   save_roc: true
+
+# CAMELYON WSI patch manifest config
+prepare:
+  slides_dir: 'D:\pathology-multitask-project\camelyon16\images'
+  masks_dir: 'D:\pathology-multitask-project\camelyon16\masks'
+  annotations_dir: null
+  manifest_path: data/processed/patch_manifest.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 1.0
+  seed: 42
+  groups: Tumor
+  max_patches_per_slide: null
+  mask_suffix: _mask.tif
+  prefer_masks: true
