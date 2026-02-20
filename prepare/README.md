@@ -8,12 +8,16 @@
 - `prepare/xml_annotations.py`：解析 ASAP XML 多边形标注，返回 level-0 坐标。
 - `prepare/tissue_mask.py`：生成低分辨率 tissue mask 并计算覆盖率。
 - `prepare/patch_labeling.py`：计算 patch 与肿瘤重叠比例并映射为标签。
-- `prepare/manifest_builder.py`：扫描 WSI、采样 patch、写出 manifest CSV（支持 XML 或 mask 标注）。
+- `prepare/manifest_builder_train.py`：train split 的 manifest 构建脚本。
+- `prepare/manifest_builder_val.py`：val split 的 manifest 构建脚本。
+- `prepare/manifest_builder_test.py`：test split 的 manifest 构建脚本（支持 Exclusion 忽略区与几何统计）。
 - `prepare/patch_dataset.py`：根据 manifest 读取 patch 的 PyTorch Dataset。
 
 示例（在仓库根目录运行）：
 ```bash
-python -m prepare.manifest_builder --config configs/prepare.yaml
+python -m prepare.manifest_builder_train --config configs/defaults.yaml
+python -m prepare.manifest_builder_val --config configs/defaults.yaml
+python -m prepare.manifest_builder_test --config configs/defaults.yaml
 ```
 
 备注：

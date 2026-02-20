@@ -56,34 +56,63 @@ python -m src.engine.train \
   data.val_labels=data/val/labels.csv
 ```
 
-### 3) （可选）从 WSI 生成 Patch Manifest
-`prepare/` 目录提供了 CAMELYON 风格的 patch 生成工具链（目前未接入 Hydra）。
-最常用的是先生成 `manifest` CSV，再构建自定义 Dataset。
+### 3) WSI 动态切（Slide Manifest，推荐）
+该流程会生成 **train/val/test 各自的 slide manifest + coords**，训练/检测时直接动态读取 patch。
+
+**按默认配置生成 train/val/test 的 slide manifest + coords：**
 ```bash
-python -m prepare.manifest_builder ^
-  --slides-dir data/raw/wsi ^
-  --annotations-dir data/raw/annotations ^
-  --output-csv data/processed/patch_manifest.csv ^
-  --level 0 ^
-  --patch-size 256 ^
-  --stride 256 ^
-  --pos-threshold 0.5 ^
-  --neg-threshold 0.0
+python -m prepare.manifest_builder_train
+python -m prepare.manifest_builder_val
+python -m prepare.manifest_builder_test
+```
+
+**如需手动覆盖参数（示例：train）：**
+```bash
+python -m prepare.manifest_builder_train ^
+  --slides-dir <your_train_slides_dir> ^
+  --masks-dir <your_train_masks_dir> ^
+  --annotations-dir <your_annotations_dir> ^
+  --coords-out-dir <your_coords_out_dir> ^
+  --slide-manifest-path <your_slide_manifest_csv> ^
+  --output-csv <your_patch_manifest_csv>
+```
+
+**启动训练（WSI 动态切）：**
+```bash
+python -m src.engine.train
+```
+
+**运行 test 检测（加载最佳权重）：**
+```bash
+python -m src.engine.test_slide_detect
+```
+若需要指定某个权重，再追加：
+```bash
+python -m src.engine.test_slide_detect test_detect.ckpt=run/20260214_0148/best.pt
+```
+
+说明：
+- `manifest_slides_*.csv` + `coords/` 是训练用的核心输入。
+- `patch_manifest_*.csv` 只是辅助输出，可忽略。
+
+### 3b) （可选）从 WSI 生成 Patch Manifest（旧版）
+旧入口 `python -m prepare.manifest_builder` 已移除，不再推荐使用。
+
+若仅想导出 patch 级 CSV 便于排查，可在上述 train/val/test builder 中开启：
+```bash
+python -m prepare.manifest_builder_train --write-patch-manifest
 ```
 说明：
 - `x/y` 坐标是 level-0，便于 OpenSlide 直接读取。
 - `--groups` 默认 `Tumor`，如标注名不同请调整。
-- 这套工具链尚未与训练配置连通，可先用于数据审查与实验迭代。
 
-### 4) 正式训练（真实数据）
+### 4) 正式训练（真实数据 / Patch 级）
 ```bash
-python -m src.engine.train data.use_dummy=false
+python -m src.engine.train
 ```
 常用覆写示例（可按需组合）：
 ```bash
 python -m src.engine.train \
-  data.use_dummy=false \
-  device=cuda \
   num_epochs=60 \
   batch_size=8 \
   model.backbone=resnet34 \

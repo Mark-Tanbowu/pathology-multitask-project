@@ -1,0 +1,250 @@
+[2026-02-20 20:59:55,312] INFO - [TEST-DETECT] Starting with config:
+seed: 234
+device: cuda
+num_epochs: 40
+batch_size: 16
+num_workers: 3
+lr: 0.0005
+tasks:
+  enable_seg: true
+  enable_cls: true
+data:
+  use_dummy: false
+  use_slide_manifest: true
+  train_slide_manifest: data/processed/manifest_slides_train.csv
+  val_slide_manifest: data/processed/manifest_slides_val.csv
+  test_slide_manifest: data/processed/manifest_slides_test.csv
+  coords_cache_slides: 2
+  cache_masks: false
+  mask_level: null
+  mask_max_size: 4096
+  normalize: imagenet
+  imagenet_mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  imagenet_std:
+  - 0.229
+  - 0.224
+  - 0.225
+  train_images: data/train/images_fixed
+  train_masks: data/train/masks_fixed
+  train_labels: data/train/labels.csv
+  val_images: data/val/images_fixed
+  val_masks: data/val/masks_fixed
+  val_labels: data/val/labels.csv
+  test_images: data/test/images_fixed
+  test_masks: data/test/masks_fixed
+  test_labels: data/test/labels.csv
+  dummy:
+    train_samples: 8
+    val_samples: 4
+    test_samples: 4
+    image_size: 128
+aug:
+  flip_p: 0.5
+  affine:
+    degrees: 10.0
+    translate: 0.05
+    scale_range:
+    - 0.95
+    - 1.05
+    shear: 5.0
+    p: 0.7
+  elastic:
+    alpha: 0.05
+    grid_size: 4
+    p: 0.3
+loader:
+  stratified_train: false
+  stratified_val: false
+  slide_weighted_sampling: true
+  slide_samples_per_epoch: 300000
+  slide_weighted_replacement: true
+  train_geometry_sampling:
+    enabled: true
+    field: tumor_area_ratio
+    gamma: 0.5
+    eps: 1.0e-08
+    clip_min: 0.6
+    clip_max: 1.8
+  val_slide_weighted_sampling: false
+  val_slide_samples_per_epoch: 120000
+  val_slide_weighted_replacement: false
+  train_positive_ratio: 0.38
+  train_drop_last: false
+  val_positive_ratio: 0.51
+model:
+  backbone: mobilenet_v2
+  num_classes: 1
+  seg_upsample_to_input: true
+  pretrained: true
+  mobilenet_width_mult: 1.0
+  use_light_decoder: true
+  attention: se
+  attention_location: both
+  encoder_attention: se
+  decoder_attention: cbam
+  attention_reduction: 16
+  decoder_attention_layers:
+  - up3
+  - up4
+loss:
+  seg: bce_with_logits
+  seg_weight: 1.0
+  cls_weight: 1.0
+  dice_weight: 0.5
+  cls: bce
+  weighting: uncertainty
+  use_uncertainty: true
+  uncertainty_init: 0.0
+  gradnorm_alpha: 1.5
+log:
+  save_timing_dir: ${hydra:runtime.output_dir}
+  save_dir: ${hydra:runtime.output_dir}
+  save_ckpt: true
+  train_log_interval: 20
+  val_log_interval: 20
+  params_dir: ${hydra:runtime.output_dir}
+  roc_dir: ${hydra:runtime.output_dir}/roc
+eval:
+  ckpt: null
+  save_dir: ${log.params_dir}
+  save_roc: true
+  wsi_score_method: topk_mean
+  wsi_topk: 30
+  wsi_k_values:
+  - 30
+  wsi_acc_threshold: 0.95
+  geometry_validation:
+    enabled: true
+    field: tumor_area_ratio
+    positive_bins:
+    - 0.0005
+    - 0.002
+    - 0.01
+    min_bin_slides: 3
+  best_checkpoint:
+    z_dice_weight: 0.4
+    auc_gate_delta: 0.002
+    geom_gate_delta: 0.02
+    geom_tie_eps: 0.0001
+    score_tie_eps: 0.0001
+    std_eps: 1.0e-08
+    loss_tie_eps: 1.0e-08
+test_detect:
+  ckpt: run/202602202024/best.pt
+  strict_load: true
+  progress_log_interval_sec: 3.0
+  save_dir: ${log.params_dir}
+  log_prefix: wsi_test_detect
+  save_runtime_log: true
+  batch_size: ${batch_size}
+  save_slide_scores: true
+  save_patch_scores: false
+  wsi_topk: ${eval.wsi_topk}
+  wsi_acc_threshold: ${eval.wsi_acc_threshold}
+prepare_train:
+  slides_dir: data/camelyon16/train/images
+  masks_dir: data/camelyon16/train/masks
+  annotations_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/annotations
+  manifest_path: data/processed/patch_manifest_train.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 0.2
+  seed: 42
+  groups: Tumor
+  ignore_groups: Exclusion
+  ignore_overlap_threshold: 0.05
+  enable_geometry_stats: true
+  apply_xml_rules_for_tumor_only: true
+  max_patches_per_slide: 3000
+  sampling_mode: stratified_random
+  target_pos_ratio: 0.5
+  slide_labels_csv: null
+  slide_label_fallback_to_sampled: false
+  mask_suffix: _mask.tif
+  prefer_masks: false
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/train
+  slide_manifest_path: data/processed/manifest_slides_train.csv
+  write_patch_manifest: false
+prepare_val:
+  slides_dir: data/camelyon16/val/images
+  masks_dir: data/camelyon16/val/masks
+  annotations_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/annotations
+  manifest_path: data/processed/patch_manifest_val.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 0.2
+  seed: 42
+  groups: Tumor
+  ignore_groups: Exclusion
+  ignore_overlap_threshold: 0.05
+  enable_geometry_stats: true
+  apply_xml_rules_for_tumor_only: true
+  max_patches_per_slide: 3000
+  sampling_mode: stratified_random
+  target_pos_ratio: 0.5
+  slide_labels_csv: null
+  slide_label_fallback_to_sampled: false
+  mask_suffix: _mask.tif
+  prefer_masks: false
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/val
+  slide_manifest_path: data/processed/manifest_slides_val.csv
+  write_patch_manifest: false
+prepare_test:
+  slides_dir: data/camelyon16/test/images
+  masks_dir: data/camelyon16/test/masks
+  annotations_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/annotations
+  manifest_path: data/processed/patch_manifest_test.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 0.2
+  seed: 42
+  groups: Tumor
+  ignore_groups: Exclusion
+  ignore_overlap_threshold: 0.05
+  max_patches_per_slide: 4000
+  sampling_mode: stratified_random
+  target_pos_ratio: 0.5
+  slide_label_mode: xml_presence
+  slide_labels_csv: null
+  slide_label_fallback_to_sampled: false
+  mask_suffix: _mask.tif
+  prefer_masks: false
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/test
+  slide_manifest_path: data/processed/manifest_slides_test.csv
+  write_patch_manifest: false
+  enable_geometry_stats: true
+
+[2026-02-20 20:59:55,313] INFO - [TEST-DETECT] runtime_log=/root/autodl-tmp/pathology-multitask-project/run/20260220_2059/wsi_test_detect_runtime_20260220_205955.log
+[2026-02-20 20:59:55,315] INFO - [TEST-DETECT] test manifest 路径一致：/root/autodl-tmp/pathology-multitask-project/data/processed/manifest_slides_test.csv
+[2026-02-20 20:59:55,333] INFO - [TEST-DETECT] 路径检查完成：slides=129 missing_coords=0 missing_masks=0 outside_coords_root=0 coords_root=/root/autodl-tmp/pathology-multitask-project/data/processed/coords/test masks_dir=/root/autodl-tmp/pathology-multitask-project/data/camelyon16/test/masks
+[2026-02-20 20:59:55,333] INFO - [TEST-DETECT] DataLoader ready: patches=421314 batches=26333 batch_size=16 num_workers=3 progress_interval=3.0s

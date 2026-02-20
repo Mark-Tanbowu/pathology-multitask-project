@@ -1,0 +1,165 @@
+===== EPOCH 1 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=1 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9100 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9200 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9300 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9900 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+
+BEST (by balanced_acc)
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+===== EPOCH 2 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=2 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9100 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9200 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9300 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9900 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+
+BEST (by balanced_acc)
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+===== EPOCH 3 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=3 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9100 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9200 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9300 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9900 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+
+BEST (by balanced_acc)
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+===== EPOCH 4 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=4 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9100 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9200 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9300 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9900 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+
+BEST (by balanced_acc)
+th=0.9300 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+===== EPOCH 5 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=5 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9100 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9200 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9300 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9900 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+
+BEST (by balanced_acc)
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+===== EPOCH 6 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=6 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9444 bacc=0.9460 recall=0.9545 spec=0.9375 tp=21 tn=30 fp=2 fn=1
+th=0.9100 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9200 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9300 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9900 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+
+BEST (by balanced_acc)
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+===== EPOCH 7 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=7 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9100 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9200 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9300 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9400 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9900 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+
+BEST (by balanced_acc)
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+===== EPOCH 8 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=8 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9100 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9200 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9300 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9900 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+
+BEST (by balanced_acc)
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+===== EPOCH 9 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=9 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9444 bacc=0.9460 recall=0.9545 spec=0.9375 tp=21 tn=30 fp=2 fn=1
+th=0.9100 acc=0.9444 bacc=0.9460 recall=0.9545 spec=0.9375 tp=21 tn=30 fp=2 fn=1
+th=0.9200 acc=0.9444 bacc=0.9460 recall=0.9545 spec=0.9375 tp=21 tn=30 fp=2 fn=1
+th=0.9300 acc=0.9630 bacc=0.9616 recall=0.9545 spec=0.9688 tp=21 tn=31 fp=1 fn=1
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9900 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+
+BEST (by balanced_acc)
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+===== EPOCH 10 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=10 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9100 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9200 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9300 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9900 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+
+BEST (by balanced_acc)
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+===== EPOCH 11 =====
+log=run/20260209_1439/wsi_scores_20260209_143935.log epoch=11 slides=54 score_key=slide_score_topk range=[0.9, 0.99] step=0.01
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9100 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9200 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9300 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9400 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9500 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9600 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9700 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1
+th=0.9800 acc=0.9630 bacc=0.9545 recall=0.9091 spec=1.0000 tp=20 tn=32 fp=0 fn=2
+th=0.9900 acc=0.9630 bacc=0.9545 recall=0.9091 spec=1.0000 tp=20 tn=32 fp=0 fn=2
+
+BEST (by balanced_acc)
+th=0.9000 acc=0.9815 bacc=0.9773 recall=0.9545 spec=1.0000 tp=21 tn=32 fp=0 fn=1

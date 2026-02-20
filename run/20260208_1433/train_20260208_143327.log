@@ -1,0 +1,175 @@
+[2026-02-08 14:33:27,829] INFO - Starting training with config:
+seed: 234
+device: cuda
+num_epochs: 40
+batch_size: 16
+num_workers: 3
+lr: 0.0005
+tasks:
+  enable_seg: true
+  enable_cls: true
+data:
+  use_dummy: false
+  use_slide_manifest: true
+  train_slide_manifest: data/processed/manifest_slides_train.csv
+  val_slide_manifest: data/processed/manifest_slides_val.csv
+  coords_cache_slides: 2
+  cache_masks: false
+  mask_level: null
+  mask_max_size: 4096
+  normalize: imagenet
+  imagenet_mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  imagenet_std:
+  - 0.229
+  - 0.224
+  - 0.225
+  train_images: data/train/images_fixed
+  train_masks: data/train/masks_fixed
+  train_labels: data/train/labels.csv
+  val_images: data/val/images_fixed
+  val_masks: data/val/masks_fixed
+  val_labels: data/val/labels.csv
+  test_images: data/test/images_fixed
+  test_masks: data/test/masks_fixed
+  test_labels: data/test/labels.csv
+  dummy:
+    train_samples: 8
+    val_samples: 4
+    test_samples: 4
+    image_size: 128
+aug:
+  flip_p: 0.5
+  affine:
+    degrees: 10.0
+    translate: 0.05
+    scale_range:
+    - 0.95
+    - 1.05
+    shear: 5.0
+    p: 0.7
+  elastic:
+    alpha: 0.05
+    grid_size: 4
+    p: 0.3
+loader:
+  stratified_train: false
+  stratified_val: false
+  slide_weighted_sampling: true
+  slide_samples_per_epoch: 300000
+  slide_weighted_replacement: true
+  train_positive_ratio: 0.38
+  train_drop_last: false
+  val_positive_ratio: 0.51
+model:
+  backbone: mobilenet_v2
+  num_classes: 1
+  seg_upsample_to_input: true
+  pretrained: true
+  mobilenet_width_mult: 1.0
+  use_light_decoder: true
+  attention: se
+  attention_location: decoder
+  encoder_attention: null
+  decoder_attention: null
+  attention_reduction: 16
+  decoder_attention_layers:
+  - up4
+loss:
+  seg: bce_with_logits
+  seg_weight: 1.0
+  cls_weight: 1.0
+  dice_weight: 0.5
+  cls: bce
+  weighting: fixed
+  use_uncertainty: false
+  uncertainty_init: 0.0
+  gradnorm_alpha: 1.5
+log:
+  save_timing_dir: ${hydra:runtime.output_dir}
+  save_dir: ${hydra:runtime.output_dir}
+  save_ckpt: true
+  train_log_interval: 20
+  val_log_interval: 20
+  params_dir: ${hydra:runtime.output_dir}
+  roc_dir: ${hydra:runtime.output_dir}/roc
+eval:
+  ckpt: null
+  save_dir: ${log.params_dir}
+  save_roc: true
+prepare_train:
+  slides_dir: data/camelyon16/train/images
+  masks_dir: data/camelyon16/train/masks
+  annotations_dir: null
+  manifest_path: data/processed/patch_manifest_train.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 0.2
+  seed: 42
+  groups: Tumor
+  max_patches_per_slide: 2000
+  mask_suffix: _mask.tif
+  prefer_masks: true
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/train
+  slide_manifest_path: data/processed/manifest_slides_train.csv
+  write_patch_manifest: false
+prepare_val:
+  slides_dir: data/camelyon16/val/images
+  masks_dir: data/camelyon16/val/masks
+  annotations_dir: null
+  manifest_path: data/processed/patch_manifest_val.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 1.0
+  seed: 42
+  groups: Tumor
+  max_patches_per_slide: null
+  mask_suffix: _mask.tif
+  prefer_masks: true
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/val
+  slide_manifest_path: data/processed/manifest_slides_val.csv
+  write_patch_manifest: false
+
+[2026-02-08 14:33:27,830] INFO - Loss weighting strategy: fixed
+[2026-02-08 14:33:27,855] INFO - Using weighted sampling for SlideCoordsDataset: samples_per_epoch=300000 pool=429921 pos=349577 neg=80344
+[2026-02-08 14:33:29,243] INFO - Train epoch=1 step=1/18750 loss=1.2827 seg=0.6036 cls=0.6791
+[2026-02-08 14:33:30,465] INFO - Train epoch=1 step=20/18750 loss=1.3424 seg=0.5151 cls=0.8273
+[2026-02-08 14:33:31,883] INFO - Train epoch=1 step=40/18750 loss=0.9371 seg=0.4475 cls=0.4895
+[2026-02-08 14:33:33,163] INFO - Train epoch=1 step=60/18750 loss=0.7876 seg=0.3542 cls=0.4334
+[2026-02-08 14:33:34,329] INFO - Train epoch=1 step=80/18750 loss=1.0016 seg=0.4652 cls=0.5363
+[2026-02-08 14:33:35,490] INFO - Train epoch=1 step=100/18750 loss=1.2327 seg=0.5573 cls=0.6754
+[2026-02-08 14:33:36,626] INFO - Train epoch=1 step=120/18750 loss=1.0048 seg=0.4953 cls=0.5095
+[2026-02-08 14:33:37,688] INFO - Train epoch=1 step=140/18750 loss=0.7006 seg=0.3626 cls=0.3381
+[2026-02-08 14:33:38,770] INFO - Train epoch=1 step=160/18750 loss=1.0582 seg=0.4872 cls=0.5711
+[2026-02-08 14:33:39,823] INFO - Train epoch=1 step=180/18750 loss=0.9225 seg=0.4280 cls=0.4945
+[2026-02-08 14:33:40,901] INFO - Train epoch=1 step=200/18750 loss=0.6519 seg=0.2790 cls=0.3729
+[2026-02-08 14:33:41,924] INFO - Train epoch=1 step=220/18750 loss=0.9322 seg=0.4553 cls=0.4769
+[2026-02-08 14:33:43,011] INFO - Train epoch=1 step=240/18750 loss=0.8921 seg=0.4270 cls=0.4651
+[2026-02-08 14:33:44,062] INFO - Train epoch=1 step=260/18750 loss=0.6482 seg=0.3116 cls=0.3366
+[2026-02-08 14:33:45,121] INFO - Train epoch=1 step=280/18750 loss=0.7988 seg=0.3547 cls=0.4441
+[2026-02-08 14:33:46,163] INFO - Train epoch=1 step=300/18750 loss=0.6701 seg=0.2947 cls=0.3754
+[2026-02-08 14:33:47,161] INFO - Train epoch=1 step=320/18750 loss=1.2434 seg=0.6751 cls=0.5683
+[2026-02-08 14:33:48,215] INFO - Train epoch=1 step=340/18750 loss=1.2111 seg=0.4776 cls=0.7336
+[2026-02-08 14:33:49,253] INFO - Train epoch=1 step=360/18750 loss=1.0002 seg=0.4799 cls=0.5203
+[2026-02-08 14:33:50,320] INFO - Train epoch=1 step=380/18750 loss=0.6302 seg=0.3232 cls=0.3070
+[2026-02-08 14:33:51,354] INFO - Train epoch=1 step=400/18750 loss=0.8660 seg=0.4996 cls=0.3664

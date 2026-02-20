@@ -1,0 +1,10 @@
+stage timings per batch: dataload, to_device, encoder, decoder, cls_head, forward_total, loss, backward, optimizer
+epoch=1 step=1 dataload=0.398088 to_device=0.004948 encoder=0.432219 decoder=0.087815 cls_head=0.016694 forward_total=0.536841 loss=0.090659 backward=0.194645 optimizer=0.091135
+epoch=1 step=2 dataload=0.004113 to_device=0.003485 encoder=0.006256 decoder=0.001573 cls_head=0.000122 forward_total=0.007992 loss=0.001849 backward=0.006160 optimizer=0.002825
+epoch=1 step=3 dataload=0.007104 to_device=0.003422 encoder=0.005929 decoder=0.001414 cls_head=0.000104 forward_total=0.007477 loss=0.001973 backward=0.008034 optimizer=0.002611
+epoch=1 step=4 dataload=0.005387 to_device=0.003394 encoder=0.005628 decoder=0.001334 cls_head=0.000100 forward_total=0.007088 loss=0.002048 backward=0.009250 optimizer=0.002489
+epoch=1 step=5 dataload=0.004931 to_device=0.003360 encoder=0.005598 decoder=0.001342 cls_head=0.000099 forward_total=0.007066 loss=0.002039 backward=0.010312 optimizer=0.002571
+epoch=1 step=6 dataload=0.224997 to_device=0.004345 encoder=0.013365 decoder=0.003181 cls_head=0.000237 forward_total=0.016843 loss=0.001501 backward=0.012011 optimizer=0.006110
+epoch=1 step=7 dataload=0.006812 to_device=0.005150 encoder=0.013213 decoder=0.002850 cls_head=0.000204 forward_total=0.016324 loss=0.001320 backward=0.013476 optimizer=0.004909
+epoch=1 step=8 dataload=0.153379 to_device=0.005224 encoder=0.013390 decoder=0.003134 cls_head=0.000240 forward_total=0.016823 loss=0.001556 backward=0.017246 optimizer=0.006116
+epoch=1 step=9 dataload=0.007027 to_device=0.005187 encoder=0.013121 decoder=0.003020 cls_head=0.000206 forward_total=0.016400 loss=0.001320 backward=0.018686 optimizer=0.005417

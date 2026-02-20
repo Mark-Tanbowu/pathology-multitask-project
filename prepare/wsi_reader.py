@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import Tuple
 
@@ -12,26 +13,30 @@ except Exception:  # pragma: no cover - optional dependency
 
 
 class SlideReader:
-    """统一的 WSI 读取封装（OpenSlide），并提供 PIL 回退路径。"""
+    """统一的 WSI 读取封装（仅 OpenSlide）。"""
 
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
         self._slide = None
-        self._pil_image = None
         self._level_downsamples: list[float] = [1.0]
         self._level_dimensions: list[Tuple[int, int]] = []
 
-        if OpenSlide is not None:
-            try:
-                self._slide = OpenSlide(str(self.path))
-                self._level_downsamples = list(self._slide.level_downsamples)
-                self._level_dimensions = list(self._slide.level_dimensions)
-            except Exception:
-                self._slide = None
+        if OpenSlide is None:
+            msg = (
+                "OpenSlide 不可用（未安装或系统库缺失）。"
+                "请安装 openslide-python 并确保系统已安装 openslide-tools/libopenslide。"
+            )
+            logging.getLogger(__name__).error(msg)
+            raise RuntimeError(msg)
 
-        if self._slide is None:
-            self._pil_image = Image.open(self.path).convert("RGB")
-            self._level_dimensions = [self._pil_image.size]
+        try:
+            self._slide = OpenSlide(str(self.path))
+            self._level_downsamples = list(self._slide.level_downsamples)
+            self._level_dimensions = list(self._slide.level_dimensions)
+        except Exception as exc:
+            msg = f"OpenSlide 打开失败：{self.path}. 原因：{type(exc).__name__}: {exc}"
+            logging.getLogger(__name__).error(msg)
+            raise RuntimeError(msg) from exc
 
     @property
     def level_downsamples(self) -> list[float]:
@@ -45,14 +50,10 @@ class SlideReader:
         self, location: Tuple[int, int], level: int, size: Tuple[int, int]
     ) -> Image.Image:
         """读取指定 level 的局部区域。"""
-        if self._slide is not None:
-            return self._slide.read_region(location, level, size).convert("RGB")
+        if self._slide is None:
+            raise RuntimeError("OpenSlide 未初始化，无法读取 WSI。")
+        return self._slide.read_region(location, level, size).convert("RGB")
 
-        if level != 0 or self._pil_image is None:
-            raise ValueError("PIL 回退仅支持 level 0。")
-        x, y = location
-        w, h = size
-        return self._pil_image.crop((x, y, x + w, y + h))
 
     def get_best_level_for_downsample(self, target_downsample: float) -> int:
         """根据目标下采样倍率选择最接近的 level。"""
@@ -62,8 +63,6 @@ class SlideReader:
     def close(self) -> None:
         if self._slide is not None:
             self._slide.close()
-        if self._pil_image is not None:
-            self._pil_image.close()
 
     def __enter__(self) -> "SlideReader":
         return self

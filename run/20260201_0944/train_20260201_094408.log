@@ -1,0 +1,260 @@
+[2026-02-01 09:44:08,956] INFO - Starting training with config:
+seed: 234
+device: cuda
+num_epochs: 40
+batch_size: 4
+num_workers: 0
+lr: 0.0005
+tasks:
+  enable_seg: true
+  enable_cls: true
+data:
+  use_dummy: false
+  use_manifest: false
+  use_slide_manifest: true
+  slide_manifest: data/processed/manifest_slides.csv
+  coords_cache_slides: 2
+  cache_masks: false
+  mask_level: null
+  mask_max_size: 4096
+  train_manifest: ${prepare.manifest_path}
+  val_manifest: ${prepare.manifest_path}
+  normalize: imagenet
+  imagenet_mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  imagenet_std:
+  - 0.229
+  - 0.224
+  - 0.225
+  train_images: data/train/images_fixed
+  train_masks: data/train/masks_fixed
+  train_labels: data/train/labels.csv
+  val_images: data/val/images_fixed
+  val_masks: data/val/masks_fixed
+  val_labels: data/val/labels.csv
+  test_images: data/test/images_fixed
+  test_masks: data/test/masks_fixed
+  test_labels: data/test/labels.csv
+  dummy:
+    train_samples: 8
+    val_samples: 4
+    test_samples: 4
+    image_size: 128
+aug:
+  flip_p: 0.5
+  affine:
+    degrees: 10.0
+    translate: 0.05
+    scale_range:
+    - 0.95
+    - 1.05
+    shear: 5.0
+    p: 0.7
+  elastic:
+    alpha: 0.05
+    grid_size: 4
+    p: 0.3
+loader:
+  stratified_train: true
+  stratified_val: true
+  train_positive_ratio: 0.38
+  train_drop_last: false
+  val_positive_ratio: 0.51
+model:
+  backbone: mobilenet_v2
+  num_classes: 1
+  seg_upsample_to_input: true
+  pretrained: true
+  mobilenet_width_mult: 1.0
+  use_light_decoder: true
+  attention: none
+  attention_location: decoder
+  encoder_attention: null
+  decoder_attention: null
+  attention_reduction: 16
+  decoder_attention_layers:
+  - up4
+loss:
+  seg: bce_with_logits
+  seg_weight: 1.0
+  cls_weight: 1.0
+  dice_weight: 0.5
+  cls: bce
+  weighting: fixed
+  use_uncertainty: false
+  uncertainty_init: 0.0
+  gradnorm_alpha: 1.5
+log:
+  save_timing_dir: ${hydra:runtime.output_dir}
+  save_dir: ${hydra:runtime.output_dir}
+  save_ckpt: true
+  train_log_interval: 20
+  val_log_interval: 20
+  params_dir: ${hydra:runtime.output_dir}
+  roc_dir: ${hydra:runtime.output_dir}/roc
+eval:
+  ckpt: null
+  save_dir: ${log.params_dir}
+  save_roc: true
+prepare:
+  slides_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/images
+  masks_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/masks
+  annotations_dir: null
+  manifest_path: data/processed/patch_manifest.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 1.0
+  seed: 42
+  groups: Tumor
+  max_patches_per_slide: null
+  mask_suffix: _mask.tif
+  prefer_masks: true
+  progress_interval: 2000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords
+  slide_manifest_path: data/processed/manifest_slides.csv
+  write_patch_manifest: false
+
+[2026-02-01 09:44:08,956] INFO - Loss weighting strategy: fixed
+[2026-02-01 09:44:10,125] INFO - Train epoch=1 step=1/18 loss=1.3026 seg=0.5837 cls=0.7189
+[2026-02-01 09:44:11,201] INFO - Val epoch=1 step=1/4 loss=1.0664 seg=0.4289 cls=0.6375
+[2026-02-01 09:44:11,357] INFO - Epoch 1/40 | train_loss=0.9311 (seg=0.4021, cls=0.5290) | val_loss=0.5509 (seg=0.3591, cls=0.1918) | val_dice=0.7575 | val_acc=0.9375
+[2026-02-01 09:44:11,538] INFO - Saved best checkpoint to /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best.pt
+[2026-02-01 09:44:11,538] INFO - Updated best checkpoint summary at /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best_checkpoint.txt
+[2026-02-01 09:44:11,579] INFO - Train epoch=2 step=1/18 loss=0.3921 seg=0.3125 cls=0.0796
+[2026-02-01 09:44:12,234] INFO - Val epoch=2 step=1/4 loss=1.3567 seg=0.4791 cls=0.8776
+[2026-02-01 09:44:12,363] INFO - Epoch 2/40 | train_loss=0.5167 (seg=0.3056, cls=0.2111) | val_loss=0.6733 (seg=0.2874, cls=0.3860) | val_dice=0.8306 | val_acc=0.8125
+[2026-02-01 09:44:12,507] INFO - Train epoch=3 step=1/18 loss=0.3251 seg=0.2738 cls=0.0514
+[2026-02-01 09:44:13,334] INFO - Val epoch=3 step=1/4 loss=0.3836 seg=0.2902 cls=0.0934
+[2026-02-01 09:44:13,462] INFO - Epoch 3/40 | train_loss=0.4756 (seg=0.2807, cls=0.1949) | val_loss=0.3426 (seg=0.2688, cls=0.0738) | val_dice=0.8386 | val_acc=1.0000
+[2026-02-01 09:44:13,678] INFO - Saved best checkpoint to /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best.pt
+[2026-02-01 09:44:13,678] INFO - Updated best checkpoint summary at /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best_checkpoint.txt
+[2026-02-01 09:44:13,729] INFO - Train epoch=4 step=1/18 loss=0.2973 seg=0.2374 cls=0.0599
+[2026-02-01 09:44:14,550] INFO - Val epoch=4 step=1/4 loss=0.6397 seg=0.2606 cls=0.3791
+[2026-02-01 09:44:14,681] INFO - Epoch 4/40 | train_loss=0.3600 (seg=0.2470, cls=0.1130) | val_loss=0.3764 (seg=0.2419, cls=0.1345) | val_dice=0.8518 | val_acc=0.9375
+[2026-02-01 09:44:14,845] INFO - Train epoch=5 step=1/18 loss=0.2987 seg=0.2392 cls=0.0595
+[2026-02-01 09:44:15,615] INFO - Val epoch=5 step=1/4 loss=0.8344 seg=0.2337 cls=0.6007
+[2026-02-01 09:44:15,742] INFO - Epoch 5/40 | train_loss=0.3002 (seg=0.2259, cls=0.0743) | val_loss=0.4138 (seg=0.2281, cls=0.1857) | val_dice=0.8642 | val_acc=0.9375
+[2026-02-01 09:44:15,907] INFO - Train epoch=6 step=1/18 loss=0.2359 seg=0.1911 cls=0.0449
+[2026-02-01 09:44:16,722] INFO - Val epoch=6 step=1/4 loss=0.3765 seg=0.2168 cls=0.1597
+[2026-02-01 09:44:16,854] INFO - Epoch 6/40 | train_loss=0.2851 (seg=0.2090, cls=0.0760) | val_loss=0.2912 (seg=0.2149, cls=0.0764) | val_dice=0.8713 | val_acc=1.0000
+[2026-02-01 09:44:17,069] INFO - Saved best checkpoint to /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best.pt
+[2026-02-01 09:44:17,069] INFO - Updated best checkpoint summary at /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best_checkpoint.txt
+[2026-02-01 09:44:17,110] INFO - Train epoch=7 step=1/18 loss=0.2252 seg=0.1904 cls=0.0348
+[2026-02-01 09:44:17,935] INFO - Val epoch=7 step=1/4 loss=0.5090 seg=0.2261 cls=0.2829
+[2026-02-01 09:44:18,069] INFO - Epoch 7/40 | train_loss=0.2777 (seg=0.1984, cls=0.0794) | val_loss=0.3180 (seg=0.2242, cls=0.0938) | val_dice=0.8676 | val_acc=0.9375
+[2026-02-01 09:44:18,225] INFO - Train epoch=8 step=1/18 loss=0.2003 seg=0.1610 cls=0.0393
+[2026-02-01 09:44:19,017] INFO - Val epoch=8 step=1/4 loss=0.7000 seg=0.2143 cls=0.4857
+[2026-02-01 09:44:19,145] INFO - Epoch 8/40 | train_loss=0.2409 (seg=0.1907, cls=0.0502) | val_loss=0.3665 (seg=0.2324, cls=0.1342) | val_dice=0.8524 | val_acc=0.9375
+[2026-02-01 09:44:19,304] INFO - Train epoch=9 step=1/18 loss=0.1983 seg=0.1704 cls=0.0279
+[2026-02-01 09:44:20,132] INFO - Val epoch=9 step=1/4 loss=0.7132 seg=0.2161 cls=0.4971
+[2026-02-01 09:44:20,265] INFO - Epoch 9/40 | train_loss=0.2237 (seg=0.1720, cls=0.0517) | val_loss=0.3932 (seg=0.2161, cls=0.1771) | val_dice=0.8616 | val_acc=0.8750
+[2026-02-01 09:44:20,429] INFO - Train epoch=10 step=1/18 loss=0.1648 seg=0.1447 cls=0.0201
+[2026-02-01 09:44:21,248] INFO - Val epoch=10 step=1/4 loss=0.3319 seg=0.2356 cls=0.0963
+[2026-02-01 09:44:21,376] INFO - Epoch 10/40 | train_loss=0.2272 (seg=0.1658, cls=0.0614) | val_loss=0.2561 (seg=0.2248, cls=0.0313) | val_dice=0.8602 | val_acc=1.0000
+[2026-02-01 09:44:21,531] INFO - Train epoch=11 step=1/18 loss=0.1823 seg=0.1352 cls=0.0471
+[2026-02-01 09:44:22,306] INFO - Val epoch=11 step=1/4 loss=0.2924 seg=0.2008 cls=0.0915
+[2026-02-01 09:44:22,433] INFO - Epoch 11/40 | train_loss=0.2297 (seg=0.1584, cls=0.0712) | val_loss=0.2652 (seg=0.1864, cls=0.0788) | val_dice=0.8788 | val_acc=1.0000
+[2026-02-01 09:44:22,655] INFO - Saved best checkpoint to /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best.pt
+[2026-02-01 09:44:22,655] INFO - Updated best checkpoint summary at /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best_checkpoint.txt
+[2026-02-01 09:44:22,708] INFO - Train epoch=12 step=1/18 loss=0.2109 seg=0.1677 cls=0.0432
+[2026-02-01 09:44:23,552] INFO - Val epoch=12 step=1/4 loss=0.4483 seg=0.3202 cls=0.1281
+[2026-02-01 09:44:23,683] INFO - Epoch 12/40 | train_loss=0.2107 (seg=0.1597, cls=0.0510) | val_loss=0.3550 (seg=0.2550, cls=0.1000) | val_dice=0.8365 | val_acc=0.9375
+[2026-02-01 09:44:23,842] INFO - Train epoch=13 step=1/18 loss=0.1511 seg=0.1348 cls=0.0163
+[2026-02-01 09:44:24,611] INFO - Val epoch=13 step=1/4 loss=0.9120 seg=0.2246 cls=0.6874
+[2026-02-01 09:44:24,933] INFO - Epoch 13/40 | train_loss=0.1716 (seg=0.1504, cls=0.0213) | val_loss=0.3792 (seg=0.1859, cls=0.1933) | val_dice=0.8825 | val_acc=0.9375
+[2026-02-01 09:44:25,089] INFO - Train epoch=14 step=1/18 loss=0.1390 seg=0.1275 cls=0.0115
+[2026-02-01 09:44:25,882] INFO - Val epoch=14 step=1/4 loss=1.1925 seg=0.3856 cls=0.8069
+[2026-02-01 09:44:26,013] INFO - Epoch 14/40 | train_loss=0.1559 (seg=0.1406, cls=0.0153) | val_loss=0.5206 (seg=0.3078, cls=0.2127) | val_dice=0.8300 | val_acc=0.9375
+[2026-02-01 09:44:26,171] INFO - Train epoch=15 step=1/18 loss=0.1840 seg=0.1743 cls=0.0097
+[2026-02-01 09:44:27,011] INFO - Val epoch=15 step=1/4 loss=0.5263 seg=0.2004 cls=0.3260
+[2026-02-01 09:44:27,150] INFO - Epoch 15/40 | train_loss=0.1512 (seg=0.1390, cls=0.0122) | val_loss=0.2790 (seg=0.1834, cls=0.0957) | val_dice=0.8860 | val_acc=0.9375
+[2026-02-01 09:44:27,309] INFO - Train epoch=16 step=1/18 loss=0.1417 seg=0.1313 cls=0.0103
+[2026-02-01 09:44:28,112] INFO - Val epoch=16 step=1/4 loss=0.4755 seg=0.2178 cls=0.2578
+[2026-02-01 09:44:28,240] INFO - Epoch 16/40 | train_loss=0.1440 (seg=0.1336, cls=0.0104) | val_loss=0.2636 (seg=0.1865, cls=0.0771) | val_dice=0.8819 | val_acc=0.9375
+[2026-02-01 09:44:28,393] INFO - Train epoch=17 step=1/18 loss=0.1284 seg=0.1204 cls=0.0080
+[2026-02-01 09:44:29,172] INFO - Val epoch=17 step=1/4 loss=0.4969 seg=0.2378 cls=0.2591
+[2026-02-01 09:44:29,301] INFO - Epoch 17/40 | train_loss=0.1331 (seg=0.1235, cls=0.0096) | val_loss=0.2816 (seg=0.1974, cls=0.0841) | val_dice=0.8726 | val_acc=0.9375
+[2026-02-01 09:44:29,459] INFO - Train epoch=18 step=1/18 loss=0.1443 seg=0.1364 cls=0.0079
+[2026-02-01 09:44:30,293] INFO - Val epoch=18 step=1/4 loss=0.5322 seg=0.2534 cls=0.2788
+[2026-02-01 09:44:30,422] INFO - Epoch 18/40 | train_loss=0.1201 (seg=0.1124, cls=0.0077) | val_loss=0.3320 (seg=0.2450, cls=0.0870) | val_dice=0.8378 | val_acc=0.9375
+[2026-02-01 09:44:30,576] INFO - Train epoch=19 step=1/18 loss=0.1228 seg=0.1160 cls=0.0068
+[2026-02-01 09:44:31,414] INFO - Val epoch=19 step=1/4 loss=0.6240 seg=0.2659 cls=0.3581
+[2026-02-01 09:44:31,560] INFO - Epoch 19/40 | train_loss=0.1229 (seg=0.1150, cls=0.0079) | val_loss=0.3214 (seg=0.2183, cls=0.1031) | val_dice=0.8684 | val_acc=0.9375
+[2026-02-01 09:44:31,712] INFO - Train epoch=20 step=1/18 loss=0.1068 seg=0.0998 cls=0.0071
+[2026-02-01 09:44:32,534] INFO - Val epoch=20 step=1/4 loss=0.6545 seg=0.2106 cls=0.4438
+[2026-02-01 09:44:32,666] INFO - Epoch 20/40 | train_loss=0.1240 (seg=0.1162, cls=0.0079) | val_loss=0.3422 (seg=0.2188, cls=0.1234) | val_dice=0.8670 | val_acc=0.9375
+[2026-02-01 09:44:32,823] INFO - Train epoch=21 step=1/18 loss=0.1122 seg=0.1048 cls=0.0074
+[2026-02-01 09:44:33,658] INFO - Val epoch=21 step=1/4 loss=0.7895 seg=0.2251 cls=0.5644
+[2026-02-01 09:44:33,787] INFO - Epoch 21/40 | train_loss=0.1139 (seg=0.1071, cls=0.0067) | val_loss=0.3464 (seg=0.1911, cls=0.1553) | val_dice=0.8793 | val_acc=0.9375
+[2026-02-01 09:44:33,943] INFO - Train epoch=22 step=1/18 loss=0.1054 seg=0.0981 cls=0.0074
+[2026-02-01 09:44:34,740] INFO - Val epoch=22 step=1/4 loss=0.3398 seg=0.2578 cls=0.0820
+[2026-02-01 09:44:34,878] INFO - Epoch 22/40 | train_loss=0.1077 (seg=0.1014, cls=0.0063) | val_loss=0.2162 (seg=0.1827, cls=0.0335) | val_dice=0.8886 | val_acc=1.0000
+[2026-02-01 09:44:35,079] INFO - Saved best checkpoint to /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best.pt
+[2026-02-01 09:44:35,079] INFO - Updated best checkpoint summary at /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best_checkpoint.txt
+[2026-02-01 09:44:35,125] INFO - Train epoch=23 step=1/18 loss=0.0772 seg=0.0722 cls=0.0050
+[2026-02-01 09:44:35,917] INFO - Val epoch=23 step=1/4 loss=0.3489 seg=0.2182 cls=0.1307
+[2026-02-01 09:44:36,044] INFO - Epoch 23/40 | train_loss=0.1045 (seg=0.0989, cls=0.0055) | val_loss=0.2465 (seg=0.1889, cls=0.0576) | val_dice=0.8848 | val_acc=1.0000
+[2026-02-01 09:44:36,193] INFO - Train epoch=24 step=1/18 loss=0.0906 seg=0.0857 cls=0.0049
+[2026-02-01 09:44:37,036] INFO - Val epoch=24 step=1/4 loss=0.3898 seg=0.2149 cls=0.1748
+[2026-02-01 09:44:37,163] INFO - Epoch 24/40 | train_loss=0.0959 (seg=0.0912, cls=0.0047) | val_loss=0.2395 (seg=0.1787, cls=0.0608) | val_dice=0.8892 | val_acc=1.0000
+[2026-02-01 09:44:37,379] INFO - Saved best checkpoint to /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best.pt
+[2026-02-01 09:44:37,379] INFO - Updated best checkpoint summary at /root/autodl-tmp/pathology-multitask-project/run/20260201_0944/best_checkpoint.txt
+[2026-02-01 09:44:37,431] INFO - Train epoch=25 step=1/18 loss=0.0918 seg=0.0868 cls=0.0050
+[2026-02-01 09:44:38,232] INFO - Val epoch=25 step=1/4 loss=0.3885 seg=0.2278 cls=0.1608
+[2026-02-01 09:44:38,367] INFO - Epoch 25/40 | train_loss=0.0949 (seg=0.0904, cls=0.0046) | val_loss=0.2569 (seg=0.2020, cls=0.0549) | val_dice=0.8742 | val_acc=1.0000
+[2026-02-01 09:44:38,519] INFO - Train epoch=26 step=1/18 loss=0.0830 seg=0.0786 cls=0.0044
+[2026-02-01 09:44:39,260] INFO - Val epoch=26 step=1/4 loss=0.3917 seg=0.2535 cls=0.1382
+[2026-02-01 09:44:39,390] INFO - Epoch 26/40 | train_loss=0.0946 (seg=0.0903, cls=0.0042) | val_loss=0.2644 (seg=0.2135, cls=0.0510) | val_dice=0.8730 | val_acc=1.0000
+[2026-02-01 09:44:39,537] INFO - Train epoch=27 step=1/18 loss=0.0832 seg=0.0790 cls=0.0041
+[2026-02-01 09:44:40,355] INFO - Val epoch=27 step=1/4 loss=0.4494 seg=0.2427 cls=0.2067
+[2026-02-01 09:44:40,490] INFO - Epoch 27/40 | train_loss=0.0927 (seg=0.0886, cls=0.0041) | val_loss=0.2752 (seg=0.1996, cls=0.0755) | val_dice=0.8785 | val_acc=0.9375
+[2026-02-01 09:44:40,646] INFO - Train epoch=28 step=1/18 loss=0.0683 seg=0.0649 cls=0.0034
+[2026-02-01 09:44:41,518] INFO - Val epoch=28 step=1/4 loss=0.3717 seg=0.2492 cls=0.1225
+[2026-02-01 09:44:41,651] INFO - Epoch 28/40 | train_loss=0.0866 (seg=0.0827, cls=0.0039) | val_loss=0.2533 (seg=0.2032, cls=0.0500) | val_dice=0.8758 | val_acc=1.0000
+[2026-02-01 09:44:41,805] INFO - Train epoch=29 step=1/18 loss=0.0824 seg=0.0792 cls=0.0032
+[2026-02-01 09:44:42,680] INFO - Val epoch=29 step=1/4 loss=0.4385 seg=0.2361 cls=0.2024
+[2026-02-01 09:44:42,817] INFO - Epoch 29/40 | train_loss=0.0860 (seg=0.0823, cls=0.0038) | val_loss=0.2535 (seg=0.1868, cls=0.0667) | val_dice=0.8847 | val_acc=0.9375
+[2026-02-01 09:44:42,981] INFO - Train epoch=30 step=1/18 loss=0.0752 seg=0.0718 cls=0.0033
+[2026-02-01 09:44:43,842] INFO - Val epoch=30 step=1/4 loss=0.3968 seg=0.2618 cls=0.1350
+[2026-02-01 09:44:43,971] INFO - Epoch 30/40 | train_loss=0.0811 (seg=0.0777, cls=0.0033) | val_loss=0.2412 (seg=0.1901, cls=0.0511) | val_dice=0.8842 | val_acc=1.0000
+[2026-02-01 09:44:44,128] INFO - Train epoch=31 step=1/18 loss=0.0789 seg=0.0760 cls=0.0028
+[2026-02-01 09:44:44,977] INFO - Val epoch=31 step=1/4 loss=0.3489 seg=0.2140 cls=0.1348
+[2026-02-01 09:44:45,107] INFO - Epoch 31/40 | train_loss=0.0804 (seg=0.0771, cls=0.0033) | val_loss=0.2413 (seg=0.1957, cls=0.0456) | val_dice=0.8819 | val_acc=1.0000
+[2026-02-01 09:44:45,262] INFO - Train epoch=32 step=1/18 loss=0.0660 seg=0.0630 cls=0.0030
+[2026-02-01 09:44:46,109] INFO - Val epoch=32 step=1/4 loss=0.3951 seg=0.2302 cls=0.1649
+[2026-02-01 09:44:46,237] INFO - Epoch 32/40 | train_loss=0.0769 (seg=0.0737, cls=0.0032) | val_loss=0.2359 (seg=0.1857, cls=0.0502) | val_dice=0.8882 | val_acc=1.0000
+[2026-02-01 09:44:46,398] INFO - Train epoch=33 step=1/18 loss=0.0675 seg=0.0643 cls=0.0032
+[2026-02-01 09:44:47,204] INFO - Val epoch=33 step=1/4 loss=0.3885 seg=0.2341 cls=0.1544
+[2026-02-01 09:44:47,336] INFO - Epoch 33/40 | train_loss=0.0752 (seg=0.0723, cls=0.0029) | val_loss=0.2444 (seg=0.1955, cls=0.0489) | val_dice=0.8845 | val_acc=1.0000
+[2026-02-01 09:44:47,492] INFO - Train epoch=34 step=1/18 loss=0.0591 seg=0.0567 cls=0.0024
+[2026-02-01 09:44:48,276] INFO - Val epoch=34 step=1/4 loss=0.5666 seg=0.2226 cls=0.3440
+[2026-02-01 09:44:48,407] INFO - Epoch 34/40 | train_loss=0.0735 (seg=0.0709, cls=0.0026) | val_loss=0.2903 (seg=0.1910, cls=0.0993) | val_dice=0.8859 | val_acc=0.9375
+[2026-02-01 09:44:48,566] INFO - Train epoch=35 step=1/18 loss=0.0603 seg=0.0577 cls=0.0026
+[2026-02-01 09:44:49,325] INFO - Val epoch=35 step=1/4 loss=0.5094 seg=0.2483 cls=0.2611
+[2026-02-01 09:44:49,451] INFO - Epoch 35/40 | train_loss=0.0715 (seg=0.0690, cls=0.0025) | val_loss=0.2974 (seg=0.2152, cls=0.0823) | val_dice=0.8763 | val_acc=0.9375
+[2026-02-01 09:44:49,607] INFO - Train epoch=36 step=1/18 loss=0.0743 seg=0.0721 cls=0.0022
+[2026-02-01 09:44:50,303] INFO - Val epoch=36 step=1/4 loss=0.6249 seg=0.4376 cls=0.1873
+[2026-02-01 09:44:50,432] INFO - Epoch 36/40 | train_loss=0.0729 (seg=0.0706, cls=0.0023) | val_loss=0.3468 (seg=0.2808, cls=0.0660) | val_dice=0.8529 | val_acc=0.9375
+[2026-02-01 09:44:50,587] INFO - Train epoch=37 step=1/18 loss=0.0683 seg=0.0661 cls=0.0022
+[2026-02-01 09:44:51,289] INFO - Val epoch=37 step=1/4 loss=0.4437 seg=0.3280 cls=0.1156
+[2026-02-01 09:44:51,418] INFO - Epoch 37/40 | train_loss=0.0727 (seg=0.0704, cls=0.0022) | val_loss=0.2656 (seg=0.2245, cls=0.0411) | val_dice=0.8750 | val_acc=1.0000
+[2026-02-01 09:44:51,580] INFO - Train epoch=38 step=1/18 loss=0.0628 seg=0.0607 cls=0.0021
+[2026-02-01 09:44:52,270] INFO - Val epoch=38 step=1/4 loss=0.4958 seg=0.2757 cls=0.2201
+[2026-02-01 09:44:52,401] INFO - Epoch 38/40 | train_loss=0.0748 (seg=0.0725, cls=0.0022) | val_loss=0.2564 (seg=0.1935, cls=0.0629) | val_dice=0.8896 | val_acc=0.9375
+[2026-02-01 09:44:52,550] INFO - Train epoch=39 step=1/18 loss=0.0656 seg=0.0632 cls=0.0024
+[2026-02-01 09:44:53,221] INFO - Val epoch=39 step=1/4 loss=1.2926 seg=0.2023 cls=1.0904
+[2026-02-01 09:44:53,573] INFO - Epoch 39/40 | train_loss=0.0761 (seg=0.0739, cls=0.0022) | val_loss=0.4912 (seg=0.2120, cls=0.2792) | val_dice=0.8795 | val_acc=0.9375
+[2026-02-01 09:44:53,730] INFO - Train epoch=40 step=1/18 loss=0.0662 seg=0.0639 cls=0.0023
+[2026-02-01 09:44:54,357] INFO - Val epoch=40 step=1/4 loss=0.6376 seg=0.3695 cls=0.2680
+[2026-02-01 09:44:54,486] INFO - Epoch 40/40 | train_loss=0.0777 (seg=0.0753, cls=0.0023) | val_loss=0.3280 (seg=0.2507, cls=0.0772) | val_dice=0.8680 | val_acc=0.9375
+[2026-02-01 09:44:54,598] INFO - Training finished. Best score=0.9446

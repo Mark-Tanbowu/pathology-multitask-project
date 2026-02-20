@@ -12,7 +12,9 @@
 - 训练：`python -m src.engine.train`（Hydra 自动读取 `configs/`），可用 `python -m src.engine.train data.use_dummy=false model.backbone=resnet34` 覆写。
 - 推理：`python -m src.engine.infer ...` 同样读取默认配置，可在命令行覆写路径或模型参数。
 - 测试评估：`python -m src.engine.eval` 使用 `data.test_*` 路径与 `outputs/best.pt`；可覆写 `eval.ckpt=... data.test_images=...`。
-- 脚本：`scripts/run_train.py`、`scripts/run_infer.py` 直接使用这些配置。
+- Test manifest 生成：`python -m prepare.manifest_builder_test --config configs/defaults.yaml`（读取 `prepare_test`）。
+- Test 检测：`python -m src.engine.test_slide_detect`（读取 `data.test_slide_manifest` 与 `prepare_test`）。
+- 脚本：`scripts/run_train.py`、`scripts/run_infer.py`、`scripts/run_prepare_test_manifest.py`、`scripts/run_test_detect.py`。
 - 轻量骨干：`python -m src.engine.train model.backbone=mobilenet_v2 model.pretrained=true` 可启用 MobileNetV2 编码器。
 
 注意力消融启动方式

@@ -68,12 +68,7 @@ class MultiTaskLoss(nn.Module):
             - task_names：与 task_losses 对齐的任务名
             - parts：用于日志的标量与中间项
         """
-        device = None
-        if seg_logits is not None:
-            device = seg_logits.device
-        elif cls_logits is not None:
-            device = cls_logits.device
-        else:
+        if seg_logits is None and cls_logits is None:
             raise ValueError("At least one of seg_logits or cls_logits must be provided.")
 
         parts = {

@@ -1,0 +1,361 @@
+stage timings per batch: dataload, to_device, encoder, decoder, cls_head, forward_total, loss, backward, optimizer
+epoch=1 step=1 dataload=0.266180 to_device=0.013622 encoder=0.358920 decoder=0.041831 cls_head=0.030961 forward_total=0.431856 loss=0.086923 backward=0.170155 optimizer=0.125226
+epoch=1 step=2 dataload=0.008793 to_device=0.008022 encoder=0.005597 decoder=0.001252 cls_head=0.000195 forward_total=0.007083 loss=0.005577 backward=0.006767 optimizer=0.020579
+epoch=1 step=3 dataload=0.006668 to_device=0.007016 encoder=0.003765 decoder=0.000786 cls_head=0.000100 forward_total=0.004670 loss=0.007847 backward=0.009307 optimizer=0.018165
+epoch=1 step=4 dataload=0.006456 to_device=0.007035 encoder=0.003651 decoder=0.000760 cls_head=0.000091 forward_total=0.004520 loss=0.008026 backward=0.012848 optimizer=0.014876
+epoch=1 step=5 dataload=0.009598 to_device=0.006931 encoder=0.003582 decoder=0.000745 cls_head=0.000090 forward_total=0.004434 loss=0.008065 backward=0.015781 optimizer=0.012209
+epoch=1 step=6 dataload=0.007426 to_device=0.008316 encoder=0.003629 decoder=0.000742 cls_head=0.000088 forward_total=0.004474 loss=0.008086 backward=0.017535 optimizer=0.010805
+epoch=1 step=7 dataload=0.006465 to_device=0.006362 encoder=0.018358 decoder=0.006436 cls_head=0.000113 forward_total=0.024924 loss=0.000736 backward=0.156944 optimizer=0.009337
+val epoch=1 step=1 dataload=0.304915 to_device=0.012118 encoder=0.021320 decoder=0.002938 cls_head=0.000581 forward_total=0.025007 loss=0.003002
+val epoch=1 step=2 dataload=0.067347 to_device=0.004711 encoder=0.023447 decoder=0.006525 cls_head=0.000165 forward_total=0.030174 loss=0.000504
+epoch=2 step=1 dataload=0.665058 to_device=0.009931 encoder=0.015793 decoder=0.002412 cls_head=0.000440 forward_total=0.018772 loss=0.002869 backward=0.009681 optimizer=0.023334
+epoch=2 step=2 dataload=0.015606 to_device=0.010054 encoder=0.008714 decoder=0.001649 cls_head=0.000241 forward_total=0.010653 loss=0.003788 backward=0.009432 optimizer=0.020261
+epoch=2 step=3 dataload=0.009486 to_device=0.008625 encoder=0.006662 decoder=0.001357 cls_head=0.000186 forward_total=0.008237 loss=0.004702 backward=0.010200 optimizer=0.018696
+epoch=2 step=4 dataload=0.008501 to_device=0.008198 encoder=0.005791 decoder=0.001196 cls_head=0.000141 forward_total=0.007154 loss=0.005569 backward=0.014578 optimizer=0.014199
+epoch=2 step=5 dataload=0.009841 to_device=0.007593 encoder=0.005228 decoder=0.001069 cls_head=0.000121 forward_total=0.006443 loss=0.006179 backward=0.015875 optimizer=0.013110
+epoch=2 step=6 dataload=0.008659 to_device=0.007488 encoder=0.005150 decoder=0.001089 cls_head=0.000122 forward_total=0.006393 loss=0.006108 backward=0.017825 optimizer=0.010634
+epoch=2 step=7 dataload=0.005792 to_device=0.006296 encoder=0.003684 decoder=0.000828 cls_head=0.000090 forward_total=0.004618 loss=0.006345 backward=0.018315 optimizer=0.009048
+val epoch=2 step=1 dataload=0.309139 to_device=0.007339 encoder=0.006798 decoder=0.001419 cls_head=0.000325 forward_total=0.008662 loss=0.003853
+val epoch=2 step=2 dataload=0.007416 to_device=0.004540 encoder=0.003847 decoder=0.000938 cls_head=0.000147 forward_total=0.004968 loss=0.001734
+epoch=3 step=1 dataload=0.723276 to_device=0.012283 encoder=0.013575 decoder=0.002362 cls_head=0.000443 forward_total=0.016508 loss=0.002824 backward=0.020723 optimizer=0.021435
+epoch=3 step=2 dataload=0.011878 to_device=0.009322 encoder=0.007478 decoder=0.001475 cls_head=0.000216 forward_total=0.009209 loss=0.003917 backward=0.018296 optimizer=0.015410
+epoch=3 step=3 dataload=0.008550 to_device=0.008561 encoder=0.006527 decoder=0.001338 cls_head=0.000162 forward_total=0.008058 loss=0.004835 backward=0.018255 optimizer=0.014647
+epoch=3 step=4 dataload=0.008241 to_device=0.008235 encoder=0.006132 decoder=0.001235 cls_head=0.000148 forward_total=0.007546 loss=0.005285 backward=0.017813 optimizer=0.013876
+epoch=3 step=5 dataload=0.011792 to_device=0.008384 encoder=0.006056 decoder=0.001242 cls_head=0.000139 forward_total=0.007469 loss=0.005262 backward=0.017785 optimizer=0.013768
+epoch=3 step=6 dataload=0.007123 to_device=0.008103 encoder=0.005716 decoder=0.001151 cls_head=0.000132 forward_total=0.007025 loss=0.005759 backward=0.017624 optimizer=0.013192
+epoch=3 step=7 dataload=0.007187 to_device=0.007753 encoder=0.005629 decoder=0.001191 cls_head=0.000130 forward_total=0.006975 loss=0.004200 backward=0.018422 optimizer=0.013203
+val epoch=3 step=1 dataload=0.305771 to_device=0.010258 encoder=0.014266 decoder=0.003085 cls_head=0.000604 forward_total=0.018143 loss=0.003408
+val epoch=3 step=2 dataload=0.016448 to_device=0.006548 encoder=0.006746 decoder=0.001668 cls_head=0.000232 forward_total=0.008706 loss=0.001059
+epoch=4 step=1 dataload=0.572270 to_device=0.012855 encoder=0.020422 decoder=0.003835 cls_head=0.000657 forward_total=0.025079 loss=0.001993 backward=0.011708 optimizer=0.033284
+epoch=4 step=2 dataload=0.018737 to_device=0.011213 encoder=0.009360 decoder=0.001909 cls_head=0.000264 forward_total=0.011582 loss=0.003503 backward=0.006226 optimizer=0.025864
+epoch=4 step=3 dataload=0.010208 to_device=0.008948 encoder=0.006532 decoder=0.001348 cls_head=0.000168 forward_total=0.008079 loss=0.004831 backward=0.005513 optimizer=0.022875
+epoch=4 step=4 dataload=0.008207 to_device=0.008123 encoder=0.005753 decoder=0.001176 cls_head=0.000140 forward_total=0.007095 loss=0.005743 backward=0.005421 optimizer=0.022596
+epoch=4 step=5 dataload=0.010147 to_device=0.007758 encoder=0.005199 decoder=0.001029 cls_head=0.000096 forward_total=0.006348 loss=0.006167 backward=0.005272 optimizer=0.021779
+epoch=4 step=6 dataload=0.007163 to_device=0.012377 encoder=0.003626 decoder=0.000765 cls_head=0.000093 forward_total=0.004503 loss=0.007976 backward=0.005291 optimizer=0.021802
+epoch=4 step=7 dataload=0.005818 to_device=0.006312 encoder=0.003750 decoder=0.000819 cls_head=0.000092 forward_total=0.004678 loss=0.006274 backward=0.005568 optimizer=0.018778
+val epoch=4 step=1 dataload=0.314166 to_device=0.006038 encoder=0.005013 decoder=0.001431 cls_head=0.000798 forward_total=0.007349 loss=0.006278
+val epoch=4 step=2 dataload=0.009004 to_device=0.004867 encoder=0.004436 decoder=0.001093 cls_head=0.000174 forward_total=0.005749 loss=0.001589
+epoch=5 step=1 dataload=0.697062 to_device=0.011539 encoder=0.017313 decoder=0.003228 cls_head=0.000562 forward_total=0.021281 loss=0.002232 backward=0.020138 optimizer=0.029718
+epoch=5 step=2 dataload=0.015071 to_device=0.010048 encoder=0.008454 decoder=0.001593 cls_head=0.000233 forward_total=0.010322 loss=0.003827 backward=0.018448 optimizer=0.018251
+epoch=5 step=3 dataload=0.010160 to_device=0.009212 encoder=0.007545 decoder=0.001527 cls_head=0.000195 forward_total=0.009304 loss=0.003888 backward=0.018218 optimizer=0.017075
+epoch=5 step=4 dataload=0.009552 to_device=0.008857 encoder=0.006799 decoder=0.001285 cls_head=0.000162 forward_total=0.008277 loss=0.004614 backward=0.017906 optimizer=0.016037
+epoch=5 step=5 dataload=0.014707 to_device=0.008743 encoder=0.006778 decoder=0.001386 cls_head=0.000163 forward_total=0.008358 loss=0.004457 backward=0.017807 optimizer=0.015280
+epoch=5 step=6 dataload=0.009819 to_device=0.008429 encoder=0.006316 decoder=0.001261 cls_head=0.000148 forward_total=0.007752 loss=0.005114 backward=0.017648 optimizer=0.013762
+epoch=5 step=7 dataload=0.007543 to_device=0.007230 encoder=0.005961 decoder=0.001290 cls_head=0.000137 forward_total=0.007415 loss=0.003776 backward=0.018479 optimizer=0.013291
+val epoch=5 step=1 dataload=0.292416 to_device=0.012253 encoder=0.014810 decoder=0.003132 cls_head=0.000593 forward_total=0.018791 loss=0.003595
+val epoch=5 step=2 dataload=0.016781 to_device=0.006525 encoder=0.007064 decoder=0.001536 cls_head=0.000222 forward_total=0.008879 loss=0.001212
+epoch=6 step=1 dataload=0.744361 to_device=0.012589 encoder=0.019563 decoder=0.003913 cls_head=0.000654 forward_total=0.024306 loss=0.002052 backward=0.007332 optimizer=0.032355
+epoch=6 step=2 dataload=0.014358 to_device=0.009804 encoder=0.008225 decoder=0.001566 cls_head=0.000243 forward_total=0.010076 loss=0.003843 backward=0.018320 optimizer=0.021753
+epoch=6 step=3 dataload=0.010114 to_device=0.009415 encoder=0.007413 decoder=0.001527 cls_head=0.000190 forward_total=0.009167 loss=0.003824 backward=0.018134 optimizer=0.016290
+epoch=6 step=4 dataload=0.008911 to_device=0.008472 encoder=0.006748 decoder=0.001309 cls_head=0.000151 forward_total=0.008237 loss=0.004594 backward=0.017669 optimizer=0.015365
+epoch=6 step=5 dataload=0.012121 to_device=0.008646 encoder=0.006769 decoder=0.001330 cls_head=0.000150 forward_total=0.008280 loss=0.004462 backward=0.017734 optimizer=0.014705
+epoch=6 step=6 dataload=0.007600 to_device=0.008093 encoder=0.006038 decoder=0.001268 cls_head=0.000134 forward_total=0.007467 loss=0.005344 backward=0.017681 optimizer=0.017914
+epoch=6 step=7 dataload=0.007220 to_device=0.007543 encoder=0.009495 decoder=0.001278 cls_head=0.000136 forward_total=0.010947 loss=0.003256 backward=0.019423 optimizer=0.012747
+val epoch=6 step=1 dataload=0.315332 to_device=0.012383 encoder=0.014597 decoder=0.003047 cls_head=0.000615 forward_total=0.018479 loss=0.003696
+val epoch=6 step=2 dataload=0.019332 to_device=0.006514 encoder=0.006654 decoder=0.001521 cls_head=0.000232 forward_total=0.008467 loss=0.001239
+epoch=7 step=1 dataload=0.618959 to_device=0.012625 encoder=0.019084 decoder=0.003681 cls_head=0.000616 forward_total=0.023560 loss=0.001978 backward=0.020972 optimizer=0.033148
+epoch=7 step=2 dataload=0.019152 to_device=0.012035 encoder=0.010639 decoder=0.002046 cls_head=0.000277 forward_total=0.013015 loss=0.003477 backward=0.018566 optimizer=0.024883
+epoch=7 step=3 dataload=0.011136 to_device=0.009559 encoder=0.007325 decoder=0.001486 cls_head=0.000180 forward_total=0.009025 loss=0.003864 backward=0.018099 optimizer=0.016857
+epoch=7 step=4 dataload=0.009629 to_device=0.008913 encoder=0.006799 decoder=0.001385 cls_head=0.000170 forward_total=0.008385 loss=0.004502 backward=0.017776 optimizer=0.015229
+epoch=7 step=5 dataload=0.012391 to_device=0.008650 encoder=0.006796 decoder=0.001289 cls_head=0.000147 forward_total=0.008263 loss=0.004484 backward=0.017791 optimizer=0.018769
+epoch=7 step=6 dataload=0.008612 to_device=0.008308 encoder=0.006036 decoder=0.001233 cls_head=0.000142 forward_total=0.007439 loss=0.005350 backward=0.017941 optimizer=0.013623
+epoch=7 step=7 dataload=0.007574 to_device=0.007370 encoder=0.005896 decoder=0.001298 cls_head=0.000136 forward_total=0.007360 loss=0.003793 backward=0.018493 optimizer=0.013661
+val epoch=7 step=1 dataload=0.304171 to_device=0.012458 encoder=0.014696 decoder=0.003079 cls_head=0.000626 forward_total=0.018621 loss=0.003633
+val epoch=7 step=2 dataload=0.016050 to_device=0.006528 encoder=0.007125 decoder=0.001531 cls_head=0.000211 forward_total=0.008927 loss=0.001225
+epoch=8 step=1 dataload=0.725130 to_device=0.012659 encoder=0.019336 decoder=0.003608 cls_head=0.000590 forward_total=0.023695 loss=0.002091 backward=0.016198 optimizer=0.032950
+epoch=8 step=2 dataload=0.019737 to_device=0.011924 encoder=0.010049 decoder=0.002022 cls_head=0.000273 forward_total=0.012398 loss=0.003435 backward=0.018258 optimizer=0.019655
+epoch=8 step=3 dataload=0.010987 to_device=0.009772 encoder=0.007932 decoder=0.001607 cls_head=0.000209 forward_total=0.009788 loss=0.003785 backward=0.019389 optimizer=0.017236
+epoch=8 step=4 dataload=0.009678 to_device=0.008857 encoder=0.006964 decoder=0.001413 cls_head=0.000174 forward_total=0.008584 loss=0.004366 backward=0.017755 optimizer=0.016196
+epoch=8 step=5 dataload=0.013649 to_device=0.008917 encoder=0.007051 decoder=0.001401 cls_head=0.000162 forward_total=0.008648 loss=0.004137 backward=0.017699 optimizer=0.015347
+epoch=8 step=6 dataload=0.008170 to_device=0.008293 encoder=0.006233 decoder=0.001233 cls_head=0.000143 forward_total=0.007636 loss=0.005203 backward=0.017678 optimizer=0.014498
+epoch=8 step=7 dataload=0.008178 to_device=0.007467 encoder=0.006195 decoder=0.001369 cls_head=0.000148 forward_total=0.007744 loss=0.003478 backward=0.018338 optimizer=0.013883
+val epoch=8 step=1 dataload=0.284092 to_device=0.011399 encoder=0.014995 decoder=0.003177 cls_head=0.000617 forward_total=0.019008 loss=0.003895
+val epoch=8 step=2 dataload=0.016283 to_device=0.006517 encoder=0.009884 decoder=0.001628 cls_head=0.000237 forward_total=0.011814 loss=0.001149
+epoch=9 step=1 dataload=0.682256 to_device=0.012838 encoder=0.019396 decoder=0.003644 cls_head=0.000604 forward_total=0.023863 loss=0.002131 backward=0.020314 optimizer=0.035847
+epoch=9 step=2 dataload=0.014902 to_device=0.010197 encoder=0.008961 decoder=0.001702 cls_head=0.000304 forward_total=0.011035 loss=0.003752 backward=0.018265 optimizer=0.018336
+epoch=9 step=3 dataload=0.010132 to_device=0.009089 encoder=0.007715 decoder=0.001497 cls_head=0.000184 forward_total=0.009432 loss=0.003905 backward=0.017789 optimizer=0.017063
+epoch=9 step=4 dataload=0.009272 to_device=0.008737 encoder=0.006792 decoder=0.001422 cls_head=0.000158 forward_total=0.008402 loss=0.004502 backward=0.017644 optimizer=0.014682
+epoch=9 step=5 dataload=0.012980 to_device=0.008523 encoder=0.006667 decoder=0.001385 cls_head=0.000158 forward_total=0.008241 loss=0.004541 backward=0.017693 optimizer=0.015207
+epoch=9 step=6 dataload=0.007802 to_device=0.008246 encoder=0.006137 decoder=0.001237 cls_head=0.000138 forward_total=0.007540 loss=0.005293 backward=0.017609 optimizer=0.013816
+epoch=9 step=7 dataload=0.007053 to_device=0.007028 encoder=0.005907 decoder=0.001289 cls_head=0.000133 forward_total=0.007354 loss=0.003846 backward=0.018216 optimizer=0.013887
+val epoch=9 step=1 dataload=0.280044 to_device=0.011534 encoder=0.014828 decoder=0.003091 cls_head=0.000595 forward_total=0.018747 loss=0.003814
+val epoch=9 step=2 dataload=0.016385 to_device=0.010820 encoder=0.006544 decoder=0.001530 cls_head=0.000217 forward_total=0.008349 loss=0.001231
+epoch=10 step=1 dataload=0.715094 to_device=0.012051 encoder=0.020428 decoder=0.003367 cls_head=0.000566 forward_total=0.024549 loss=0.002219 backward=0.020941 optimizer=0.029397
+epoch=10 step=2 dataload=0.015868 to_device=0.010539 encoder=0.009153 decoder=0.004362 cls_head=0.000272 forward_total=0.013835 loss=0.001239 backward=0.018362 optimizer=0.019690
+epoch=10 step=3 dataload=0.010716 to_device=0.009256 encoder=0.007196 decoder=0.001425 cls_head=0.000178 forward_total=0.008834 loss=0.004004 backward=0.017986 optimizer=0.015447
+epoch=10 step=4 dataload=0.008443 to_device=0.008320 encoder=0.006504 decoder=0.001366 cls_head=0.000157 forward_total=0.008056 loss=0.004788 backward=0.017801 optimizer=0.015384
+epoch=10 step=5 dataload=0.010540 to_device=0.008530 encoder=0.004706 decoder=0.000995 cls_head=0.000162 forward_total=0.005893 loss=0.006862 backward=0.018161 optimizer=0.015095
+epoch=10 step=6 dataload=0.008923 to_device=0.010651 encoder=0.006092 decoder=0.001287 cls_head=0.000152 forward_total=0.007558 loss=0.005249 backward=0.018152 optimizer=0.013921
+epoch=10 step=7 dataload=0.007971 to_device=0.009299 encoder=0.005695 decoder=0.001256 cls_head=0.000130 forward_total=0.007107 loss=0.004094 backward=0.018974 optimizer=0.013752
+val epoch=10 step=1 dataload=0.264773 to_device=0.006657 encoder=0.009436 decoder=0.002179 cls_head=0.000431 forward_total=0.012172 loss=0.003865
+val epoch=10 step=2 dataload=0.012641 to_device=0.007013 encoder=0.005789 decoder=0.001445 cls_head=0.000192 forward_total=0.007476 loss=0.001293
+epoch=11 step=1 dataload=0.586000 to_device=0.012735 encoder=0.019726 decoder=0.003731 cls_head=0.000649 forward_total=0.024278 loss=0.001995 backward=0.011253 optimizer=0.032633
+epoch=11 step=2 dataload=0.015556 to_device=0.008105 encoder=0.006081 decoder=0.001695 cls_head=0.000199 forward_total=0.008010 loss=0.004864 backward=0.017871 optimizer=0.013144
+epoch=11 step=3 dataload=0.007621 to_device=0.009036 encoder=0.005363 decoder=0.001110 cls_head=0.000131 forward_total=0.006628 loss=0.006064 backward=0.018444 optimizer=0.012559
+epoch=11 step=4 dataload=0.007852 to_device=0.010212 encoder=0.005272 decoder=0.001087 cls_head=0.000125 forward_total=0.006507 loss=0.006245 backward=0.017533 optimizer=0.012526
+epoch=11 step=5 dataload=0.010454 to_device=0.008277 encoder=0.005228 decoder=0.001077 cls_head=0.000121 forward_total=0.006449 loss=0.006274 backward=0.017628 optimizer=0.012379
+epoch=11 step=6 dataload=0.009094 to_device=0.008151 encoder=0.005176 decoder=0.001076 cls_head=0.000117 forward_total=0.006391 loss=0.006272 backward=0.017613 optimizer=0.012407
+epoch=11 step=7 dataload=0.007406 to_device=0.007458 encoder=0.005274 decoder=0.001187 cls_head=0.000116 forward_total=0.006598 loss=0.004438 backward=0.018356 optimizer=0.012367
+val epoch=11 step=1 dataload=0.296845 to_device=0.009621 encoder=0.014246 decoder=0.003055 cls_head=0.000602 forward_total=0.018125 loss=0.003893
+val epoch=11 step=2 dataload=0.016569 to_device=0.006520 encoder=0.006662 decoder=0.001624 cls_head=0.000223 forward_total=0.008566 loss=0.001108
+epoch=12 step=1 dataload=0.564092 to_device=0.011777 encoder=0.017633 decoder=0.003308 cls_head=0.000561 forward_total=0.021661 loss=0.002261 backward=0.020965 optimizer=0.030258
+epoch=12 step=2 dataload=0.014735 to_device=0.010018 encoder=0.008352 decoder=0.001803 cls_head=0.000250 forward_total=0.010451 loss=0.003634 backward=0.018244 optimizer=0.021070
+epoch=12 step=3 dataload=0.011242 to_device=0.011067 encoder=0.008054 decoder=0.001548 cls_head=0.000182 forward_total=0.009828 loss=0.003855 backward=0.017934 optimizer=0.017313
+epoch=12 step=4 dataload=0.009216 to_device=0.008587 encoder=0.006932 decoder=0.001382 cls_head=0.000160 forward_total=0.008504 loss=0.004390 backward=0.017703 optimizer=0.015792
+epoch=12 step=5 dataload=0.012573 to_device=0.009107 encoder=0.006877 decoder=0.001350 cls_head=0.000156 forward_total=0.008415 loss=0.004401 backward=0.017722 optimizer=0.015938
+epoch=12 step=6 dataload=0.010212 to_device=0.008818 encoder=0.006937 decoder=0.001400 cls_head=0.000154 forward_total=0.008521 loss=0.004235 backward=0.017924 optimizer=0.014720
+epoch=12 step=7 dataload=0.008199 to_device=0.008422 encoder=0.006114 decoder=0.001304 cls_head=0.000135 forward_total=0.007579 loss=0.003563 backward=0.018421 optimizer=0.013965
+val epoch=12 step=1 dataload=0.289882 to_device=0.011199 encoder=0.014988 decoder=0.003135 cls_head=0.000614 forward_total=0.018958 loss=0.003802
+val epoch=12 step=2 dataload=0.016512 to_device=0.006468 encoder=0.007224 decoder=0.001511 cls_head=0.000201 forward_total=0.008991 loss=0.001262
+epoch=13 step=1 dataload=0.572868 to_device=0.010884 encoder=0.015936 decoder=0.003014 cls_head=0.000493 forward_total=0.019599 loss=0.002355 backward=0.015629 optimizer=0.027404
+epoch=13 step=2 dataload=0.013772 to_device=0.009582 encoder=0.007901 decoder=0.001604 cls_head=0.000239 forward_total=0.009787 loss=0.003807 backward=0.006140 optimizer=0.023184
+epoch=13 step=3 dataload=0.009198 to_device=0.008630 encoder=0.006889 decoder=0.001366 cls_head=0.000203 forward_total=0.008498 loss=0.004650 backward=0.005626 optimizer=0.022832
+epoch=13 step=4 dataload=0.007875 to_device=0.008003 encoder=0.005509 decoder=0.001120 cls_head=0.000131 forward_total=0.006786 loss=0.005824 backward=0.005268 optimizer=0.021837
+epoch=13 step=5 dataload=0.010733 to_device=0.007351 encoder=0.003589 decoder=0.000750 cls_head=0.000092 forward_total=0.004449 loss=0.008040 backward=0.017735 optimizer=0.010725
+epoch=13 step=6 dataload=0.005651 to_device=0.006771 encoder=0.003910 decoder=0.000771 cls_head=0.000090 forward_total=0.004790 loss=0.007770 backward=0.017647 optimizer=0.010717
+epoch=13 step=7 dataload=0.005874 to_device=0.006253 encoder=0.003759 decoder=0.000862 cls_head=0.000092 forward_total=0.004730 loss=0.006170 backward=0.018366 optimizer=0.009112
+val epoch=13 step=1 dataload=0.352994 to_device=0.008427 encoder=0.012767 decoder=0.003622 cls_head=0.000615 forward_total=0.017201 loss=0.004068
+val epoch=13 step=2 dataload=0.018753 to_device=0.006659 encoder=0.007460 decoder=0.001756 cls_head=0.000225 forward_total=0.009501 loss=0.001040
+epoch=14 step=1 dataload=0.887789 to_device=0.011500 encoder=0.017929 decoder=0.002935 cls_head=0.000488 forward_total=0.021502 loss=0.002343 backward=0.012862 optimizer=0.029964
+epoch=14 step=2 dataload=0.017798 to_device=0.010962 encoder=0.009196 decoder=0.001872 cls_head=0.000247 forward_total=0.011364 loss=0.003560 backward=0.011044 optimizer=0.019506
+epoch=14 step=3 dataload=0.010517 to_device=0.009250 encoder=0.007224 decoder=0.001430 cls_head=0.000169 forward_total=0.008857 loss=0.004092 backward=0.010770 optimizer=0.018338
+epoch=14 step=4 dataload=0.008751 to_device=0.008478 encoder=0.006330 decoder=0.001285 cls_head=0.000149 forward_total=0.007793 loss=0.005060 backward=0.010617 optimizer=0.018129
+epoch=14 step=5 dataload=0.010411 to_device=0.008738 encoder=0.005838 decoder=0.001184 cls_head=0.000137 forward_total=0.007190 loss=0.005549 backward=0.010608 optimizer=0.017979
+epoch=14 step=6 dataload=0.009012 to_device=0.007760 encoder=0.005476 decoder=0.001131 cls_head=0.000128 forward_total=0.006761 loss=0.005907 backward=0.010478 optimizer=0.017292
+epoch=14 step=7 dataload=0.005330 to_device=0.006321 encoder=0.003760 decoder=0.000815 cls_head=0.000090 forward_total=0.004682 loss=0.006292 backward=0.010897 optimizer=0.013965
+val epoch=14 step=1 dataload=0.319715 to_device=0.011520 encoder=0.015240 decoder=0.003316 cls_head=0.000644 forward_total=0.019403 loss=0.003946
+val epoch=14 step=2 dataload=0.017392 to_device=0.006533 encoder=0.006738 decoder=0.001632 cls_head=0.000242 forward_total=0.008669 loss=0.001065
+epoch=15 step=1 dataload=0.568417 to_device=0.012868 encoder=0.019610 decoder=0.003856 cls_head=0.000598 forward_total=0.024243 loss=0.002066 backward=0.022368 optimizer=0.036259
+epoch=15 step=2 dataload=0.019657 to_device=0.011775 encoder=0.011237 decoder=0.002006 cls_head=0.000422 forward_total=0.013735 loss=0.003409 backward=0.018215 optimizer=0.021139
+epoch=15 step=3 dataload=0.012027 to_device=0.009733 encoder=0.007760 decoder=0.001501 cls_head=0.000178 forward_total=0.009475 loss=0.003925 backward=0.017901 optimizer=0.018875
+epoch=15 step=4 dataload=0.009556 to_device=0.008761 encoder=0.006974 decoder=0.001463 cls_head=0.000199 forward_total=0.008677 loss=0.004242 backward=0.017788 optimizer=0.015207
+epoch=15 step=5 dataload=0.013105 to_device=0.008994 encoder=0.006536 decoder=0.001307 cls_head=0.000148 forward_total=0.008022 loss=0.004736 backward=0.017699 optimizer=0.014631
+epoch=15 step=6 dataload=0.007616 to_device=0.008099 encoder=0.006017 decoder=0.001235 cls_head=0.000140 forward_total=0.007418 loss=0.005398 backward=0.017582 optimizer=0.014012
+epoch=15 step=7 dataload=0.007281 to_device=0.008249 encoder=0.006507 decoder=0.001329 cls_head=0.000133 forward_total=0.008004 loss=0.003300 backward=0.018912 optimizer=0.013438
+val epoch=15 step=1 dataload=0.324143 to_device=0.011508 encoder=0.014888 decoder=0.003110 cls_head=0.000607 forward_total=0.018817 loss=0.003825
+val epoch=15 step=2 dataload=0.016836 to_device=0.006635 encoder=0.006722 decoder=0.001723 cls_head=0.000227 forward_total=0.008726 loss=0.001063
+epoch=16 step=1 dataload=0.620940 to_device=0.012679 encoder=0.019256 decoder=0.003566 cls_head=0.000622 forward_total=0.023605 loss=0.002169 backward=0.020947 optimizer=0.030149
+epoch=16 step=2 dataload=0.018990 to_device=0.010067 encoder=0.008114 decoder=0.001736 cls_head=0.000276 forward_total=0.010170 loss=0.003631 backward=0.006078 optimizer=0.023424
+epoch=16 step=3 dataload=0.009989 to_device=0.008995 encoder=0.006886 decoder=0.001346 cls_head=0.000158 forward_total=0.008419 loss=0.004449 backward=0.017865 optimizer=0.015328
+epoch=16 step=4 dataload=0.008616 to_device=0.008463 encoder=0.006344 decoder=0.001322 cls_head=0.000158 forward_total=0.007852 loss=0.004926 backward=0.017666 optimizer=0.014671
+epoch=16 step=5 dataload=0.012705 to_device=0.008619 encoder=0.006419 decoder=0.001310 cls_head=0.000145 forward_total=0.007906 loss=0.004851 backward=0.017704 optimizer=0.014566
+epoch=16 step=6 dataload=0.007485 to_device=0.008037 encoder=0.005946 decoder=0.001164 cls_head=0.000130 forward_total=0.007265 loss=0.005548 backward=0.017582 optimizer=0.014055
+epoch=16 step=7 dataload=0.007132 to_device=0.007230 encoder=0.005869 decoder=0.001252 cls_head=0.000130 forward_total=0.007277 loss=0.003921 backward=0.018404 optimizer=0.013383
+val epoch=16 step=1 dataload=0.315007 to_device=0.011609 encoder=0.015988 decoder=0.003213 cls_head=0.000613 forward_total=0.020004 loss=0.003881
+val epoch=16 step=2 dataload=0.016860 to_device=0.006488 encoder=0.006745 decoder=0.001629 cls_head=0.000196 forward_total=0.008624 loss=0.001123
+epoch=17 step=1 dataload=0.694664 to_device=0.014637 encoder=0.019882 decoder=0.003858 cls_head=0.000602 forward_total=0.024519 loss=0.002036 backward=0.022239 optimizer=0.032967
+epoch=17 step=2 dataload=0.019288 to_device=0.011524 encoder=0.010126 decoder=0.002119 cls_head=0.000285 forward_total=0.012588 loss=0.003369 backward=0.018396 optimizer=0.020996
+epoch=17 step=3 dataload=0.011142 to_device=0.011906 encoder=0.007998 decoder=0.001569 cls_head=0.000187 forward_total=0.009804 loss=0.003836 backward=0.017910 optimizer=0.017206
+epoch=17 step=4 dataload=0.009203 to_device=0.008784 encoder=0.011806 decoder=0.001421 cls_head=0.000159 forward_total=0.013416 loss=0.003917 backward=0.018132 optimizer=0.015145
+epoch=17 step=5 dataload=0.011416 to_device=0.008706 encoder=0.006649 decoder=0.001308 cls_head=0.000148 forward_total=0.008137 loss=0.004619 backward=0.017848 optimizer=0.015349
+epoch=17 step=6 dataload=0.010026 to_device=0.010099 encoder=0.006454 decoder=0.001341 cls_head=0.000184 forward_total=0.008035 loss=0.004814 backward=0.017938 optimizer=0.014704
+epoch=17 step=7 dataload=0.007733 to_device=0.007376 encoder=0.006144 decoder=0.001320 cls_head=0.000135 forward_total=0.007625 loss=0.003532 backward=0.019010 optimizer=0.014000
+val epoch=17 step=1 dataload=0.304883 to_device=0.009860 encoder=0.014676 decoder=0.003111 cls_head=0.000587 forward_total=0.018546 loss=0.003730
+val epoch=17 step=2 dataload=0.016533 to_device=0.006384 encoder=0.006742 decoder=0.001683 cls_head=0.000194 forward_total=0.008670 loss=0.001062
+epoch=18 step=1 dataload=0.595660 to_device=0.012813 encoder=0.019427 decoder=0.003410 cls_head=0.000557 forward_total=0.023587 loss=0.002271 backward=0.020788 optimizer=0.030927
+epoch=18 step=2 dataload=0.014191 to_device=0.012439 encoder=0.007872 decoder=0.001741 cls_head=0.000207 forward_total=0.009857 loss=0.003758 backward=0.018779 optimizer=0.019024
+epoch=18 step=3 dataload=0.010759 to_device=0.011268 encoder=0.008186 decoder=0.001638 cls_head=0.000191 forward_total=0.010055 loss=0.003801 backward=0.017889 optimizer=0.016524
+epoch=18 step=4 dataload=0.009292 to_device=0.008860 encoder=0.006894 decoder=0.001418 cls_head=0.000161 forward_total=0.008503 loss=0.004377 backward=0.017716 optimizer=0.016336
+epoch=18 step=5 dataload=0.013835 to_device=0.010880 encoder=0.006669 decoder=0.001372 cls_head=0.000156 forward_total=0.008228 loss=0.004499 backward=0.017844 optimizer=0.016141
+epoch=18 step=6 dataload=0.008724 to_device=0.008345 encoder=0.006145 decoder=0.001234 cls_head=0.000139 forward_total=0.007544 loss=0.005235 backward=0.017652 optimizer=0.014597
+epoch=18 step=7 dataload=0.007613 to_device=0.007405 encoder=0.006163 decoder=0.001282 cls_head=0.000137 forward_total=0.007607 loss=0.003580 backward=0.018396 optimizer=0.014048
+val epoch=18 step=1 dataload=0.286188 to_device=0.011366 encoder=0.014820 decoder=0.003107 cls_head=0.000598 forward_total=0.018726 loss=0.003810
+val epoch=18 step=2 dataload=0.016316 to_device=0.006444 encoder=0.007250 decoder=0.001520 cls_head=0.000200 forward_total=0.009026 loss=0.001246
+epoch=19 step=1 dataload=0.605409 to_device=0.011294 encoder=0.019403 decoder=0.003236 cls_head=0.000600 forward_total=0.023453 loss=0.002172 backward=0.016106 optimizer=0.025898
+epoch=19 step=2 dataload=0.012905 to_device=0.009930 encoder=0.008058 decoder=0.001535 cls_head=0.000224 forward_total=0.009856 loss=0.003885 backward=0.018543 optimizer=0.019157
+epoch=19 step=3 dataload=0.009853 to_device=0.008982 encoder=0.007050 decoder=0.001425 cls_head=0.000188 forward_total=0.008696 loss=0.004265 backward=0.017989 optimizer=0.016281
+epoch=19 step=4 dataload=0.009114 to_device=0.008316 encoder=0.006412 decoder=0.001325 cls_head=0.000150 forward_total=0.007917 loss=0.004862 backward=0.017850 optimizer=0.017267
+epoch=19 step=5 dataload=0.011432 to_device=0.008015 encoder=0.006361 decoder=0.001321 cls_head=0.000166 forward_total=0.007892 loss=0.004863 backward=0.017790 optimizer=0.016921
+epoch=19 step=6 dataload=0.007257 to_device=0.007924 encoder=0.005731 decoder=0.001123 cls_head=0.000130 forward_total=0.007009 loss=0.005714 backward=0.017811 optimizer=0.013461
+epoch=19 step=7 dataload=0.007232 to_device=0.007232 encoder=0.005647 decoder=0.001248 cls_head=0.000130 forward_total=0.007048 loss=0.004067 backward=0.018730 optimizer=0.014727
+val epoch=19 step=1 dataload=0.273342 to_device=0.009126 encoder=0.009895 decoder=0.002086 cls_head=0.000436 forward_total=0.012578 loss=0.003884
+val epoch=19 step=2 dataload=0.011438 to_device=0.005566 encoder=0.005826 decoder=0.001431 cls_head=0.000198 forward_total=0.007504 loss=0.001317
+epoch=20 step=1 dataload=0.573548 to_device=0.012646 encoder=0.019404 decoder=0.003469 cls_head=0.000554 forward_total=0.023596 loss=0.002232 backward=0.013096 optimizer=0.032370
+epoch=20 step=2 dataload=0.015973 to_device=0.010205 encoder=0.008414 decoder=0.001551 cls_head=0.000226 forward_total=0.010234 loss=0.003863 backward=0.017405 optimizer=0.018298
+epoch=20 step=3 dataload=0.010069 to_device=0.009206 encoder=0.007280 decoder=0.001489 cls_head=0.000170 forward_total=0.008972 loss=0.003944 backward=0.017940 optimizer=0.017077
+epoch=20 step=4 dataload=0.009245 to_device=0.008691 encoder=0.006652 decoder=0.001394 cls_head=0.000152 forward_total=0.008225 loss=0.004569 backward=0.017702 optimizer=0.014622
+epoch=20 step=5 dataload=0.012042 to_device=0.008518 encoder=0.006788 decoder=0.001279 cls_head=0.000142 forward_total=0.008241 loss=0.004493 backward=0.018088 optimizer=0.015748
+epoch=20 step=6 dataload=0.007475 to_device=0.007913 encoder=0.005979 decoder=0.001216 cls_head=0.000131 forward_total=0.007352 loss=0.005393 backward=0.017798 optimizer=0.013951
+epoch=20 step=7 dataload=0.007464 to_device=0.007194 encoder=0.005894 decoder=0.001294 cls_head=0.000132 forward_total=0.007345 loss=0.003808 backward=0.018812 optimizer=0.013428
+val epoch=20 step=1 dataload=0.275737 to_device=0.010439 encoder=0.012201 decoder=0.002568 cls_head=0.000522 forward_total=0.015472 loss=0.003759
+val epoch=20 step=2 dataload=0.014702 to_device=0.006084 encoder=0.006497 decoder=0.001416 cls_head=0.000187 forward_total=0.008152 loss=0.001323
+epoch=21 step=1 dataload=0.580847 to_device=0.012967 encoder=0.021283 decoder=0.003755 cls_head=0.000629 forward_total=0.025865 loss=0.002088 backward=0.021385 optimizer=0.031170
+epoch=21 step=2 dataload=0.015016 to_device=0.009889 encoder=0.008635 decoder=0.001781 cls_head=0.000253 forward_total=0.010716 loss=0.003613 backward=0.018442 optimizer=0.016469
+epoch=21 step=3 dataload=0.008850 to_device=0.008765 encoder=0.006926 decoder=0.001426 cls_head=0.000174 forward_total=0.008557 loss=0.004325 backward=0.017858 optimizer=0.015427
+epoch=21 step=4 dataload=0.008350 to_device=0.008490 encoder=0.006387 decoder=0.001318 cls_head=0.000147 forward_total=0.007879 loss=0.004907 backward=0.017802 optimizer=0.016732
+epoch=21 step=5 dataload=0.011382 to_device=0.008475 encoder=0.006475 decoder=0.001280 cls_head=0.000148 forward_total=0.007932 loss=0.004857 backward=0.018240 optimizer=0.014001
+epoch=21 step=6 dataload=0.008456 to_device=0.007901 encoder=0.005715 decoder=0.001181 cls_head=0.000136 forward_total=0.007056 loss=0.005613 backward=0.017718 optimizer=0.015513
+epoch=21 step=7 dataload=0.006808 to_device=0.007025 encoder=0.005640 decoder=0.001239 cls_head=0.000129 forward_total=0.007031 loss=0.004098 backward=0.018469 optimizer=0.012879
+val epoch=21 step=1 dataload=0.314921 to_device=0.011153 encoder=0.014755 decoder=0.003086 cls_head=0.000595 forward_total=0.018649 loss=0.003861
+val epoch=21 step=2 dataload=0.016996 to_device=0.006717 encoder=0.006690 decoder=0.001619 cls_head=0.000227 forward_total=0.008589 loss=0.001149
+epoch=22 step=1 dataload=0.593596 to_device=0.011808 encoder=0.019862 decoder=0.003608 cls_head=0.000653 forward_total=0.024311 loss=0.002188 backward=0.021208 optimizer=0.033210
+epoch=22 step=2 dataload=0.019233 to_device=0.011633 encoder=0.010114 decoder=0.002049 cls_head=0.000269 forward_total=0.012484 loss=0.003408 backward=0.018400 optimizer=0.020791
+epoch=22 step=3 dataload=0.011297 to_device=0.009700 encoder=0.007928 decoder=0.002272 cls_head=0.000188 forward_total=0.010423 loss=0.003242 backward=0.019444 optimizer=0.017462
+epoch=22 step=4 dataload=0.009788 to_device=0.008905 encoder=0.007166 decoder=0.001434 cls_head=0.000167 forward_total=0.008798 loss=0.004096 backward=0.017923 optimizer=0.016138
+epoch=22 step=5 dataload=0.013336 to_device=0.009078 encoder=0.006879 decoder=0.001390 cls_head=0.000161 forward_total=0.008462 loss=0.004354 backward=0.017986 optimizer=0.015422
+epoch=22 step=6 dataload=0.010358 to_device=0.008790 encoder=0.006674 decoder=0.001329 cls_head=0.000151 forward_total=0.008184 loss=0.004584 backward=0.017779 optimizer=0.014632
+epoch=22 step=7 dataload=0.007742 to_device=0.007482 encoder=0.006959 decoder=0.001363 cls_head=0.000148 forward_total=0.008495 loss=0.003146 backward=0.018825 optimizer=0.014011
+val epoch=22 step=1 dataload=0.319068 to_device=0.012346 encoder=0.015638 decoder=0.003150 cls_head=0.000581 forward_total=0.019598 loss=0.003893
+val epoch=22 step=2 dataload=0.016583 to_device=0.008382 encoder=0.007145 decoder=0.001459 cls_head=0.000203 forward_total=0.008873 loss=0.001286
+epoch=23 step=1 dataload=0.605072 to_device=0.016394 encoder=0.019938 decoder=0.003844 cls_head=0.000545 forward_total=0.024495 loss=0.002219 backward=0.020938 optimizer=0.033312
+epoch=23 step=2 dataload=0.014562 to_device=0.010214 encoder=0.008351 decoder=0.001752 cls_head=0.000232 forward_total=0.010377 loss=0.003648 backward=0.018228 optimizer=0.019406
+epoch=23 step=3 dataload=0.010458 to_device=0.011323 encoder=0.007935 decoder=0.001618 cls_head=0.000199 forward_total=0.009790 loss=0.003763 backward=0.017920 optimizer=0.017202
+epoch=23 step=4 dataload=0.009604 to_device=0.008530 encoder=0.006942 decoder=0.001401 cls_head=0.000170 forward_total=0.008545 loss=0.004577 backward=0.018070 optimizer=0.015643
+epoch=23 step=5 dataload=0.014155 to_device=0.009160 encoder=0.006811 decoder=0.001352 cls_head=0.000190 forward_total=0.008392 loss=0.004464 backward=0.017796 optimizer=0.014773
+epoch=23 step=6 dataload=0.007016 to_device=0.008962 encoder=0.006121 decoder=0.001246 cls_head=0.000142 forward_total=0.007535 loss=0.005293 backward=0.017597 optimizer=0.013882
+epoch=23 step=7 dataload=0.007353 to_device=0.007053 encoder=0.006032 decoder=0.001289 cls_head=0.000137 forward_total=0.007484 loss=0.003730 backward=0.018461 optimizer=0.013370
+val epoch=23 step=1 dataload=0.271150 to_device=0.012446 encoder=0.015021 decoder=0.003129 cls_head=0.000597 forward_total=0.018973 loss=0.003793
+val epoch=23 step=2 dataload=0.015664 to_device=0.006450 encoder=0.006562 decoder=0.001521 cls_head=0.000205 forward_total=0.008345 loss=0.001224
+epoch=24 step=1 dataload=0.593216 to_device=0.012692 encoder=0.019811 decoder=0.003752 cls_head=0.000623 forward_total=0.024341 loss=0.002066 backward=0.013056 optimizer=0.033180
+epoch=24 step=2 dataload=0.019882 to_device=0.011322 encoder=0.009979 decoder=0.002053 cls_head=0.000289 forward_total=0.012376 loss=0.003375 backward=0.018561 optimizer=0.022582
+epoch=24 step=3 dataload=0.011409 to_device=0.009690 encoder=0.007609 decoder=0.001580 cls_head=0.000179 forward_total=0.009403 loss=0.003778 backward=0.017923 optimizer=0.016920
+epoch=24 step=4 dataload=0.009364 to_device=0.008670 encoder=0.006859 decoder=0.001390 cls_head=0.000151 forward_total=0.008430 loss=0.004425 backward=0.017773 optimizer=0.015274
+epoch=24 step=5 dataload=0.010729 to_device=0.008232 encoder=0.006252 decoder=0.001295 cls_head=0.000146 forward_total=0.007722 loss=0.004967 backward=0.018184 optimizer=0.014587
+epoch=24 step=6 dataload=0.009343 to_device=0.008335 encoder=0.006616 decoder=0.001240 cls_head=0.000137 forward_total=0.008023 loss=0.004712 backward=0.017756 optimizer=0.013957
+epoch=24 step=7 dataload=0.007098 to_device=0.007193 encoder=0.005901 decoder=0.001297 cls_head=0.000134 forward_total=0.007358 loss=0.003802 backward=0.018554 optimizer=0.013745
+val epoch=24 step=1 dataload=0.309419 to_device=0.012646 encoder=0.016966 decoder=0.003251 cls_head=0.000611 forward_total=0.021055 loss=0.004062
+val epoch=24 step=2 dataload=0.016778 to_device=0.007521 encoder=0.006464 decoder=0.001452 cls_head=0.000203 forward_total=0.008174 loss=0.001293
+epoch=25 step=1 dataload=0.555553 to_device=0.011967 encoder=0.022816 decoder=0.004144 cls_head=0.000575 forward_total=0.027711 loss=0.002495 backward=0.012672 optimizer=0.034714
+epoch=25 step=2 dataload=0.005967 to_device=0.007268 encoder=0.004547 decoder=0.000938 cls_head=0.000160 forward_total=0.005676 loss=0.007061 backward=0.006299 optimizer=0.022234
+epoch=25 step=3 dataload=0.005379 to_device=0.006954 encoder=0.004022 decoder=0.000867 cls_head=0.000114 forward_total=0.005023 loss=0.007530 backward=0.017868 optimizer=0.010670
+epoch=25 step=4 dataload=0.006058 to_device=0.006936 encoder=0.003837 decoder=0.000813 cls_head=0.000101 forward_total=0.004769 loss=0.007816 backward=0.017759 optimizer=0.010685
+epoch=25 step=5 dataload=0.014362 to_device=0.009535 encoder=0.007144 decoder=0.001399 cls_head=0.000241 forward_total=0.008871 loss=0.004125 backward=0.017796 optimizer=0.013073
+epoch=25 step=6 dataload=0.007284 to_device=0.011592 encoder=0.005443 decoder=0.001078 cls_head=0.000127 forward_total=0.006675 loss=0.005979 backward=0.017723 optimizer=0.010722
+epoch=25 step=7 dataload=0.005672 to_device=0.006145 encoder=0.003846 decoder=0.000859 cls_head=0.000095 forward_total=0.004817 loss=0.006109 backward=0.018480 optimizer=0.009083
+val epoch=25 step=1 dataload=0.314959 to_device=0.010932 encoder=0.014894 decoder=0.003193 cls_head=0.000601 forward_total=0.018925 loss=0.003961
+val epoch=25 step=2 dataload=0.016560 to_device=0.006606 encoder=0.007753 decoder=0.001591 cls_head=0.000231 forward_total=0.009691 loss=0.001136
+epoch=26 step=1 dataload=0.607872 to_device=0.012660 encoder=0.019649 decoder=0.003710 cls_head=0.000601 forward_total=0.024119 loss=0.002071 backward=0.020830 optimizer=0.033902
+epoch=26 step=2 dataload=0.015314 to_device=0.010391 encoder=0.008666 decoder=0.001672 cls_head=0.000240 forward_total=0.010621 loss=0.003760 backward=0.018537 optimizer=0.019457
+epoch=26 step=3 dataload=0.010639 to_device=0.009630 encoder=0.007665 decoder=0.001612 cls_head=0.000183 forward_total=0.009495 loss=0.003754 backward=0.017925 optimizer=0.017032
+epoch=26 step=4 dataload=0.009375 to_device=0.008707 encoder=0.006810 decoder=0.001387 cls_head=0.000155 forward_total=0.008382 loss=0.004491 backward=0.017778 optimizer=0.016125
+epoch=26 step=5 dataload=0.012690 to_device=0.008677 encoder=0.006676 decoder=0.001381 cls_head=0.000154 forward_total=0.008242 loss=0.004579 backward=0.017979 optimizer=0.014421
+epoch=26 step=6 dataload=0.010088 to_device=0.008252 encoder=0.006001 decoder=0.001224 cls_head=0.000136 forward_total=0.007388 loss=0.005462 backward=0.017744 optimizer=0.013960
+epoch=26 step=7 dataload=0.007635 to_device=0.007387 encoder=0.005870 decoder=0.001290 cls_head=0.000134 forward_total=0.007323 loss=0.003755 backward=0.018601 optimizer=0.013741
+val epoch=26 step=1 dataload=0.298736 to_device=0.009925 encoder=0.014760 decoder=0.003173 cls_head=0.000606 forward_total=0.018737 loss=0.004100
+val epoch=26 step=2 dataload=0.015831 to_device=0.006800 encoder=0.006653 decoder=0.001516 cls_head=0.000205 forward_total=0.008438 loss=0.001245
+epoch=27 step=1 dataload=0.698358 to_device=0.008940 encoder=0.011555 decoder=0.002155 cls_head=0.000406 forward_total=0.014220 loss=0.003065 backward=0.021229 optimizer=0.026320
+epoch=27 step=2 dataload=0.015012 to_device=0.010135 encoder=0.009188 decoder=0.004186 cls_head=0.000253 forward_total=0.013677 loss=0.001263 backward=0.018411 optimizer=0.018530
+epoch=27 step=3 dataload=0.010057 to_device=0.009068 encoder=0.007267 decoder=0.001488 cls_head=0.000171 forward_total=0.008957 loss=0.003999 backward=0.018109 optimizer=0.015269
+epoch=27 step=4 dataload=0.008381 to_device=0.008269 encoder=0.007290 decoder=0.001403 cls_head=0.000157 forward_total=0.008877 loss=0.004043 backward=0.017928 optimizer=0.014659
+epoch=27 step=5 dataload=0.010373 to_device=0.008597 encoder=0.006363 decoder=0.001232 cls_head=0.000137 forward_total=0.007763 loss=0.004959 backward=0.017704 optimizer=0.014479
+epoch=27 step=6 dataload=0.010273 to_device=0.008329 encoder=0.006236 decoder=0.001293 cls_head=0.000140 forward_total=0.007698 loss=0.005056 backward=0.017740 optimizer=0.013851
+epoch=27 step=7 dataload=0.006874 to_device=0.008916 encoder=0.006234 decoder=0.001304 cls_head=0.000135 forward_total=0.007699 loss=0.003664 backward=0.018736 optimizer=0.013215
+val epoch=27 step=1 dataload=0.299649 to_device=0.009659 encoder=0.017890 decoder=0.003220 cls_head=0.000634 forward_total=0.021967 loss=0.004233
+val epoch=27 step=2 dataload=0.015809 to_device=0.006184 encoder=0.006198 decoder=0.001415 cls_head=0.000188 forward_total=0.007854 loss=0.001338
+epoch=28 step=1 dataload=0.574104 to_device=0.010414 encoder=0.011532 decoder=0.002282 cls_head=0.000447 forward_total=0.014396 loss=0.002881 backward=0.020745 optimizer=0.026841
+epoch=28 step=2 dataload=0.015042 to_device=0.012517 encoder=0.009010 decoder=0.001611 cls_head=0.000234 forward_total=0.010904 loss=0.003826 backward=0.021290 optimizer=0.020688
+epoch=28 step=3 dataload=0.009844 to_device=0.009025 encoder=0.006995 decoder=0.001464 cls_head=0.000185 forward_total=0.008677 loss=0.004222 backward=0.018029 optimizer=0.016164
+epoch=28 step=4 dataload=0.008963 to_device=0.008596 encoder=0.007200 decoder=0.001457 cls_head=0.000163 forward_total=0.008848 loss=0.004104 backward=0.018232 optimizer=0.015487
+epoch=28 step=5 dataload=0.012133 to_device=0.008637 encoder=0.006775 decoder=0.001288 cls_head=0.000144 forward_total=0.008238 loss=0.004571 backward=0.017923 optimizer=0.014606
+epoch=28 step=6 dataload=0.009614 to_device=0.008730 encoder=0.006789 decoder=0.001234 cls_head=0.000137 forward_total=0.008188 loss=0.004545 backward=0.017752 optimizer=0.014230
+epoch=28 step=7 dataload=0.007207 to_device=0.007201 encoder=0.005903 decoder=0.001304 cls_head=0.000134 forward_total=0.007366 loss=0.003783 backward=0.018510 optimizer=0.013899
+val epoch=28 step=1 dataload=0.319436 to_device=0.009650 encoder=0.014715 decoder=0.003275 cls_head=0.000629 forward_total=0.018824 loss=0.004604
+val epoch=28 step=2 dataload=0.016016 to_device=0.006509 encoder=0.007041 decoder=0.001628 cls_head=0.000202 forward_total=0.008934 loss=0.001127
+epoch=29 step=1 dataload=0.623069 to_device=0.015867 encoder=0.019474 decoder=0.003562 cls_head=0.000539 forward_total=0.023743 loss=0.002195 backward=0.014676 optimizer=0.033314
+epoch=29 step=2 dataload=0.014855 to_device=0.010740 encoder=0.008314 decoder=0.001568 cls_head=0.000229 forward_total=0.010154 loss=0.003864 backward=0.018408 optimizer=0.021116
+epoch=29 step=3 dataload=0.011260 to_device=0.009728 encoder=0.009728 decoder=0.001600 cls_head=0.000228 forward_total=0.011623 loss=0.003807 backward=0.018095 optimizer=0.018469
+epoch=29 step=4 dataload=0.010133 to_device=0.009046 encoder=0.007165 decoder=0.001488 cls_head=0.000165 forward_total=0.008850 loss=0.004024 backward=0.017726 optimizer=0.016248
+epoch=29 step=5 dataload=0.011147 to_device=0.008899 encoder=0.007030 decoder=0.001441 cls_head=0.000154 forward_total=0.008658 loss=0.004167 backward=0.017808 optimizer=0.015347
+epoch=29 step=6 dataload=0.010111 to_device=0.008426 encoder=0.006499 decoder=0.001300 cls_head=0.000145 forward_total=0.007972 loss=0.004783 backward=0.017766 optimizer=0.014134
+epoch=29 step=7 dataload=0.007625 to_device=0.007824 encoder=0.006517 decoder=0.001327 cls_head=0.000138 forward_total=0.008014 loss=0.003314 backward=0.019187 optimizer=0.014135
+val epoch=29 step=1 dataload=0.333083 to_device=0.012365 encoder=0.015039 decoder=0.003082 cls_head=0.000620 forward_total=0.018977 loss=0.004197
+val epoch=29 step=2 dataload=0.016649 to_device=0.007207 encoder=0.007767 decoder=0.001671 cls_head=0.000204 forward_total=0.009698 loss=0.001095
+epoch=30 step=1 dataload=0.598906 to_device=0.012674 encoder=0.020053 decoder=0.003716 cls_head=0.000611 forward_total=0.024554 loss=0.002019 backward=0.013200 optimizer=0.033369
+epoch=30 step=2 dataload=0.014739 to_device=0.009813 encoder=0.008300 decoder=0.001597 cls_head=0.000235 forward_total=0.010174 loss=0.003858 backward=0.018295 optimizer=0.019019
+epoch=30 step=3 dataload=0.009946 to_device=0.009201 encoder=0.007366 decoder=0.001499 cls_head=0.000175 forward_total=0.009072 loss=0.003893 backward=0.017998 optimizer=0.016916
+epoch=30 step=4 dataload=0.009548 to_device=0.008776 encoder=0.006847 decoder=0.001405 cls_head=0.000158 forward_total=0.008450 loss=0.004456 backward=0.017832 optimizer=0.014819
+epoch=30 step=5 dataload=0.011758 to_device=0.008687 encoder=0.006953 decoder=0.001355 cls_head=0.000152 forward_total=0.008490 loss=0.004277 backward=0.017877 optimizer=0.014934
+epoch=30 step=6 dataload=0.009887 to_device=0.008444 encoder=0.006583 decoder=0.001247 cls_head=0.000144 forward_total=0.008003 loss=0.004773 backward=0.017719 optimizer=0.014142
+epoch=30 step=7 dataload=0.007494 to_device=0.007127 encoder=0.005926 decoder=0.001288 cls_head=0.000135 forward_total=0.007375 loss=0.003763 backward=0.018478 optimizer=0.013911
+val epoch=30 step=1 dataload=0.298635 to_device=0.008118 encoder=0.010608 decoder=0.002565 cls_head=0.000516 forward_total=0.013841 loss=0.003975
+val epoch=30 step=2 dataload=0.016354 to_device=0.006393 encoder=0.006765 decoder=0.001633 cls_head=0.000213 forward_total=0.008669 loss=0.001170
+epoch=31 step=1 dataload=0.590372 to_device=0.010032 encoder=0.014300 decoder=0.002781 cls_head=0.000474 forward_total=0.017683 loss=0.002418 backward=0.007179 optimizer=0.023711
+epoch=31 step=2 dataload=0.012637 to_device=0.012218 encoder=0.007576 decoder=0.001451 cls_head=0.000223 forward_total=0.009295 loss=0.004048 backward=0.017483 optimizer=0.016458
+epoch=31 step=3 dataload=0.008960 to_device=0.008638 encoder=0.006878 decoder=0.001372 cls_head=0.000170 forward_total=0.008454 loss=0.004365 backward=0.018058 optimizer=0.015357
+epoch=31 step=4 dataload=0.008443 to_device=0.012778 encoder=0.006207 decoder=0.001274 cls_head=0.000143 forward_total=0.007651 loss=0.005157 backward=0.018307 optimizer=0.014077
+epoch=31 step=5 dataload=0.011970 to_device=0.008510 encoder=0.006430 decoder=0.001275 cls_head=0.000144 forward_total=0.007881 loss=0.004899 backward=0.017782 optimizer=0.014017
+epoch=31 step=6 dataload=0.008765 to_device=0.008141 encoder=0.005738 decoder=0.001206 cls_head=0.000134 forward_total=0.007104 loss=0.005634 backward=0.017944 optimizer=0.013335
+epoch=31 step=7 dataload=0.007049 to_device=0.007179 encoder=0.005827 decoder=0.001330 cls_head=0.000134 forward_total=0.007315 loss=0.003857 backward=0.018687 optimizer=0.013326
+val epoch=31 step=1 dataload=0.271963 to_device=0.010335 encoder=0.014993 decoder=0.003203 cls_head=0.000599 forward_total=0.018987 loss=0.004145
+val epoch=31 step=2 dataload=0.017018 to_device=0.008861 encoder=0.007103 decoder=0.001545 cls_head=0.000229 forward_total=0.008956 loss=0.001207
+epoch=32 step=1 dataload=0.599299 to_device=0.009948 encoder=0.013986 decoder=0.002618 cls_head=0.000519 forward_total=0.017255 loss=0.002604 backward=0.009266 optimizer=0.030525
+epoch=32 step=2 dataload=0.012942 to_device=0.009259 encoder=0.008054 decoder=0.001612 cls_head=0.000219 forward_total=0.009929 loss=0.003800 backward=0.011913 optimizer=0.017940
+epoch=32 step=3 dataload=0.009337 to_device=0.008912 encoder=0.006898 decoder=0.001430 cls_head=0.000161 forward_total=0.008530 loss=0.004316 backward=0.017703 optimizer=0.016334
+epoch=32 step=4 dataload=0.008904 to_device=0.008641 encoder=0.006325 decoder=0.001307 cls_head=0.000146 forward_total=0.007806 loss=0.005048 backward=0.017625 optimizer=0.014682
+epoch=32 step=5 dataload=0.013487 to_device=0.008361 encoder=0.006431 decoder=0.001264 cls_head=0.000137 forward_total=0.007860 loss=0.004862 backward=0.017754 optimizer=0.014773
+epoch=32 step=6 dataload=0.007426 to_device=0.008102 encoder=0.006068 decoder=0.001742 cls_head=0.000146 forward_total=0.007983 loss=0.004992 backward=0.018127 optimizer=0.014576
+epoch=32 step=7 dataload=0.007952 to_device=0.007195 encoder=0.005988 decoder=0.001280 cls_head=0.000132 forward_total=0.007425 loss=0.003769 backward=0.018401 optimizer=0.013445
+val epoch=32 step=1 dataload=0.259306 to_device=0.010946 encoder=0.015273 decoder=0.003200 cls_head=0.000612 forward_total=0.019279 loss=0.004074
+val epoch=32 step=2 dataload=0.015655 to_device=0.006422 encoder=0.006725 decoder=0.001519 cls_head=0.000200 forward_total=0.008499 loss=0.001244
+epoch=33 step=1 dataload=0.581932 to_device=0.012681 encoder=0.020080 decoder=0.003725 cls_head=0.000593 forward_total=0.024558 loss=0.002037 backward=0.007699 optimizer=0.033109
+epoch=33 step=2 dataload=0.014571 to_device=0.009488 encoder=0.008060 decoder=0.001604 cls_head=0.000234 forward_total=0.009940 loss=0.003820 backward=0.017401 optimizer=0.016300
+epoch=33 step=3 dataload=0.009060 to_device=0.010831 encoder=0.007486 decoder=0.001516 cls_head=0.000202 forward_total=0.009265 loss=0.003863 backward=0.018031 optimizer=0.015458
+epoch=33 step=4 dataload=0.008536 to_device=0.008284 encoder=0.006466 decoder=0.001316 cls_head=0.000152 forward_total=0.007961 loss=0.004860 backward=0.017927 optimizer=0.014598
+epoch=33 step=5 dataload=0.011634 to_device=0.007963 encoder=0.006004 decoder=0.001246 cls_head=0.000141 forward_total=0.007418 loss=0.005349 backward=0.017712 optimizer=0.013823
+epoch=33 step=6 dataload=0.008400 to_device=0.008066 encoder=0.005826 decoder=0.001247 cls_head=0.000125 forward_total=0.007226 loss=0.005594 backward=0.017679 optimizer=0.013268
+epoch=33 step=7 dataload=0.006688 to_device=0.007211 encoder=0.005703 decoder=0.001248 cls_head=0.000128 forward_total=0.007104 loss=0.004022 backward=0.019163 optimizer=0.013216
+val epoch=33 step=1 dataload=0.292822 to_device=0.012235 encoder=0.015244 decoder=0.003106 cls_head=0.000616 forward_total=0.019224 loss=0.004219
+val epoch=33 step=2 dataload=0.017329 to_device=0.006553 encoder=0.007004 decoder=0.001660 cls_head=0.000215 forward_total=0.008933 loss=0.001091
+epoch=34 step=1 dataload=0.614255 to_device=0.009391 encoder=0.013426 decoder=0.002436 cls_head=0.000457 forward_total=0.016438 loss=0.002791 backward=0.021032 optimizer=0.028152
+epoch=34 step=2 dataload=0.013252 to_device=0.009484 encoder=0.007975 decoder=0.001677 cls_head=0.000239 forward_total=0.009931 loss=0.003725 backward=0.018356 optimizer=0.017372
+epoch=34 step=3 dataload=0.009598 to_device=0.008919 encoder=0.007240 decoder=0.001660 cls_head=0.000215 forward_total=0.009147 loss=0.003689 backward=0.017955 optimizer=0.016088
+epoch=34 step=4 dataload=0.008752 to_device=0.008690 encoder=0.006452 decoder=0.001326 cls_head=0.000151 forward_total=0.007957 loss=0.004893 backward=0.017705 optimizer=0.014656
+epoch=34 step=5 dataload=0.011164 to_device=0.008401 encoder=0.006353 decoder=0.001253 cls_head=0.000151 forward_total=0.007785 loss=0.004928 backward=0.017692 optimizer=0.014438
+epoch=34 step=6 dataload=0.009146 to_device=0.008361 encoder=0.006495 decoder=0.001224 cls_head=0.000148 forward_total=0.007897 loss=0.004867 backward=0.017767 optimizer=0.014510
+epoch=34 step=7 dataload=0.007697 to_device=0.007312 encoder=0.006135 decoder=0.001292 cls_head=0.000135 forward_total=0.007588 loss=0.003578 backward=0.018552 optimizer=0.015234
+val epoch=34 step=1 dataload=0.320080 to_device=0.010215 encoder=0.012044 decoder=0.002534 cls_head=0.000491 forward_total=0.015235 loss=0.004271
+val epoch=34 step=2 dataload=0.014938 to_device=0.006233 encoder=0.006654 decoder=0.001639 cls_head=0.000234 forward_total=0.008582 loss=0.001075
+epoch=35 step=1 dataload=0.580884 to_device=0.011059 encoder=0.016340 decoder=0.003210 cls_head=0.000634 forward_total=0.020340 loss=0.004732 backward=0.014208 optimizer=0.030115
+epoch=35 step=2 dataload=0.013465 to_device=0.009750 encoder=0.008250 decoder=0.001665 cls_head=0.000237 forward_total=0.010202 loss=0.003732 backward=0.011788 optimizer=0.018728
+epoch=35 step=3 dataload=0.010637 to_device=0.009288 encoder=0.007286 decoder=0.001410 cls_head=0.000170 forward_total=0.008899 loss=0.003999 backward=0.011599 optimizer=0.017787
+epoch=35 step=4 dataload=0.009315 to_device=0.009320 encoder=0.006931 decoder=0.001342 cls_head=0.000157 forward_total=0.008459 loss=0.004590 backward=0.011566 optimizer=0.017403
+epoch=35 step=5 dataload=0.012023 to_device=0.008173 encoder=0.006153 decoder=0.001196 cls_head=0.000141 forward_total=0.007519 loss=0.005268 backward=0.011398 optimizer=0.017434
+epoch=35 step=6 dataload=0.006682 to_device=0.007835 encoder=0.005525 decoder=0.001074 cls_head=0.000124 forward_total=0.006748 loss=0.006003 backward=0.011280 optimizer=0.016585
+epoch=35 step=7 dataload=0.005669 to_device=0.006419 encoder=0.003913 decoder=0.000868 cls_head=0.000114 forward_total=0.004918 loss=0.006036 backward=0.011928 optimizer=0.013020
+val epoch=35 step=1 dataload=0.295383 to_device=0.010111 encoder=0.014703 decoder=0.003128 cls_head=0.000598 forward_total=0.018630 loss=0.004167
+val epoch=35 step=2 dataload=0.016735 to_device=0.006468 encoder=0.006901 decoder=0.001504 cls_head=0.000201 forward_total=0.008660 loss=0.001265
+epoch=36 step=1 dataload=0.547402 to_device=0.013910 encoder=0.006937 decoder=0.001257 cls_head=0.000279 forward_total=0.008557 loss=0.004548 backward=0.020342 optimizer=0.019847
+epoch=36 step=2 dataload=0.015083 to_device=0.009870 encoder=0.008329 decoder=0.001588 cls_head=0.000366 forward_total=0.010330 loss=0.003723 backward=0.011431 optimizer=0.021065
+epoch=36 step=3 dataload=0.010381 to_device=0.010482 encoder=0.006471 decoder=0.001347 cls_head=0.000201 forward_total=0.008057 loss=0.004917 backward=0.018416 optimizer=0.014251
+epoch=36 step=4 dataload=0.008139 to_device=0.008380 encoder=0.005895 decoder=0.001235 cls_head=0.000141 forward_total=0.007299 loss=0.005550 backward=0.017993 optimizer=0.013484
+epoch=36 step=5 dataload=0.009505 to_device=0.010197 encoder=0.006031 decoder=0.001203 cls_head=0.000133 forward_total=0.007393 loss=0.005347 backward=0.017855 optimizer=0.013357
+epoch=36 step=6 dataload=0.009416 to_device=0.007923 encoder=0.006010 decoder=0.001169 cls_head=0.000129 forward_total=0.007340 loss=0.005446 backward=0.017862 optimizer=0.013423
+epoch=36 step=7 dataload=0.006728 to_device=0.007561 encoder=0.005635 decoder=0.001245 cls_head=0.000130 forward_total=0.007037 loss=0.004103 backward=0.018614 optimizer=0.012724
+val epoch=36 step=1 dataload=0.311847 to_device=0.010847 encoder=0.015083 decoder=0.003180 cls_head=0.000596 forward_total=0.019058 loss=0.004242
+val epoch=36 step=2 dataload=0.016531 to_device=0.006541 encoder=0.007437 decoder=0.001535 cls_head=0.000207 forward_total=0.009237 loss=0.001223
+epoch=37 step=1 dataload=0.582371 to_device=0.012710 encoder=0.019895 decoder=0.003447 cls_head=0.000557 forward_total=0.024077 loss=0.002198 backward=0.021032 optimizer=0.030112
+epoch=37 step=2 dataload=0.015107 to_device=0.009968 encoder=0.008322 decoder=0.001696 cls_head=0.000241 forward_total=0.010306 loss=0.003690 backward=0.018584 optimizer=0.016344
+epoch=37 step=3 dataload=0.008854 to_device=0.008853 encoder=0.006796 decoder=0.001413 cls_head=0.000167 forward_total=0.008407 loss=0.004406 backward=0.018082 optimizer=0.016122
+epoch=37 step=4 dataload=0.008692 to_device=0.009048 encoder=0.006395 decoder=0.001307 cls_head=0.000149 forward_total=0.007879 loss=0.004963 backward=0.018024 optimizer=0.014525
+epoch=37 step=5 dataload=0.010164 to_device=0.010740 encoder=0.006890 decoder=0.001374 cls_head=0.000173 forward_total=0.008485 loss=0.004369 backward=0.018239 optimizer=0.015159
+epoch=37 step=6 dataload=0.010085 to_device=0.008266 encoder=0.006172 decoder=0.001165 cls_head=0.000133 forward_total=0.007498 loss=0.005273 backward=0.017931 optimizer=0.013914
+epoch=37 step=7 dataload=0.007211 to_device=0.007136 encoder=0.005889 decoder=0.001289 cls_head=0.000131 forward_total=0.007337 loss=0.003796 backward=0.018889 optimizer=0.013846
+val epoch=37 step=1 dataload=0.294641 to_device=0.012526 encoder=0.015362 decoder=0.003245 cls_head=0.000658 forward_total=0.019500 loss=0.004280
+val epoch=37 step=2 dataload=0.017041 to_device=0.006400 encoder=0.007096 decoder=0.001490 cls_head=0.000219 forward_total=0.008861 loss=0.001229
+epoch=38 step=1 dataload=0.686039 to_device=0.012835 encoder=0.024348 decoder=0.004099 cls_head=0.000731 forward_total=0.029376 loss=0.002207 backward=0.023633 optimizer=0.030459
+epoch=38 step=2 dataload=0.014855 to_device=0.010289 encoder=0.008769 decoder=0.001761 cls_head=0.000247 forward_total=0.010827 loss=0.003671 backward=0.018475 optimizer=0.017348
+epoch=38 step=3 dataload=0.009407 to_device=0.009056 encoder=0.007306 decoder=0.001457 cls_head=0.000167 forward_total=0.008961 loss=0.003954 backward=0.018067 optimizer=0.017134
+epoch=38 step=4 dataload=0.009566 to_device=0.008795 encoder=0.006736 decoder=0.001389 cls_head=0.000157 forward_total=0.008311 loss=0.004524 backward=0.018138 optimizer=0.015301
+epoch=38 step=5 dataload=0.011404 to_device=0.009128 encoder=0.006955 decoder=0.001290 cls_head=0.000145 forward_total=0.008422 loss=0.004376 backward=0.017865 optimizer=0.014746
+epoch=38 step=6 dataload=0.011738 to_device=0.008481 encoder=0.006328 decoder=0.001243 cls_head=0.000140 forward_total=0.007740 loss=0.004997 backward=0.017961 optimizer=0.013849
+epoch=38 step=7 dataload=0.007609 to_device=0.007404 encoder=0.006159 decoder=0.001392 cls_head=0.000148 forward_total=0.007725 loss=0.005645 backward=0.019028 optimizer=0.013596
+val epoch=38 step=1 dataload=0.317849 to_device=0.011392 encoder=0.015688 decoder=0.003381 cls_head=0.000637 forward_total=0.019948 loss=0.004466
+val epoch=38 step=2 dataload=0.018297 to_device=0.006496 encoder=0.006988 decoder=0.001507 cls_head=0.000225 forward_total=0.008869 loss=0.001305
+epoch=39 step=1 dataload=0.629653 to_device=0.012731 encoder=0.020334 decoder=0.003567 cls_head=0.000576 forward_total=0.024651 loss=0.002203 backward=0.020602 optimizer=0.033329
+epoch=39 step=2 dataload=0.015190 to_device=0.014036 encoder=0.008441 decoder=0.001652 cls_head=0.000222 forward_total=0.010354 loss=0.004919 backward=0.018336 optimizer=0.018382
+epoch=39 step=3 dataload=0.010107 to_device=0.009307 encoder=0.007490 decoder=0.001489 cls_head=0.000173 forward_total=0.009186 loss=0.003927 backward=0.017998 optimizer=0.016254
+epoch=39 step=4 dataload=0.009046 to_device=0.008594 encoder=0.006670 decoder=0.001307 cls_head=0.000148 forward_total=0.008153 loss=0.004614 backward=0.017734 optimizer=0.015332
+epoch=39 step=5 dataload=0.011894 to_device=0.009330 encoder=0.006559 decoder=0.001307 cls_head=0.000149 forward_total=0.008046 loss=0.004702 backward=0.017738 optimizer=0.014565
+epoch=39 step=6 dataload=0.007492 to_device=0.008200 encoder=0.005942 decoder=0.001186 cls_head=0.000132 forward_total=0.007284 loss=0.005419 backward=0.017747 optimizer=0.013912
+epoch=39 step=7 dataload=0.007495 to_device=0.007446 encoder=0.005901 decoder=0.001298 cls_head=0.000135 forward_total=0.007359 loss=0.003763 backward=0.018578 optimizer=0.013336
+val epoch=39 step=1 dataload=0.295192 to_device=0.009629 encoder=0.010743 decoder=0.002202 cls_head=0.000479 forward_total=0.013609 loss=0.004308
+val epoch=39 step=2 dataload=0.012705 to_device=0.005911 encoder=0.006268 decoder=0.001421 cls_head=0.000193 forward_total=0.007934 loss=0.001339
+epoch=40 step=1 dataload=0.844742 to_device=0.011048 encoder=0.017979 decoder=0.002950 cls_head=0.000499 forward_total=0.021586 loss=0.002425 backward=0.021001 optimizer=0.032399
+epoch=40 step=2 dataload=0.014974 to_device=0.010085 encoder=0.008400 decoder=0.001680 cls_head=0.000231 forward_total=0.010353 loss=0.003803 backward=0.018799 optimizer=0.016460
+epoch=40 step=3 dataload=0.009017 to_device=0.008762 encoder=0.006751 decoder=0.001422 cls_head=0.000166 forward_total=0.008370 loss=0.004458 backward=0.017955 optimizer=0.016249
+epoch=40 step=4 dataload=0.009300 to_device=0.008957 encoder=0.006474 decoder=0.001308 cls_head=0.000148 forward_total=0.007958 loss=0.004927 backward=0.018441 optimizer=0.015409
+epoch=40 step=5 dataload=0.012629 to_device=0.008220 encoder=0.006606 decoder=0.001340 cls_head=0.000155 forward_total=0.008130 loss=0.004689 backward=0.017804 optimizer=0.014040
+epoch=40 step=6 dataload=0.007382 to_device=0.007978 encoder=0.005773 decoder=0.001185 cls_head=0.000133 forward_total=0.007118 loss=0.005738 backward=0.017743 optimizer=0.013930
+epoch=40 step=7 dataload=0.007429 to_device=0.007227 encoder=0.005765 decoder=0.001282 cls_head=0.000132 forward_total=0.007204 loss=0.003904 backward=0.018436 optimizer=0.013448
+val epoch=40 step=1 dataload=0.283038 to_device=0.009661 encoder=0.014742 decoder=0.003339 cls_head=0.000637 forward_total=0.018962 loss=0.004123
+val epoch=40 step=2 dataload=0.016877 to_device=0.005420 encoder=0.005464 decoder=0.001210 cls_head=0.000219 forward_total=0.006954 loss=0.001471

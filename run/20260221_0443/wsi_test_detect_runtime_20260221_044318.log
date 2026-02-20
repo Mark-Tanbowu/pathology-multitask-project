@@ -1,0 +1,401 @@
+[2026-02-21 04:43:18,290] INFO - [TEST-DETECT] Starting with config:
+seed: 234
+device: cuda
+num_epochs: 40
+batch_size: 16
+num_workers: 3
+lr: 0.0005
+tasks:
+  enable_seg: true
+  enable_cls: true
+data:
+  use_dummy: false
+  use_slide_manifest: true
+  train_slide_manifest: data/processed/manifest_slides_train.csv
+  val_slide_manifest: data/processed/manifest_slides_val.csv
+  test_slide_manifest: data/processed/manifest_slides_test.csv
+  coords_cache_slides: 2
+  cache_masks: false
+  mask_level: null
+  mask_max_size: 4096
+  normalize: imagenet
+  imagenet_mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  imagenet_std:
+  - 0.229
+  - 0.224
+  - 0.225
+  train_images: data/train/images_fixed
+  train_masks: data/train/masks_fixed
+  train_labels: data/train/labels.csv
+  val_images: data/val/images_fixed
+  val_masks: data/val/masks_fixed
+  val_labels: data/val/labels.csv
+  test_images: data/test/images_fixed
+  test_masks: data/test/masks_fixed
+  test_labels: data/test/labels.csv
+  dummy:
+    train_samples: 8
+    val_samples: 4
+    test_samples: 4
+    image_size: 128
+aug:
+  flip_p: 0.5
+  affine:
+    degrees: 10.0
+    translate: 0.05
+    scale_range:
+    - 0.95
+    - 1.05
+    shear: 5.0
+    p: 0.7
+  elastic:
+    alpha: 0.05
+    grid_size: 4
+    p: 0.3
+loader:
+  stratified_train: false
+  stratified_val: false
+  slide_weighted_sampling: true
+  slide_samples_per_epoch: 300000
+  slide_weighted_replacement: true
+  train_geometry_sampling:
+    enabled: true
+    field: tumor_area_ratio
+    gamma: 0.5
+    eps: 1.0e-08
+    clip_min: 0.6
+    clip_max: 1.8
+  val_slide_weighted_sampling: false
+  val_slide_samples_per_epoch: 120000
+  val_slide_weighted_replacement: false
+  train_positive_ratio: 0.38
+  train_drop_last: false
+  val_positive_ratio: 0.51
+model:
+  backbone: mobilenet_v2
+  num_classes: 1
+  seg_upsample_to_input: true
+  pretrained: true
+  mobilenet_width_mult: 1.0
+  use_light_decoder: true
+  attention: se
+  attention_location: both
+  encoder_attention: se
+  decoder_attention: cbam
+  attention_reduction: 16
+  decoder_attention_layers:
+  - up3
+  - up4
+loss:
+  seg: bce_with_logits
+  seg_weight: 1.0
+  cls_weight: 1.0
+  dice_weight: 0.5
+  cls: bce
+  weighting: uncertainty
+  use_uncertainty: true
+  uncertainty_init: 0.0
+  gradnorm_alpha: 1.5
+log:
+  save_timing_dir: ${hydra:runtime.output_dir}
+  save_dir: ${hydra:runtime.output_dir}
+  save_ckpt: true
+  train_log_interval: 20
+  val_log_interval: 20
+  params_dir: ${hydra:runtime.output_dir}
+  roc_dir: ${hydra:runtime.output_dir}/roc
+eval:
+  ckpt: null
+  save_dir: ${log.params_dir}
+  save_roc: true
+  wsi_score_method: topk_mean
+  wsi_topk: 30
+  wsi_k_values:
+  - 30
+  wsi_acc_threshold: 0.91
+  geometry_validation:
+    enabled: true
+    field: tumor_area_ratio
+    positive_bins:
+    - 0.0005
+    - 0.002
+    - 0.01
+    min_bin_slides: 3
+  best_checkpoint:
+    z_dice_weight: 0.4
+    auc_gate_delta: 0.002
+    geom_gate_delta: 0.02
+    geom_tie_eps: 0.0001
+    score_tie_eps: 0.0001
+    std_eps: 1.0e-08
+    loss_tie_eps: 1.0e-08
+test_detect:
+  ckpt: run/20260220_2024/best.pt
+  strict_load: true
+  progress_log_interval_sec: 3.0
+  save_dir: ${log.params_dir}
+  log_prefix: wsi_test_detect
+  save_runtime_log: true
+  batch_size: ${batch_size}
+  save_slide_scores: true
+  save_patch_scores: false
+  wsi_topk: ${eval.wsi_topk}
+  wsi_acc_threshold: ${eval.wsi_acc_threshold}
+prepare_train:
+  slides_dir: data/camelyon16/train/images
+  masks_dir: data/camelyon16/train/masks
+  annotations_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/annotations
+  manifest_path: data/processed/patch_manifest_train.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 0.2
+  seed: 42
+  groups: Tumor
+  ignore_groups: Exclusion
+  ignore_overlap_threshold: 0.05
+  enable_geometry_stats: true
+  apply_xml_rules_for_tumor_only: true
+  max_patches_per_slide: 3000
+  sampling_mode: stratified_random
+  target_pos_ratio: 0.5
+  slide_labels_csv: null
+  slide_label_fallback_to_sampled: false
+  mask_suffix: _mask.tif
+  prefer_masks: false
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/train
+  slide_manifest_path: data/processed/manifest_slides_train.csv
+  write_patch_manifest: false
+prepare_val:
+  slides_dir: data/camelyon16/val/images
+  masks_dir: data/camelyon16/val/masks
+  annotations_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/annotations
+  manifest_path: data/processed/patch_manifest_val.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 0.2
+  seed: 42
+  groups: Tumor
+  ignore_groups: Exclusion
+  ignore_overlap_threshold: 0.05
+  enable_geometry_stats: true
+  apply_xml_rules_for_tumor_only: true
+  max_patches_per_slide: 3000
+  sampling_mode: stratified_random
+  target_pos_ratio: 0.5
+  slide_labels_csv: null
+  slide_label_fallback_to_sampled: false
+  mask_suffix: _mask.tif
+  prefer_masks: false
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/val
+  slide_manifest_path: data/processed/manifest_slides_val.csv
+  write_patch_manifest: false
+prepare_test:
+  slides_dir: data/camelyon16/test/images
+  masks_dir: data/camelyon16/test/masks
+  annotations_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/annotations
+  manifest_path: data/processed/patch_manifest_test.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 128
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 0.2
+  seed: 42
+  groups: Tumor
+  ignore_groups: Exclusion
+  ignore_overlap_threshold: 0.05
+  max_patches_per_slide: 4000
+  sampling_mode: stratified_random
+  target_pos_ratio: 0.5
+  slide_label_mode: xml_presence
+  slide_labels_csv: null
+  slide_label_fallback_to_sampled: false
+  mask_suffix: _mask.tif
+  prefer_masks: false
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/test
+  slide_manifest_path: data/processed/manifest_slides_test.csv
+  write_patch_manifest: false
+  enable_geometry_stats: true
+
+[2026-02-21 04:43:18,290] INFO - [TEST-DETECT] runtime_log=/root/autodl-tmp/pathology-multitask-project/run/20260221_0443/wsi_test_detect_runtime_20260221_044318.log
+[2026-02-21 04:43:18,293] INFO - [TEST-DETECT] test manifest 路径一致：/root/autodl-tmp/pathology-multitask-project/data/processed/manifest_slides_test.csv
+[2026-02-21 04:43:18,311] INFO - [TEST-DETECT] 路径检查完成：slides=129 missing_coords=0 missing_masks=0 outside_coords_root=0 coords_root=/root/autodl-tmp/pathology-multitask-project/data/processed/coords/test masks_dir=/root/autodl-tmp/pathology-multitask-project/data/camelyon16/test/masks
+[2026-02-21 04:43:18,312] INFO - [TEST-DETECT] DataLoader ready: patches=514408 batches=32151 batch_size=16 num_workers=3 progress_interval=3.0s
+[2026-02-21 04:43:18,897] INFO - [TEST-DETECT] Loaded checkpoint: /root/autodl-tmp/pathology-multitask-project/run/20260220_2024/best.pt
+[2026-02-21 04:43:21,910] INFO - [TEST-DETECT] progress=0.16% batch=50/32151 patches=800/514408 slides=1 speed=265.7 patch/s elapsed=3.0s eta=1932.8s
+[2026-02-21 04:43:24,930] INFO - [TEST-DETECT] progress=0.36% batch=115/32151 patches=1840/514408 slides=1 speed=305.1 patch/s elapsed=6.0s eta=1679.9s
+[2026-02-21 04:43:27,983] INFO - [TEST-DETECT] progress=0.56% batch=181/32151 patches=2896/514408 slides=1 speed=318.8 patch/s elapsed=9.1s eta=1604.3s
+[2026-02-21 04:43:31,034] INFO - [TEST-DETECT] progress=0.77% batch=247/32151 patches=3952/514408 slides=1 speed=325.7 patch/s elapsed=12.1s eta=1567.3s
+[2026-02-21 04:43:34,087] INFO - [TEST-DETECT] progress=0.95% batch=307/32151 patches=4912/514408 slides=2 speed=323.4 patch/s elapsed=15.2s eta=1575.3s
+[2026-02-21 04:43:37,130] INFO - [TEST-DETECT] progress=1.14% batch=367/32151 patches=5872/514408 slides=2 speed=322.1 patch/s elapsed=18.2s eta=1578.8s
+[2026-02-21 04:43:40,146] INFO - [TEST-DETECT] progress=1.33% batch=427/32151 patches=6832/514408 slides=2 speed=321.6 patch/s elapsed=21.2s eta=1578.5s
+[2026-02-21 04:43:43,153] INFO - [TEST-DETECT] progress=1.52% batch=488/32151 patches=7808/514408 slides=2 speed=321.9 patch/s elapsed=24.3s eta=1573.6s
+[2026-02-21 04:43:46,154] INFO - [TEST-DETECT] progress=1.71% batch=549/32151 patches=8784/514408 slides=3 speed=322.3 patch/s elapsed=27.3s eta=1568.8s
+[2026-02-21 04:43:49,182] INFO - [TEST-DETECT] progress=1.90% batch=610/32151 patches=9760/514408 slides=3 speed=322.3 patch/s elapsed=30.3s eta=1565.8s
+[2026-02-21 04:43:52,202] INFO - [TEST-DETECT] progress=2.09% batch=672/32151 patches=10752/514408 slides=3 speed=322.9 patch/s elapsed=33.3s eta=1560.0s
+[2026-02-21 04:43:55,213] INFO - [TEST-DETECT] progress=2.28% batch=734/32151 patches=11744/514408 slides=3 speed=323.4 patch/s elapsed=36.3s eta=1554.3s
+[2026-02-21 04:43:58,238] INFO - [TEST-DETECT] progress=2.48% batch=798/32151 patches=12768/514408 slides=4 speed=324.6 patch/s elapsed=39.3s eta=1545.5s
+[2026-02-21 04:44:01,311] INFO - [TEST-DETECT] progress=2.70% batch=867/32151 patches=13872/514408 slides=4 speed=327.1 patch/s elapsed=42.4s eta=1530.3s
+[2026-02-21 04:44:04,323] INFO - [TEST-DETECT] progress=2.91% batch=935/32151 patches=14960/514408 slides=4 speed=329.3 patch/s elapsed=45.4s eta=1516.5s
+[2026-02-21 04:44:07,326] INFO - [TEST-DETECT] progress=3.11% batch=1001/32151 patches=16016/514408 slides=5 speed=330.7 patch/s elapsed=48.4s eta=1506.9s
+[2026-02-21 04:44:10,368] INFO - [TEST-DETECT] progress=3.30% batch=1062/32151 patches=16992/514408 slides=5 speed=330.1 patch/s elapsed=51.5s eta=1506.6s
+[2026-02-21 04:44:13,449] INFO - [TEST-DETECT] progress=3.50% batch=1125/32151 patches=18000/514408 slides=5 speed=330.0 patch/s elapsed=54.5s eta=1504.4s
+[2026-02-21 04:44:16,469] INFO - [TEST-DETECT] progress=3.70% batch=1188/32151 patches=19008/514408 slides=5 speed=330.2 patch/s elapsed=57.6s eta=1500.4s
+[2026-02-21 04:44:19,538] INFO - [TEST-DETECT] progress=3.85% batch=1239/32151 patches=19824/514408 slides=5 speed=326.9 patch/s elapsed=60.6s eta=1512.9s
+[2026-02-21 04:44:22,604] INFO - [TEST-DETECT] progress=4.02% batch=1292/32151 patches=20672/514408 slides=6 speed=324.5 patch/s elapsed=63.7s eta=1521.5s
+[2026-02-21 04:44:25,679] INFO - [TEST-DETECT] progress=4.21% batch=1352/32151 patches=21632/514408 slides=6 speed=323.9 patch/s elapsed=66.8s eta=1521.2s
+[2026-02-21 04:44:28,701] INFO - [TEST-DETECT] progress=4.39% batch=1413/32151 patches=22608/514408 slides=6 speed=323.9 patch/s elapsed=69.8s eta=1518.4s
+[2026-02-21 04:44:31,701] INFO - [TEST-DETECT] progress=4.58% batch=1473/32151 patches=23568/514408 slides=6 speed=323.7 patch/s elapsed=72.8s eta=1516.2s
+[2026-02-21 04:44:34,746] INFO - [TEST-DETECT] progress=4.77% batch=1532/32151 patches=24512/514408 slides=7 speed=323.2 patch/s elapsed=75.8s eta=1515.9s
+[2026-02-21 04:44:37,769] INFO - [TEST-DETECT] progress=4.95% batch=1592/32151 patches=25472/514408 slides=7 speed=323.0 patch/s elapsed=78.9s eta=1513.9s
+[2026-02-21 04:44:40,785] INFO - [TEST-DETECT] progress=5.14% batch=1653/32151 patches=26448/514408 slides=7 speed=323.0 patch/s elapsed=81.9s eta=1510.8s
+[2026-02-21 04:44:43,797] INFO - [TEST-DETECT] progress=5.33% batch=1714/32151 patches=27424/514408 slides=7 speed=323.0 patch/s elapsed=84.9s eta=1507.6s
+[2026-02-21 04:44:46,841] INFO - [TEST-DETECT] progress=5.52% batch=1775/32151 patches=28400/514408 slides=8 speed=322.9 patch/s elapsed=87.9s eta=1504.9s
+[2026-02-21 04:44:49,848] INFO - [TEST-DETECT] progress=5.73% batch=1841/32151 patches=29456/514408 slides=8 speed=323.9 patch/s elapsed=90.9s eta=1497.3s
+[2026-02-21 04:44:52,852] INFO - [TEST-DETECT] progress=5.93% batch=1907/32151 patches=30512/514408 slides=8 speed=324.8 patch/s elapsed=94.0s eta=1490.0s
+[2026-02-21 04:44:55,876] INFO - [TEST-DETECT] progress=6.14% batch=1974/32151 patches=31584/514408 slides=8 speed=325.7 patch/s elapsed=97.0s eta=1482.5s
+[2026-02-21 04:44:58,881] INFO - [TEST-DETECT] progress=6.34% batch=2037/32151 patches=32592/514408 slides=9 speed=326.0 patch/s elapsed=100.0s eta=1478.0s
+[2026-02-21 04:45:01,902] INFO - [TEST-DETECT] progress=6.52% batch=2097/32151 patches=33552/514408 slides=9 speed=325.7 patch/s elapsed=103.0s eta=1476.2s
+[2026-02-21 04:45:04,912] INFO - [TEST-DETECT] progress=6.71% batch=2157/32151 patches=34512/514408 slides=9 speed=325.5 patch/s elapsed=106.0s eta=1474.1s
+[2026-02-21 04:45:07,949] INFO - [TEST-DETECT] progress=6.90% batch=2217/32151 patches=35472/514408 slides=9 speed=325.3 patch/s elapsed=109.0s eta=1472.4s
+[2026-02-21 04:45:11,029] INFO - [TEST-DETECT] progress=7.07% batch=2274/32151 patches=36384/514408 slides=10 speed=324.5 patch/s elapsed=112.1s eta=1473.2s
+[2026-02-21 04:45:14,101] INFO - [TEST-DETECT] progress=7.24% batch=2328/32151 patches=37248/514408 slides=10 speed=323.3 patch/s elapsed=115.2s eta=1475.8s
+[2026-02-21 04:45:17,194] INFO - [TEST-DETECT] progress=7.41% batch=2382/32151 patches=38112/514408 slides=10 speed=322.2 patch/s elapsed=118.3s eta=1478.4s
+[2026-02-21 04:45:20,205] INFO - [TEST-DETECT] progress=7.58% batch=2437/32151 patches=38992/514408 slides=10 speed=321.4 patch/s elapsed=121.3s eta=1479.0s
+[2026-02-21 04:45:23,216] INFO - [TEST-DETECT] progress=7.75% batch=2491/32151 patches=39856/514408 slides=10 speed=320.6 patch/s elapsed=124.3s eta=1480.2s
+[2026-02-21 04:45:26,277] INFO - [TEST-DETECT] progress=7.93% batch=2550/32151 patches=40800/514408 slides=11 speed=320.3 patch/s elapsed=127.4s eta=1478.6s
+[2026-02-21 04:45:29,298] INFO - [TEST-DETECT] progress=8.12% batch=2612/32151 patches=41792/514408 slides=11 speed=320.5 patch/s elapsed=130.4s eta=1474.6s
+[2026-02-21 04:45:32,325] INFO - [TEST-DETECT] progress=8.28% batch=2662/32151 patches=42592/514408 slides=11 speed=319.2 patch/s elapsed=133.4s eta=1478.0s
+[2026-02-21 04:45:35,347] INFO - [TEST-DETECT] progress=8.47% batch=2722/32151 patches=43552/514408 slides=11 speed=319.2 patch/s elapsed=136.4s eta=1475.2s
+[2026-02-21 04:45:38,429] INFO - [TEST-DETECT] progress=8.64% batch=2778/32151 patches=44448/514408 slides=12 speed=318.6 patch/s elapsed=139.5s eta=1475.3s
+[2026-02-21 04:45:41,497] INFO - [TEST-DETECT] progress=8.82% batch=2837/32151 patches=45392/514408 slides=12 speed=318.3 patch/s elapsed=142.6s eta=1473.4s
+[2026-02-21 04:45:44,503] INFO - [TEST-DETECT] progress=9.03% batch=2902/32151 patches=46432/514408 slides=12 speed=318.9 patch/s elapsed=145.6s eta=1467.5s
+[2026-02-21 04:45:47,516] INFO - [TEST-DETECT] progress=9.23% batch=2966/32151 patches=47456/514408 slides=12 speed=319.3 patch/s elapsed=148.6s eta=1462.3s
+[2026-02-21 04:45:50,537] INFO - [TEST-DETECT] progress=9.42% batch=3028/32151 patches=48448/514408 slides=13 speed=319.5 patch/s elapsed=151.6s eta=1458.4s
+[2026-02-21 04:45:53,642] INFO - [TEST-DETECT] progress=9.62% batch=3093/32151 patches=49488/514408 slides=13 speed=319.8 patch/s elapsed=154.7s eta=1453.7s
+[2026-02-21 04:45:56,644] INFO - [TEST-DETECT] progress=9.82% batch=3157/32151 patches=50512/514408 slides=13 speed=320.2 patch/s elapsed=157.7s eta=1448.7s
+[2026-02-21 04:45:59,702] INFO - [TEST-DETECT] progress=10.02% batch=3222/32151 patches=51552/514408 slides=13 speed=320.6 patch/s elapsed=160.8s eta=1443.8s
+[2026-02-21 04:46:02,729] INFO - [TEST-DETECT] progress=10.22% batch=3285/32151 patches=52560/514408 slides=14 speed=320.8 patch/s elapsed=163.8s eta=1439.6s
+[2026-02-21 04:46:05,746] INFO - [TEST-DETECT] progress=10.41% batch=3348/32151 patches=53568/514408 slides=14 speed=321.1 patch/s elapsed=166.8s eta=1435.4s
+[2026-02-21 04:46:08,763] INFO - [TEST-DETECT] progress=10.61% batch=3412/32151 patches=54592/514408 slides=14 speed=321.4 patch/s elapsed=169.9s eta=1430.7s
+[2026-02-21 04:46:11,770] INFO - [TEST-DETECT] progress=10.81% batch=3474/32151 patches=55584/514408 slides=14 speed=321.5 patch/s elapsed=172.9s eta=1427.0s
+[2026-02-21 04:46:14,789] INFO - [TEST-DETECT] progress=11.00% batch=3538/32151 patches=56608/514408 slides=15 speed=321.8 patch/s elapsed=175.9s eta=1422.5s
+[2026-02-21 04:46:17,801] INFO - [TEST-DETECT] progress=11.20% batch=3602/32151 patches=57632/514408 slides=15 speed=322.1 patch/s elapsed=178.9s eta=1417.9s
+[2026-02-21 04:46:20,836] INFO - [TEST-DETECT] progress=11.40% batch=3665/32151 patches=58640/514408 slides=15 speed=322.3 patch/s elapsed=181.9s eta=1414.1s
+[2026-02-21 04:46:23,875] INFO - [TEST-DETECT] progress=11.60% batch=3731/32151 patches=59696/514408 slides=15 speed=322.7 patch/s elapsed=185.0s eta=1409.0s
+[2026-02-21 04:46:26,880] INFO - [TEST-DETECT] progress=11.81% batch=3796/32151 patches=60736/514408 slides=16 speed=323.1 patch/s elapsed=188.0s eta=1404.1s
+[2026-02-21 04:46:29,897] INFO - [TEST-DETECT] progress=12.01% batch=3862/32151 patches=61792/514408 slides=16 speed=323.5 patch/s elapsed=191.0s eta=1399.0s
+[2026-02-21 04:46:32,913] INFO - [TEST-DETECT] progress=12.21% batch=3927/32151 patches=62832/514408 slides=16 speed=323.9 patch/s elapsed=194.0s eta=1394.4s
+[2026-02-21 04:46:35,960] INFO - [TEST-DETECT] progress=12.42% batch=3993/32151 patches=63888/514408 slides=16 speed=324.2 patch/s elapsed=197.1s eta=1389.6s
+[2026-02-21 04:46:39,017] INFO - [TEST-DETECT] progress=12.61% batch=4053/32151 patches=64848/514408 slides=17 speed=324.0 patch/s elapsed=200.1s eta=1387.3s
+[2026-02-21 04:46:42,049] INFO - [TEST-DETECT] progress=12.79% batch=4113/32151 patches=65808/514408 slides=17 speed=323.9 patch/s elapsed=203.1s eta=1384.8s
+[2026-02-21 04:46:45,118] INFO - [TEST-DETECT] progress=12.98% batch=4173/32151 patches=66768/514408 slides=17 speed=323.8 patch/s elapsed=206.2s eta=1382.6s
+[2026-02-21 04:46:48,127] INFO - [TEST-DETECT] progress=13.17% batch=4233/32151 patches=67728/514408 slides=17 speed=323.7 patch/s elapsed=209.2s eta=1379.9s
+[2026-02-21 04:46:51,144] INFO - [TEST-DETECT] progress=13.34% batch=4288/32151 patches=68608/514408 slides=18 speed=323.3 patch/s elapsed=212.2s eta=1379.1s
+[2026-02-21 04:46:54,145] INFO - [TEST-DETECT] progress=13.55% batch=4357/32151 patches=69712/514408 slides=18 speed=323.9 patch/s elapsed=215.2s eta=1373.1s
+[2026-02-21 04:46:57,198] INFO - [TEST-DETECT] progress=13.74% batch=4419/32151 patches=70704/514408 slides=18 speed=323.9 patch/s elapsed=218.3s eta=1369.9s
+[2026-02-21 04:47:00,226] INFO - [TEST-DETECT] progress=13.93% batch=4479/32151 patches=71664/514408 slides=18 speed=323.8 patch/s elapsed=221.3s eta=1367.4s
+[2026-02-21 04:47:03,346] INFO - [TEST-DETECT] progress=14.11% batch=4538/32151 patches=72608/514408 slides=19 speed=323.5 patch/s elapsed=224.4s eta=1365.7s
+[2026-02-21 04:47:06,357] INFO - [TEST-DETECT] progress=14.28% batch=4592/32151 patches=73472/514408 slides=19 speed=323.0 patch/s elapsed=227.5s eta=1365.1s
+[2026-02-21 04:47:09,357] INFO - [TEST-DETECT] progress=14.46% batch=4648/32151 patches=74368/514408 slides=19 speed=322.7 patch/s elapsed=230.5s eta=1363.6s
+[2026-02-21 04:47:12,434] INFO - [TEST-DETECT] progress=14.63% batch=4703/32151 patches=75248/514408 slides=19 speed=322.2 patch/s elapsed=233.5s eta=1362.9s
+[2026-02-21 04:47:15,458] INFO - [TEST-DETECT] progress=14.81% batch=4760/32151 patches=76160/514408 slides=20 speed=322.0 patch/s elapsed=236.6s eta=1361.2s
+[2026-02-21 04:47:18,463] INFO - [TEST-DETECT] progress=15.01% batch=4827/32151 patches=77232/514408 slides=20 speed=322.4 patch/s elapsed=239.6s eta=1356.1s
+[2026-02-21 04:47:21,496] INFO - [TEST-DETECT] progress=15.23% batch=4895/32151 patches=78320/514408 slides=20 speed=322.8 patch/s elapsed=242.6s eta=1350.8s
+[2026-02-21 04:47:24,543] INFO - [TEST-DETECT] progress=15.44% batch=4964/32151 patches=79424/514408 slides=20 speed=323.3 patch/s elapsed=245.6s eta=1345.3s
+[2026-02-21 04:47:27,584] INFO - [TEST-DETECT] progress=15.64% batch=5027/32151 patches=80432/514408 slides=21 speed=323.4 patch/s elapsed=248.7s eta=1341.8s
+[2026-02-21 04:47:30,597] INFO - [TEST-DETECT] progress=15.81% batch=5083/32151 patches=81328/514408 slides=21 speed=323.1 patch/s elapsed=251.7s eta=1340.3s
+[2026-02-21 04:47:33,677] INFO - [TEST-DETECT] progress=15.99% batch=5142/32151 patches=82272/514408 slides=21 speed=322.9 patch/s elapsed=254.8s eta=1338.2s
+[2026-02-21 04:47:36,682] INFO - [TEST-DETECT] progress=16.18% batch=5201/32151 patches=83216/514408 slides=21 speed=322.8 patch/s elapsed=257.8s eta=1335.7s
+[2026-02-21 04:47:39,683] INFO - [TEST-DETECT] progress=16.35% batch=5257/32151 patches=84112/514408 slides=22 speed=322.5 patch/s elapsed=260.8s eta=1334.1s
+[2026-02-21 04:47:42,694] INFO - [TEST-DETECT] progress=16.55% batch=5322/32151 patches=85152/514408 slides=22 speed=322.8 patch/s elapsed=263.8s eta=1329.8s
+[2026-02-21 04:47:45,745] INFO - [TEST-DETECT] progress=16.77% batch=5391/32151 patches=86256/514408 slides=22 speed=323.2 patch/s elapsed=266.8s eta=1324.6s
+[2026-02-21 04:47:48,793] INFO - [TEST-DETECT] progress=16.98% batch=5460/32151 patches=87360/514408 slides=22 speed=323.7 patch/s elapsed=269.9s eta=1319.3s
+[2026-02-21 04:47:51,896] INFO - [TEST-DETECT] progress=17.18% batch=5525/32151 patches=88400/514408 slides=23 speed=323.8 patch/s elapsed=273.0s eta=1315.6s
+[2026-02-21 04:47:54,927] INFO - [TEST-DETECT] progress=17.37% batch=5585/32151 patches=89360/514408 slides=23 speed=323.7 patch/s elapsed=276.0s eta=1312.9s
+[2026-02-21 04:47:57,940] INFO - [TEST-DETECT] progress=17.56% batch=5645/32151 patches=90320/514408 slides=23 speed=323.7 patch/s elapsed=279.0s eta=1310.2s
+[2026-02-21 04:48:00,975] INFO - [TEST-DETECT] progress=17.74% batch=5705/32151 patches=91280/514408 slides=23 speed=323.6 patch/s elapsed=282.1s eta=1307.6s
+[2026-02-21 04:48:04,028] INFO - [TEST-DETECT] progress=17.91% batch=5759/32151 patches=92144/514408 slides=24 speed=323.2 patch/s elapsed=285.1s eta=1306.6s
+[2026-02-21 04:48:07,062] INFO - [TEST-DETECT] progress=18.10% batch=5819/32151 patches=93104/514408 slides=24 speed=323.1 patch/s elapsed=288.2s eta=1304.0s
+[2026-02-21 04:48:10,067] INFO - [TEST-DETECT] progress=18.29% batch=5880/32151 patches=94080/514408 slides=24 speed=323.1 patch/s elapsed=291.2s eta=1300.9s
+[2026-02-21 04:48:13,100] INFO - [TEST-DETECT] progress=18.48% batch=5942/32151 patches=95072/514408 slides=24 speed=323.2 patch/s elapsed=294.2s eta=1297.6s
+[2026-02-21 04:48:16,180] INFO - [TEST-DETECT] progress=18.68% batch=6005/32151 patches=96080/514408 slides=25 speed=323.2 patch/s elapsed=297.3s eta=1294.3s
+[2026-02-21 04:48:19,246] INFO - [TEST-DETECT] progress=18.86% batch=6063/32151 patches=97008/514408 slides=25 speed=323.0 patch/s elapsed=300.3s eta=1292.3s
+[2026-02-21 04:48:22,302] INFO - [TEST-DETECT] progress=19.06% batch=6129/32151 patches=98064/514408 slides=25 speed=323.2 patch/s elapsed=303.4s eta=1288.1s
+[2026-02-21 04:48:25,347] INFO - [TEST-DETECT] progress=19.24% batch=6185/32151 patches=98960/514408 slides=25 speed=322.9 patch/s elapsed=306.4s eta=1286.5s
+[2026-02-21 04:48:28,416] INFO - [TEST-DETECT] progress=19.44% batch=6251/32151 patches=100016/514408 slides=26 speed=323.1 patch/s elapsed=309.5s eta=1282.4s
+[2026-02-21 04:48:31,434] INFO - [TEST-DETECT] progress=19.65% batch=6316/32151 patches=101056/514408 slides=26 speed=323.3 patch/s elapsed=312.5s eta=1278.4s
+[2026-02-21 04:48:34,449] INFO - [TEST-DETECT] progress=19.84% batch=6380/32151 patches=102080/514408 slides=26 speed=323.5 patch/s elapsed=315.5s eta=1274.6s
+[2026-02-21 04:48:37,496] INFO - [TEST-DETECT] progress=20.05% batch=6446/32151 patches=103136/514408 slides=26 speed=323.7 patch/s elapsed=318.6s eta=1270.5s
+[2026-02-21 04:48:40,541] INFO - [TEST-DETECT] progress=20.24% batch=6506/32151 patches=104096/514408 slides=27 speed=323.6 patch/s elapsed=321.6s eta=1267.8s
+[2026-02-21 04:48:43,632] INFO - [TEST-DETECT] progress=20.42% batch=6566/32151 patches=105056/514408 slides=27 speed=323.5 patch/s elapsed=324.7s eta=1265.3s
+[2026-02-21 04:48:46,646] INFO - [TEST-DETECT] progress=20.61% batch=6627/32151 patches=106032/514408 slides=27 speed=323.5 patch/s elapsed=327.7s eta=1262.3s
+[2026-02-21 04:48:49,692] INFO - [TEST-DETECT] progress=20.81% batch=6689/32151 patches=107024/514408 slides=27 speed=323.5 patch/s elapsed=330.8s eta=1259.2s
+[2026-02-21 04:48:52,792] INFO - [TEST-DETECT] progress=21.00% batch=6752/32151 patches=108032/514408 slides=28 speed=323.6 patch/s elapsed=333.9s eta=1256.0s
+[2026-02-21 04:48:55,796] INFO - [TEST-DETECT] progress=21.20% batch=6815/32151 patches=109040/514408 slides=28 speed=323.7 patch/s elapsed=336.9s eta=1252.4s
+[2026-02-21 04:48:58,802] INFO - [TEST-DETECT] progress=21.39% batch=6878/32151 patches=110048/514408 slides=28 speed=323.8 patch/s elapsed=339.9s eta=1248.9s
+[2026-02-21 04:49:01,817] INFO - [TEST-DETECT] progress=21.59% batch=6942/32151 patches=111072/514408 slides=28 speed=323.9 patch/s elapsed=342.9s eta=1245.2s
+[2026-02-21 04:49:04,825] INFO - [TEST-DETECT] progress=21.79% batch=7006/32151 patches=112096/514408 slides=29 speed=324.0 patch/s elapsed=345.9s eta=1241.5s
+[2026-02-21 04:49:07,917] INFO - [TEST-DETECT] progress=21.99% batch=7070/32151 patches=113120/514408 slides=29 speed=324.1 patch/s elapsed=349.0s eta=1238.1s
+[2026-02-21 04:49:10,960] INFO - [TEST-DETECT] progress=22.19% batch=7133/32151 patches=114128/514408 slides=29 speed=324.2 patch/s elapsed=352.1s eta=1234.8s
+[2026-02-21 04:49:13,989] INFO - [TEST-DETECT] progress=22.38% batch=7196/32151 patches=115136/514408 slides=29 speed=324.2 patch/s elapsed=355.1s eta=1231.4s
+[2026-02-21 04:49:17,055] INFO - [TEST-DETECT] progress=22.58% batch=7259/32151 patches=116144/514408 slides=30 speed=324.3 patch/s elapsed=358.2s eta=1228.1s
+[2026-02-21 04:49:20,101] INFO - [TEST-DETECT] progress=22.77% batch=7322/32151 patches=117152/514408 slides=30 speed=324.3 patch/s elapsed=361.2s eta=1224.8s
+[2026-02-21 04:49:23,113] INFO - [TEST-DETECT] progress=22.95% batch=7380/32151 patches=118080/514408 slides=30 speed=324.2 patch/s elapsed=364.2s eta=1222.5s
+[2026-02-21 04:49:26,113] INFO - [TEST-DETECT] progress=23.15% batch=7443/32151 patches=119088/514408 slides=30 speed=324.3 patch/s elapsed=367.2s eta=1219.0s
+[2026-02-21 04:49:29,145] INFO - [TEST-DETECT] progress=23.35% batch=7506/32151 patches=120096/514408 slides=31 speed=324.4 patch/s elapsed=370.2s eta=1215.6s
+[2026-02-21 04:49:32,149] INFO - [TEST-DETECT] progress=23.54% batch=7569/32151 patches=121104/514408 slides=31 speed=324.5 patch/s elapsed=373.2s eta=1212.2s
+[2026-02-21 04:49:35,171] INFO - [TEST-DETECT] progress=23.74% batch=7632/32151 patches=122112/514408 slides=31 speed=324.5 patch/s elapsed=376.3s eta=1208.8s
+[2026-02-21 04:49:38,256] INFO - [TEST-DETECT] progress=23.91% batch=7686/32151 patches=122976/514408 slides=31 speed=324.2 patch/s elapsed=379.4s eta=1207.5s
+[2026-02-21 04:49:41,284] INFO - [TEST-DETECT] progress=24.07% batch=7740/32151 patches=123840/514408 slides=31 speed=323.9 patch/s elapsed=382.4s eta=1206.0s
+[2026-02-21 04:49:44,304] INFO - [TEST-DETECT] progress=24.25% batch=7798/32151 patches=124768/514408 slides=32 speed=323.7 patch/s elapsed=385.4s eta=1203.6s
+[2026-02-21 04:49:47,324] INFO - [TEST-DETECT] progress=24.43% batch=7855/32151 patches=125680/514408 slides=32 speed=323.6 patch/s elapsed=388.4s eta=1201.4s
+[2026-02-21 04:49:50,328] INFO - [TEST-DETECT] progress=24.61% batch=7912/32151 patches=126592/514408 slides=32 speed=323.4 patch/s elapsed=391.4s eta=1199.1s
+[2026-02-21 04:49:53,357] INFO - [TEST-DETECT] progress=24.78% batch=7968/32151 patches=127488/514408 slides=32 speed=323.2 patch/s elapsed=394.5s eta=1197.2s
+[2026-02-21 04:49:56,459] INFO - [TEST-DETECT] progress=24.95% batch=8022/32151 patches=128352/514408 slides=33 speed=322.8 patch/s elapsed=397.6s eta=1195.8s
+[2026-02-21 04:49:59,486] INFO - [TEST-DETECT] progress=25.11% batch=8073/32151 patches=129168/514408 slides=33 speed=322.4 patch/s elapsed=400.6s eta=1194.7s
+[2026-02-21 04:50:02,540] INFO - [TEST-DETECT] progress=25.27% batch=8124/32151 patches=129984/514408 slides=33 speed=322.0 patch/s elapsed=403.6s eta=1193.8s
+[2026-02-21 04:50:05,550] INFO - [TEST-DETECT] progress=25.43% batch=8176/32151 patches=130816/514408 slides=33 speed=321.7 patch/s elapsed=406.7s eta=1192.4s
+[2026-02-21 04:50:08,627] INFO - [TEST-DETECT] progress=25.60% batch=8229/32151 patches=131664/514408 slides=33 speed=321.3 patch/s elapsed=409.7s eta=1191.1s
+[2026-02-21 04:50:11,691] INFO - [TEST-DETECT] progress=25.78% batch=8289/32151 patches=132624/514408 slides=34 speed=321.3 patch/s elapsed=412.8s eta=1188.3s
+[2026-02-21 04:50:14,714] INFO - [TEST-DETECT] progress=25.98% batch=8354/32151 patches=133664/514408 slides=34 speed=321.5 patch/s elapsed=415.8s eta=1184.5s
+[2026-02-21 04:50:17,714] INFO - [TEST-DETECT] progress=26.18% batch=8418/32151 patches=134688/514408 slides=34 speed=321.6 patch/s elapsed=418.8s eta=1180.7s
+[2026-02-21 04:50:20,779] INFO - [TEST-DETECT] progress=26.39% batch=8484/32151 patches=135744/514408 slides=34 speed=321.8 patch/s elapsed=421.9s eta=1176.9s
+[2026-02-21 04:50:23,791] INFO - [TEST-DETECT] progress=26.58% batch=8545/32151 patches=136720/514408 slides=35 speed=321.8 patch/s elapsed=424.9s eta=1173.8s
+[2026-02-21 04:50:26,808] INFO - [TEST-DETECT] progress=26.77% batch=8606/32151 patches=137696/514408 slides=35 speed=321.8 patch/s elapsed=427.9s eta=1170.7s
+[2026-02-21 04:50:29,860] INFO - [TEST-DETECT] progress=26.96% batch=8667/32151 patches=138672/514408 slides=35 speed=321.8 patch/s elapsed=431.0s eta=1167.7s
+[2026-02-21 04:50:32,922] INFO - [TEST-DETECT] progress=27.15% batch=8729/32151 patches=139664/514408 slides=35 speed=321.8 patch/s elapsed=434.0s eta=1164.6s
+[2026-02-21 04:50:36,002] INFO - [TEST-DETECT] progress=27.34% batch=8789/32151 patches=140624/514408 slides=36 speed=321.7 patch/s elapsed=437.1s eta=1161.8s
+[2026-02-21 04:50:39,050] INFO - [TEST-DETECT] progress=27.52% batch=8849/32151 patches=141584/514408 slides=36 speed=321.7 patch/s elapsed=440.1s eta=1159.0s
+[2026-02-21 04:50:42,118] INFO - [TEST-DETECT] progress=27.70% batch=8905/32151 patches=142480/514408 slides=36 speed=321.5 patch/s elapsed=443.2s eta=1157.0s
+[2026-02-21 04:50:45,155] INFO - [TEST-DETECT] progress=27.89% batch=8968/32151 patches=143488/514408 slides=36 speed=321.5 patch/s elapsed=446.3s eta=1153.6s
+[2026-02-21 04:50:48,163] INFO - [TEST-DETECT] progress=28.09% batch=9030/32151 patches=144480/514408 slides=37 speed=321.6 patch/s elapsed=449.3s eta=1150.3s
+[2026-02-21 04:50:51,186] INFO - [TEST-DETECT] progress=28.28% batch=9091/32151 patches=145456/514408 slides=37 speed=321.6 patch/s elapsed=452.3s eta=1147.2s
+[2026-02-21 04:50:54,191] INFO - [TEST-DETECT] progress=28.47% batch=9153/32151 patches=146448/514408 slides=37 speed=321.7 patch/s elapsed=455.3s eta=1143.9s

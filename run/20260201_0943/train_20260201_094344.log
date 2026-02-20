@@ -1,0 +1,127 @@
+[2026-02-01 09:43:44,651] INFO - Starting training with config:
+seed: 234
+device: cuda
+num_epochs: 40
+batch_size: 4
+num_workers: 0
+lr: 0.0005
+tasks:
+  enable_seg: true
+  enable_cls: true
+data:
+  use_dummy: false
+  use_manifest: true
+  use_slide_manifest: false
+  slide_manifest: data/processed/manifest_slides.csv
+  coords_cache_slides: 2
+  cache_masks: false
+  mask_level: null
+  mask_max_size: 4096
+  train_manifest: ${prepare.manifest_path}
+  val_manifest: ${prepare.manifest_path}
+  normalize: imagenet
+  imagenet_mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  imagenet_std:
+  - 0.229
+  - 0.224
+  - 0.225
+  train_images: data/train/images_fixed
+  train_masks: data/train/masks_fixed
+  train_labels: data/train/labels.csv
+  val_images: data/val/images_fixed
+  val_masks: data/val/masks_fixed
+  val_labels: data/val/labels.csv
+  test_images: data/test/images_fixed
+  test_masks: data/test/masks_fixed
+  test_labels: data/test/labels.csv
+  dummy:
+    train_samples: 8
+    val_samples: 4
+    test_samples: 4
+    image_size: 128
+aug:
+  flip_p: 0.5
+  affine:
+    degrees: 10.0
+    translate: 0.05
+    scale_range:
+    - 0.95
+    - 1.05
+    shear: 5.0
+    p: 0.7
+  elastic:
+    alpha: 0.05
+    grid_size: 4
+    p: 0.3
+loader:
+  stratified_train: true
+  stratified_val: true
+  train_positive_ratio: 0.38
+  train_drop_last: false
+  val_positive_ratio: 0.51
+model:
+  backbone: mobilenet_v2
+  num_classes: 1
+  seg_upsample_to_input: true
+  pretrained: true
+  mobilenet_width_mult: 1.0
+  use_light_decoder: true
+  attention: none
+  attention_location: decoder
+  encoder_attention: null
+  decoder_attention: null
+  attention_reduction: 16
+  decoder_attention_layers:
+  - up4
+loss:
+  seg: bce_with_logits
+  seg_weight: 1.0
+  cls_weight: 1.0
+  dice_weight: 0.5
+  cls: bce
+  weighting: fixed
+  use_uncertainty: false
+  uncertainty_init: 0.0
+  gradnorm_alpha: 1.5
+log:
+  save_timing_dir: ${hydra:runtime.output_dir}
+  save_dir: ${hydra:runtime.output_dir}
+  save_ckpt: true
+  train_log_interval: 20
+  val_log_interval: 20
+  params_dir: ${hydra:runtime.output_dir}
+  roc_dir: ${hydra:runtime.output_dir}/roc
+eval:
+  ckpt: null
+  save_dir: ${log.params_dir}
+  save_roc: true
+prepare:
+  slides_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/images
+  masks_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/masks
+  annotations_dir: null
+  manifest_path: data/processed/patch_manifest.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 1.0
+  seed: 42
+  groups: Tumor
+  max_patches_per_slide: null
+  mask_suffix: _mask.tif
+  prefer_masks: true
+  progress_interval: 2000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords
+  slide_manifest_path: data/processed/manifest_slides.csv
+  write_patch_manifest: false
+
+[2026-02-01 09:43:44,651] INFO - Loss weighting strategy: fixed

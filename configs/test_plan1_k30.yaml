@@ -1,0 +1,28 @@
+# 方案1：WSI 聚合保持 topk_mean，仅将 k 调整为 30（先用 0.95 阈值）
+#
+# 用法：
+# python scripts/run_test_detect.py --config-name test_plan1_k30 test_detect.ckpt=<你的best.pt路径>
+
+defaults:
+  - defaults
+
+# 评估参数：top-k 聚合
+eval:
+  # 方案1核心：把 WSI top-k 从 15 提升到 30
+  wsi_topk: 30
+  # 先沿用 0.95，后续可用 calibrate 脚本重标定
+  wsi_acc_threshold: 0.95
+
+test_detect:
+  # 聚合参数与 eval 对齐
+  wsi_topk: ${eval.wsi_topk}
+  wsi_acc_threshold: ${eval.wsi_acc_threshold}
+
+# 显式固定 test 数据路径，避免误用 val 清单
+data:
+  test_slide_manifest: data/processed/manifest_slides_test.csv
+
+prepare_test:
+  slide_manifest_path: data/processed/manifest_slides_test.csv
+  coords_out_dir: data/processed/coords/test
+  masks_dir: data/camelyon16/test/masks

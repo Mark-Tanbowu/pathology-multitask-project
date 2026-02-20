@@ -42,11 +42,28 @@ def compute_tissue_mask(image: Image.Image, invert: bool = True) -> np.ndarray:
     return mask
 
 
-def build_tissue_mask(slide: SlideReader, level: int) -> np.ndarray:
-    """读取低分辨率 level 并生成 tissue mask。"""
-    width, height = slide.level_dimensions[level]
-    overview = slide.read_region((0, 0), level, (width, height))
-    return compute_tissue_mask(overview)
+def build_tissue_mask(
+    slide: SlideReader, level: int, max_size: int | None = None
+) -> tuple[np.ndarray, int]:
+    """读取低分辨率 level 并生成 tissue mask，支持限制最大边长。"""
+    if max_size is None:
+        width, height = slide.level_dimensions[level]
+        overview = slide.read_region((0, 0), level, (width, height))
+        return compute_tissue_mask(overview), level
+
+    lvl = level
+    n_levels = len(slide.level_dimensions)
+    width, height = slide.level_dimensions[lvl]
+    while max(width, height) > max_size and (lvl + 1) < n_levels:
+        lvl += 1
+        width, height = slide.level_dimensions[lvl]
+
+    overview = slide.read_region((0, 0), lvl, (width, height))
+    if max(overview.size) > max_size:
+        overview = overview.copy()
+        overview.thumbnail((max_size, max_size))
+
+    return compute_tissue_mask(overview), lvl
 
 
 def mask_coverage(mask: np.ndarray, x0: int, y0: int, width: int, height: int) -> float:

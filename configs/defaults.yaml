@@ -8,13 +8,13 @@ hydra:
 # 随机种子（保证可复现）
 seed: 234
 # 设备选择：cpu | cuda | auto（由代码判定）
-device: cpu
+device: cuda
 # 训练轮数
 num_epochs: 40
 # 批大小
-batch_size: 5
+batch_size: 16
 # DataLoader 的 worker 数量（Windows 建议 0）
-num_workers: 0
+num_workers: 3
 # 学习率
 lr: 0.0005
 
@@ -27,11 +27,15 @@ tasks:
 data:
   # 是否使用 dummy 数据（调通流程用）
   use_dummy: false
-  # Use manifest-based WSI dynamic patches
-  use_manifest: false
-  # Manifest paths (WSI dynamic patches)
-  train_manifest: ${prepare.manifest_path}
-  val_manifest: ${prepare.manifest_path}
+  # Use slide-level manifest + per-slide coords
+  use_slide_manifest: true
+  train_slide_manifest: data/processed/manifest_slides_train.csv
+  val_slide_manifest: data/processed/manifest_slides_val.csv
+  test_slide_manifest: data/processed/manifest_slides_test.csv
+  coords_cache_slides: 2
+  cache_masks: false
+  mask_level: null
+  mask_max_size: 4096
   # 归一化策略：none | imagenet
   normalize: imagenet
   # ImageNet 均值/方差（normalize=imagenet 时生效）
@@ -74,8 +78,33 @@ aug:
 # 采样/加载器相关开关
 loader:
   # 是否使用分层采样（分类正负样本比例控制）
-  stratified_train: true
-  stratified_val: true
+  stratified_train: false
+  stratified_val: false
+  # slide-manifest 训练时启用加权重采样（替代 stratified）
+  slide_weighted_sampling: true
+  # 每个 epoch 抽样数量（控制 steps）
+  slide_samples_per_epoch: 300000
+  # 是否有放回抽样（建议 true，保证每个 epoch 统计稳定）
+  slide_weighted_replacement: true
+  # 基于几何统计的训练重采样（在基础正负平衡上，对阳性 slide 再加权）
+  train_geometry_sampling:
+    # true: 启用几何重采样；false: 仅做正负平衡
+    enabled: true
+    # 读取 slide manifest 中的几何字段
+    field: tumor_area_ratio
+    # 加权强度，越大越强调小病灶 slide（建议 0.3~0.8）
+    gamma: 0.5
+    # 防止除零
+    eps: 1.0e-8
+    # 倍率裁剪，避免极端重采样导致训练震荡
+    clip_min: 0.6
+    clip_max: 1.8
+  # slide-manifest 验证集是否启用重采样（建议 false，做全量验证）
+  val_slide_weighted_sampling: false
+  # 验证每个 epoch 抽样数量（控制 val steps）
+  val_slide_samples_per_epoch: 120000
+  # 验证是否有放回抽样
+  val_slide_weighted_replacement: false
   # 训练集正样本比例（分层采样时生效）
   train_positive_ratio: 0.38
   # 训练集是否丢弃最后不足一批的样本
@@ -97,17 +126,17 @@ model:
   mobilenet_width_mult: 1.0
   # 是否使用轻量解码器（轻量骨干推荐 true）
   use_light_decoder: true
-  # 注意力开关：none | se | cbam
-  attention: none
-  # 注意力位置：encoder | decoder | both
-  attention_location: decoder
+  # 注意力开关：none | se | cbam（当显式指定 encoder_attention/decoder_attention 时作为后备）
+  attention: se
+  # 注意力位置：encoder | decoder | both（当显式指定 encoder_attention/decoder_attention 时作为后备）
+  attention_location: both
   # 显式指定编码器/解码器注意力（优先于 attention/attention_location）
-  encoder_attention: null
-  decoder_attention: null
+  encoder_attention: se
+  decoder_attention: cbam
   # 注意力通道压缩率
   attention_reduction: 16
-  # 指定解码器注意力层（如 [up4]）
-  decoder_attention_layers: [up4]
+  # 指定解码器注意力层（推荐 [up3, up4] 兼顾语义与边界）
+  decoder_attention_layers: [up3, up4]
 
 # 损失函数配置
 loss:
@@ -121,9 +150,9 @@ loss:
   # 分类损失类型：bce | ce
   cls: bce
   # 动态加权策略：fixed | uncertainty | gradnorm
-  weighting: fixed
+  weighting: uncertainty
   # 不确定性加权开关（旧兼容字段）
-  use_uncertainty: false
+  use_uncertainty: true
   # 不确定性权重初始化（log_sigma）
   uncertainty_init: 0.0
   # GradNorm 的 alpha
@@ -137,6 +166,9 @@ log:
   save_dir: ${hydra:runtime.output_dir}
   # 是否保存最佳权重
   save_ckpt: true
+  # 训练/验证日志打印频率（步）
+  train_log_interval: 20
+  val_log_interval: 20
   # 训练指标参数输出目录
   params_dir: ${hydra:runtime.output_dir}
   # ROC 曲线输出目录（放在每次 run 的子文件夹）
@@ -150,13 +182,72 @@ eval:
   save_dir: ${log.params_dir}
   # 是否保存 ROC 曲线
   save_roc: true
+  # WSI 聚合方式：topk_mean（当前实现）
+  wsi_score_method: topk_mean
+  # WSI top-k 聚合参数（方案1默认值：30）
+  wsi_topk: 15
+  # 记录不同 k 在同一阈值下的验证指标
+  wsi_k_values: [15]
+  # WSI ACC 判定阈值（slide_score > threshold 判为阳性）
+  wsi_acc_threshold: 0.92
+  # 几何稳定性验证（按 normal + 阳性几何分桶计算宏平均稳定分）
+  geometry_validation:
+    # true: 计算并记录几何稳定性指标；false: 关闭该指标
+    enabled: true
+    # 使用 slide manifest 中哪个几何字段分桶
+    field: tumor_area_ratio
+    # 阳性 slide 的面积占比分桶边界（normal 会单独成桶）
+    positive_bins: [0.0005, 0.002, 0.01]
+    # 每个桶最少 slide 数，小于该值的桶不参与宏平均
+    min_bin_slides: 3
+  # 最佳 checkpoint 选择策略（标准化加权 + AUC 守门）
+  best_checkpoint:
+    # z-score 融合时的 Dice 权重；AUC 权重为 (1 - z_dice_weight)
+    z_dice_weight: 0.4
+    # AUC 守门：当前 AUC 低于 best_wsi_auc - delta 时不更新 best
+    auc_gate_delta: 0.002
+    # 几何稳定性守门：当前稳定性低于 best_wsi_geom_stability - delta 时不更新 best
+    geom_gate_delta: 0.02
+    # score 接近时，几何稳定性并列比较的阈值 eps
+    geom_tie_eps: 1.0e-4
+    # score 接近判定阈值（|score - best_score| <= eps 时进入 val_loss tie-break）
+    score_tie_eps: 1.0e-4
+    # 标准化稳定项（std <= std_eps 时该项 z-score 置 0）
+    std_eps: 1.0e-8
+    # val_loss tie-break 的最小改进幅度
+    loss_tie_eps: 1.0e-8
 
-# CAMELYON WSI patch manifest config
-prepare:
-  slides_dir: 'D:\pathology-multitask-project\camelyon16\images'
-  masks_dir: 'D:\pathology-multitask-project\camelyon16\masks'
-  annotations_dir: null
-  manifest_path: data/processed/patch_manifest.csv
+# test 检测配置（基于 slide manifest）
+test_detect:
+  # 手动指定 checkpoint（为空则优先复用 eval.ckpt，再回退最新 run/best.pt）
+  ckpt: null
+  # 严格加载权重：true 时结构必须完全一致；不一致可设 false 排查
+  strict_load: true
+  # 中间进度日志打印间隔（秒）
+  progress_log_interval_sec: 3.0
+  # 检测指标输出目录
+  save_dir: ${log.params_dir}
+  # test 日志文件名前缀（与 train_* 日志区分）
+  log_prefix: wsi_test_detect
+  # 是否保存运行期详细日志到文件
+  save_runtime_log: true
+  # test dataloader 批大小（默认与训练 batch_size 对齐）
+  batch_size: ${batch_size}
+  # 是否保存每张 slide 的聚合得分日志
+  save_slide_scores: true
+  # 是否保存每个 patch 的得分日志（文件较大，默认关闭）
+  save_patch_scores: false
+  # WSI top-k 聚合参数
+  wsi_topk: ${eval.wsi_topk}
+  # WSI 判定阈值
+  wsi_acc_threshold: ${eval.wsi_acc_threshold}
+
+# WSI manifest config (train split)
+prepare_train:
+  slides_dir: data/camelyon16/train/images
+  masks_dir: data/camelyon16/train/masks
+  annotations_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/annotations
+  manifest_path: data/processed/patch_manifest_train.csv
   patch_level: 0
   patch_size: 256
   patch_stride: 256
@@ -164,9 +255,123 @@ prepare:
   min_tissue: 0.5
   pos_threshold: 0.5
   neg_threshold: 0.0
-  neg_keep_prob: 1.0
+  # 控制后采样：随机保留部分负样本，压缩总体 patch 数
+  neg_keep_prob: 0.2
   seed: 42
   groups: Tumor
-  max_patches_per_slide: null
+  # 可忽略区组（仅 tumor slide 启用）
+  ignore_groups: Exclusion
+  # patch 与忽略区重叠达到阈值则剔除
+  ignore_overlap_threshold: 0.05
+  # 是否输出几何统计（面积/周长/占比）到 slide manifest
+  enable_geometry_stats: true
+  # 是否仅对 tumor slide 启用 XML 规则（normal 保持原流程）
+  apply_xml_rules_for_tumor_only: true
+  # 每张 slide 的 patch 上限（第二类策略）
+  max_patches_per_slide: 3000
+  # patch 采样模式：scan_order | stratified_random
+  sampling_mode: stratified_random
+  # 分层随机抽样目标阳性比例（null 表示按候选天然比例）
+  target_pos_ratio: 0.5
+  # 可选：显式 slide 真值映射 CSV（列名: slide_id,slide_label），为空则按 tumor_/normal_ 推断
+  slide_labels_csv: null
+  # 若无法解析真值，是否退回 sampled_has_pos 推导（建议 false，避免标签污染）
+  slide_label_fallback_to_sampled: false
   mask_suffix: _mask.tif
-  prefer_masks: true
+  prefer_masks: false
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/train
+  slide_manifest_path: data/processed/manifest_slides_train.csv
+  write_patch_manifest: false
+
+# WSI manifest config (val split)
+prepare_val:
+  slides_dir: data/camelyon16/val/images
+  masks_dir: data/camelyon16/val/masks
+  annotations_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/annotations
+  manifest_path: data/processed/patch_manifest_val.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  # 与 train 同类：先控池规模再做重采样
+  neg_keep_prob: 0.2
+  seed: 42
+  groups: Tumor
+  # 可忽略区组（仅 tumor slide 启用）
+  ignore_groups: Exclusion
+  # patch 与忽略区重叠达到阈值则剔除
+  ignore_overlap_threshold: 0.05
+  # 是否输出几何统计（面积/周长/占比）到 slide manifest
+  enable_geometry_stats: true
+  # 是否仅对 tumor slide 启用 XML 规则（normal 保持原流程）
+  apply_xml_rules_for_tumor_only: true
+  max_patches_per_slide: 3000
+  # patch 采样模式：scan_order | stratified_random
+  sampling_mode: stratified_random
+  # 分层随机抽样目标阳性比例（null 表示按候选天然比例）
+  target_pos_ratio: 0.5
+  # 可选：显式 slide 真值映射 CSV（列名: slide_id,slide_label），为空则按 tumor_/normal_ 推断
+  slide_labels_csv: null
+  # 若无法解析真值，是否退回 sampled_has_pos 推导（建议 false，避免标签污染）
+  slide_label_fallback_to_sampled: false
+  mask_suffix: _mask.tif
+  prefer_masks: false
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/val
+  slide_manifest_path: data/processed/manifest_slides_val.csv
+  write_patch_manifest: false
+
+# WSI manifest config (test split)
+prepare_test:
+  slides_dir: data/camelyon16/test/images
+  masks_dir: data/camelyon16/test/masks
+  annotations_dir: /root/autodl-tmp/pathology-multitask-project/data/camelyon16/annotations
+  manifest_path: data/processed/patch_manifest_test.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 128
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  # 与 train 对齐：先随机保留部分负样本，再做分层抽样
+  neg_keep_prob: 0.2
+  seed: 42
+  # 病灶多边形组（用于正负标注）
+  groups: Tumor
+  # 可忽略区组（用于 exclusion 过滤）
+  ignore_groups: Exclusion
+  # patch 与忽略区重叠达到该阈值则剔除
+  ignore_overlap_threshold: 0.05
+  # 与 train 对齐：每张 slide 采样上限
+  max_patches_per_slide: 4000
+  # 分层随机抽样，替代顺序截断
+  sampling_mode: stratified_random
+  # 与 train 对齐的目标阳性比例
+  target_pos_ratio: 0.5
+  # test_ 前缀无法直接推断标签，默认按 xml 是否存在推断 slide_label
+  slide_label_mode: xml_presence
+  slide_labels_csv: null
+  slide_label_fallback_to_sampled: false
+  mask_suffix: _mask.tif
+  prefer_masks: false
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/test
+  slide_manifest_path: data/processed/manifest_slides_test.csv
+  # 写 patch manifest 体积较大，默认关闭；需要排查可手动打开
+  write_patch_manifest: false
+  # 开启几何统计（面积/周长/占比）写入 slide manifest
+  enable_geometry_stats: true

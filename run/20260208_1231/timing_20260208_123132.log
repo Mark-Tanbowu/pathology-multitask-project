@@ -1,0 +1,1 @@
+stage timings per batch: dataload, to_device, encoder, decoder, cls_head, forward_total, loss, backward, optimizer

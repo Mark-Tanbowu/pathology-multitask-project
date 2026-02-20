@@ -1,0 +1,10 @@
+Best checkpoint summary
+saved_at=2026-02-08T19:55:00.110685
+epoch=1
+score=0.8618
+val_dice=0.9240
+val_acc=0.7996
+train_loss=0.6341
+val_loss=1.2292
+payload_keys=[model_state_dict, optimizer_state_dict, scheduler_state_dict, epoch, best_score, metrics, history, config, random_seed]
+ckpt_path=/root/autodl-tmp/pathology-multitask-project/run/20260208_1932/best.pt

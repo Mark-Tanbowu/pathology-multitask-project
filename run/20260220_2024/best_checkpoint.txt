@@ -1,0 +1,23 @@
+Best checkpoint summary
+saved_at=2026-02-20T23:24:42.208487
+epoch=7
+score=1.236572
+score_mode=zscore_dice_wsi_auc
+z_dice_weight=0.4000
+z_wsi_auc_weight=0.6000
+auc_gate_delta=0.002000
+geom_gate_delta=0.020000
+geom_tie_eps=0.0001
+score_tie_eps=0.0001
+std_eps=1e-08
+loss_tie_eps=1e-08
+z_dice=-0.480925
+z_wsi_auc=2.381570
+val_dice=0.9475
+val_acc=0.9679
+val_wsi_auc=0.9673
+val_wsi_geom_stability=0.9600
+train_loss=-1.3524
+val_loss=-1.4299
+payload_keys=[model_state_dict, optimizer_state_dict, scheduler_state_dict, epoch, best_score, metrics, history, config, random_seed]
+ckpt_path=/root/autodl-tmp/pathology-multitask-project/run/20260220_2024/best.pt

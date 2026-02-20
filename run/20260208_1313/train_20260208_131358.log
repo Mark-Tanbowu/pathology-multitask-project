@@ -1,0 +1,830 @@
+[2026-02-08 13:13:58,993] INFO - Starting training with config:
+seed: 234
+device: cuda
+num_epochs: 40
+batch_size: 16
+num_workers: 4
+lr: 0.0005
+tasks:
+  enable_seg: true
+  enable_cls: true
+data:
+  use_dummy: false
+  use_slide_manifest: true
+  train_slide_manifest: data/processed/manifest_slides_train.csv
+  val_slide_manifest: data/processed/manifest_slides_val.csv
+  coords_cache_slides: 2
+  cache_masks: false
+  mask_level: null
+  mask_max_size: 4096
+  normalize: imagenet
+  imagenet_mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  imagenet_std:
+  - 0.229
+  - 0.224
+  - 0.225
+  train_images: data/train/images_fixed
+  train_masks: data/train/masks_fixed
+  train_labels: data/train/labels.csv
+  val_images: data/val/images_fixed
+  val_masks: data/val/masks_fixed
+  val_labels: data/val/labels.csv
+  test_images: data/test/images_fixed
+  test_masks: data/test/masks_fixed
+  test_labels: data/test/labels.csv
+  dummy:
+    train_samples: 8
+    val_samples: 4
+    test_samples: 4
+    image_size: 128
+aug:
+  flip_p: 0.5
+  affine:
+    degrees: 10.0
+    translate: 0.05
+    scale_range:
+    - 0.95
+    - 1.05
+    shear: 5.0
+    p: 0.7
+  elastic:
+    alpha: 0.05
+    grid_size: 4
+    p: 0.3
+loader:
+  stratified_train: true
+  stratified_val: true
+  train_positive_ratio: 0.38
+  train_drop_last: false
+  val_positive_ratio: 0.51
+model:
+  backbone: mobilenet_v2
+  num_classes: 1
+  seg_upsample_to_input: true
+  pretrained: true
+  mobilenet_width_mult: 1.0
+  use_light_decoder: true
+  attention: se
+  attention_location: decoder
+  encoder_attention: null
+  decoder_attention: null
+  attention_reduction: 16
+  decoder_attention_layers:
+  - up4
+loss:
+  seg: bce_with_logits
+  seg_weight: 1.0
+  cls_weight: 1.0
+  dice_weight: 0.5
+  cls: bce
+  weighting: fixed
+  use_uncertainty: false
+  uncertainty_init: 0.0
+  gradnorm_alpha: 1.5
+log:
+  save_timing_dir: ${hydra:runtime.output_dir}
+  save_dir: ${hydra:runtime.output_dir}
+  save_ckpt: true
+  train_log_interval: 20
+  val_log_interval: 20
+  params_dir: ${hydra:runtime.output_dir}
+  roc_dir: ${hydra:runtime.output_dir}/roc
+eval:
+  ckpt: null
+  save_dir: ${log.params_dir}
+  save_roc: true
+prepare_train:
+  slides_dir: data/camelyon16/train/images
+  masks_dir: data/camelyon16/train/masks
+  annotations_dir: null
+  manifest_path: data/processed/patch_manifest_train.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 0.2
+  seed: 42
+  groups: Tumor
+  max_patches_per_slide: null
+  mask_suffix: _mask.tif
+  prefer_masks: true
+  progress_interval: 2000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/train
+  slide_manifest_path: data/processed/manifest_slides_train.csv
+  write_patch_manifest: false
+prepare_val:
+  slides_dir: data/camelyon16/val/images
+  masks_dir: data/camelyon16/val/masks
+  annotations_dir: null
+  manifest_path: data/processed/patch_manifest_val.csv
+  patch_level: 0
+  patch_size: 256
+  patch_stride: 256
+  tissue_level: null
+  min_tissue: 0.5
+  pos_threshold: 0.5
+  neg_threshold: 0.0
+  neg_keep_prob: 1.0
+  seed: 42
+  groups: Tumor
+  max_patches_per_slide: null
+  mask_suffix: _mask.tif
+  prefer_masks: true
+  progress_interval: 5000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords/val
+  slide_manifest_path: data/processed/manifest_slides_val.csv
+  write_patch_manifest: false
+
+[2026-02-08 13:13:58,993] INFO - Loss weighting strategy: fixed
+[2026-02-08 13:13:58,996] WARNING - SlideCoordsDataset does not support stratified sampling; disabling.
+[2026-02-08 13:13:58,996] WARNING - SlideCoordsDataset does not support stratified sampling; disabling.
+[2026-02-08 13:14:00,706] INFO - Train epoch=1 step=1/301147 loss=1.0427 seg=0.4710 cls=0.5717
+[2026-02-08 13:14:01,627] INFO - Train epoch=1 step=20/301147 loss=0.7113 seg=0.4390 cls=0.2722
+[2026-02-08 13:14:02,746] INFO - Train epoch=1 step=40/301147 loss=0.4230 seg=0.3579 cls=0.0651
+[2026-02-08 13:14:03,779] INFO - Train epoch=1 step=60/301147 loss=0.4054 seg=0.3445 cls=0.0609
+[2026-02-08 13:14:04,789] INFO - Train epoch=1 step=80/301147 loss=0.5336 seg=0.3099 cls=0.2237
+[2026-02-08 13:14:05,765] INFO - Train epoch=1 step=100/301147 loss=0.3968 seg=0.3036 cls=0.0932
+[2026-02-08 13:14:06,722] INFO - Train epoch=1 step=120/301147 loss=0.3024 seg=0.2509 cls=0.0515
+[2026-02-08 13:14:07,674] INFO - Train epoch=1 step=140/301147 loss=0.2814 seg=0.2292 cls=0.0523
+[2026-02-08 13:14:08,637] INFO - Train epoch=1 step=160/301147 loss=0.5431 seg=0.2638 cls=0.2793
+[2026-02-08 13:14:09,578] INFO - Train epoch=1 step=180/301147 loss=0.3910 seg=0.1804 cls=0.2106
+[2026-02-08 13:14:10,528] INFO - Train epoch=1 step=200/301147 loss=0.4399 seg=0.1592 cls=0.2806
+[2026-02-08 13:14:11,466] INFO - Train epoch=1 step=220/301147 loss=0.1977 seg=0.1404 cls=0.0573
+[2026-02-08 13:14:12,363] INFO - Train epoch=1 step=240/301147 loss=0.1597 seg=0.1186 cls=0.0411
+[2026-02-08 13:14:13,189] INFO - Train epoch=1 step=260/301147 loss=0.1378 seg=0.1077 cls=0.0300
+[2026-02-08 13:14:14,108] INFO - Train epoch=1 step=280/301147 loss=0.1254 seg=0.0896 cls=0.0358
+[2026-02-08 13:14:15,067] INFO - Train epoch=1 step=300/301147 loss=0.4488 seg=0.1702 cls=0.2786
+[2026-02-08 13:14:16,017] INFO - Train epoch=1 step=320/301147 loss=0.1034 seg=0.0697 cls=0.0336
+[2026-02-08 13:14:16,965] INFO - Train epoch=1 step=340/301147 loss=0.1341 seg=0.1046 cls=0.0295
+[2026-02-08 13:14:17,938] INFO - Train epoch=1 step=360/301147 loss=0.4539 seg=0.2146 cls=0.2393
+[2026-02-08 13:14:18,912] INFO - Train epoch=1 step=380/301147 loss=0.0845 seg=0.0500 cls=0.0345
+[2026-02-08 13:14:19,883] INFO - Train epoch=1 step=400/301147 loss=0.1052 seg=0.0854 cls=0.0197
+[2026-02-08 13:14:20,830] INFO - Train epoch=1 step=420/301147 loss=0.7155 seg=0.2583 cls=0.4571
+[2026-02-08 13:14:21,544] INFO - Train epoch=1 step=440/301147 loss=0.1515 seg=0.1174 cls=0.0341
+[2026-02-08 13:14:22,408] INFO - Train epoch=1 step=460/301147 loss=0.0608 seg=0.0351 cls=0.0257
+[2026-02-08 13:14:23,356] INFO - Train epoch=1 step=480/301147 loss=0.0974 seg=0.0692 cls=0.0282
+[2026-02-08 13:14:24,317] INFO - Train epoch=1 step=500/301147 loss=0.0592 seg=0.0308 cls=0.0284
+[2026-02-08 13:14:25,255] INFO - Train epoch=1 step=520/301147 loss=0.0610 seg=0.0278 cls=0.0332
+[2026-02-08 13:14:26,222] INFO - Train epoch=1 step=540/301147 loss=0.6618 seg=0.1580 cls=0.5039
+[2026-02-08 13:14:27,175] INFO - Train epoch=1 step=560/301147 loss=0.6738 seg=0.2683 cls=0.4056
+[2026-02-08 13:14:28,120] INFO - Train epoch=1 step=580/301147 loss=0.0742 seg=0.0257 cls=0.0485
+[2026-02-08 13:14:29,070] INFO - Train epoch=1 step=600/301147 loss=0.0959 seg=0.0523 cls=0.0436
+[2026-02-08 13:14:30,065] INFO - Train epoch=1 step=620/301147 loss=0.3754 seg=0.1403 cls=0.2352
+[2026-02-08 13:14:31,003] INFO - Train epoch=1 step=640/301147 loss=0.0519 seg=0.0217 cls=0.0303
+[2026-02-08 13:14:31,935] INFO - Train epoch=1 step=660/301147 loss=0.0598 seg=0.0226 cls=0.0372
+[2026-02-08 13:14:32,883] INFO - Train epoch=1 step=680/301147 loss=0.0700 seg=0.0193 cls=0.0507
+[2026-02-08 13:14:33,829] INFO - Train epoch=1 step=700/301147 loss=0.0798 seg=0.0549 cls=0.0248
+[2026-02-08 13:14:34,792] INFO - Train epoch=1 step=720/301147 loss=0.4364 seg=0.1400 cls=0.2965
+[2026-02-08 13:14:35,746] INFO - Train epoch=1 step=740/301147 loss=0.0462 seg=0.0173 cls=0.0289
+[2026-02-08 13:14:36,712] INFO - Train epoch=1 step=760/301147 loss=0.0470 seg=0.0159 cls=0.0311
+[2026-02-08 13:14:37,640] INFO - Train epoch=1 step=780/301147 loss=0.0553 seg=0.0155 cls=0.0399
+[2026-02-08 13:14:38,531] INFO - Train epoch=1 step=800/301147 loss=0.0974 seg=0.0513 cls=0.0461
+[2026-02-08 13:14:39,484] INFO - Train epoch=1 step=820/301147 loss=0.2178 seg=0.0526 cls=0.1652
+[2026-02-08 13:14:40,483] INFO - Train epoch=1 step=840/301147 loss=0.0658 seg=0.0192 cls=0.0466
+[2026-02-08 13:14:41,457] INFO - Train epoch=1 step=860/301147 loss=0.0609 seg=0.0156 cls=0.0453
+[2026-02-08 13:14:42,398] INFO - Train epoch=1 step=880/301147 loss=0.0503 seg=0.0158 cls=0.0345
+[2026-02-08 13:14:43,339] INFO - Train epoch=1 step=900/301147 loss=0.1166 seg=0.0748 cls=0.0418
+[2026-02-08 13:14:44,292] INFO - Train epoch=1 step=920/301147 loss=0.1079 seg=0.0876 cls=0.0203
+[2026-02-08 13:14:45,195] INFO - Train epoch=1 step=940/301147 loss=0.0426 seg=0.0173 cls=0.0252
+[2026-02-08 13:14:46,118] INFO - Train epoch=1 step=960/301147 loss=0.4169 seg=0.1517 cls=0.2652
+[2026-02-08 13:14:47,100] INFO - Train epoch=1 step=980/301147 loss=0.1071 seg=0.0766 cls=0.0304
+[2026-02-08 13:14:48,306] INFO - Train epoch=1 step=1000/301147 loss=0.5447 seg=0.2007 cls=0.3440
+[2026-02-08 13:14:49,666] INFO - Train epoch=1 step=1020/301147 loss=0.0461 seg=0.0144 cls=0.0317
+[2026-02-08 13:14:50,655] INFO - Train epoch=1 step=1040/301147 loss=0.1205 seg=0.0342 cls=0.0863
+[2026-02-08 13:14:51,911] INFO - Train epoch=1 step=1060/301147 loss=0.0309 seg=0.0126 cls=0.0184
+[2026-02-08 13:14:52,915] INFO - Train epoch=1 step=1080/301147 loss=0.0294 seg=0.0111 cls=0.0183
+[2026-02-08 13:14:53,935] INFO - Train epoch=1 step=1100/301147 loss=0.7203 seg=0.1933 cls=0.5271
+[2026-02-08 13:14:54,906] INFO - Train epoch=1 step=1120/301147 loss=0.0474 seg=0.0128 cls=0.0346
+[2026-02-08 13:14:55,922] INFO - Train epoch=1 step=1140/301147 loss=0.0632 seg=0.0132 cls=0.0500
+[2026-02-08 13:14:56,914] INFO - Train epoch=1 step=1160/301147 loss=0.6893 seg=0.1802 cls=0.5090
+[2026-02-08 13:14:57,884] INFO - Train epoch=1 step=1180/301147 loss=0.3217 seg=0.0631 cls=0.2586
+[2026-02-08 13:14:58,852] INFO - Train epoch=1 step=1200/301147 loss=0.0521 seg=0.0119 cls=0.0402
+[2026-02-08 13:14:59,795] INFO - Train epoch=1 step=1220/301147 loss=0.2201 seg=0.0124 cls=0.2077
+[2026-02-08 13:15:00,790] INFO - Train epoch=1 step=1240/301147 loss=0.0734 seg=0.0438 cls=0.0297
+[2026-02-08 13:15:01,768] INFO - Train epoch=1 step=1260/301147 loss=0.4194 seg=0.1296 cls=0.2898
+[2026-02-08 13:15:02,756] INFO - Train epoch=1 step=1280/301147 loss=0.4966 seg=0.2010 cls=0.2956
+[2026-02-08 13:15:03,720] INFO - Train epoch=1 step=1300/301147 loss=0.0570 seg=0.0141 cls=0.0429
+[2026-02-08 13:15:04,740] INFO - Train epoch=1 step=1320/301147 loss=0.1043 seg=0.0874 cls=0.0169
+[2026-02-08 13:15:05,706] INFO - Train epoch=1 step=1340/301147 loss=0.0339 seg=0.0097 cls=0.0241
+[2026-02-08 13:15:06,700] INFO - Train epoch=1 step=1360/301147 loss=0.0358 seg=0.0092 cls=0.0266
+[2026-02-08 13:15:07,683] INFO - Train epoch=1 step=1380/301147 loss=0.4859 seg=0.1977 cls=0.2882
+[2026-02-08 13:15:08,717] INFO - Train epoch=1 step=1400/301147 loss=0.0329 seg=0.0092 cls=0.0237
+[2026-02-08 13:15:09,668] INFO - Train epoch=1 step=1420/301147 loss=0.0953 seg=0.0236 cls=0.0717
+[2026-02-08 13:15:10,629] INFO - Train epoch=1 step=1440/301147 loss=0.0461 seg=0.0124 cls=0.0338
+[2026-02-08 13:15:11,572] INFO - Train epoch=1 step=1460/301147 loss=0.2673 seg=0.0149 cls=0.2524
+[2026-02-08 13:15:12,539] INFO - Train epoch=1 step=1480/301147 loss=0.0566 seg=0.0110 cls=0.0455
+[2026-02-08 13:15:13,494] INFO - Train epoch=1 step=1500/301147 loss=0.0503 seg=0.0102 cls=0.0401
+[2026-02-08 13:15:14,472] INFO - Train epoch=1 step=1520/301147 loss=0.0580 seg=0.0112 cls=0.0468
+[2026-02-08 13:15:15,414] INFO - Train epoch=1 step=1540/301147 loss=0.0740 seg=0.0454 cls=0.0286
+[2026-02-08 13:15:16,369] INFO - Train epoch=1 step=1560/301147 loss=0.2967 seg=0.0145 cls=0.2823
+[2026-02-08 13:15:17,385] INFO - Train epoch=1 step=1580/301147 loss=0.2759 seg=0.0148 cls=0.2611
+[2026-02-08 13:15:18,354] INFO - Train epoch=1 step=1600/301147 loss=0.3906 seg=0.1513 cls=0.2393
+[2026-02-08 13:15:19,311] INFO - Train epoch=1 step=1620/301147 loss=0.0441 seg=0.0113 cls=0.0328
+[2026-02-08 13:15:20,257] INFO - Train epoch=1 step=1640/301147 loss=0.1974 seg=0.1290 cls=0.0685
+[2026-02-08 13:15:21,231] INFO - Train epoch=1 step=1660/301147 loss=0.2928 seg=0.1111 cls=0.1817
+[2026-02-08 13:15:22,194] INFO - Train epoch=1 step=1680/301147 loss=0.4371 seg=0.1649 cls=0.2723
+[2026-02-08 13:15:23,154] INFO - Train epoch=1 step=1700/301147 loss=0.4252 seg=0.1797 cls=0.2456
+[2026-02-08 13:15:24,103] INFO - Train epoch=1 step=1720/301147 loss=0.4413 seg=0.1907 cls=0.2506
+[2026-02-08 13:15:25,057] INFO - Train epoch=1 step=1740/301147 loss=0.0441 seg=0.0112 cls=0.0329
+[2026-02-08 13:15:25,866] INFO - Train epoch=1 step=1760/301147 loss=0.4159 seg=0.1597 cls=0.2563
+[2026-02-08 13:15:26,946] INFO - Train epoch=1 step=1780/301147 loss=0.0563 seg=0.0222 cls=0.0340
+[2026-02-08 13:15:27,932] INFO - Train epoch=1 step=1800/301147 loss=0.0625 seg=0.0410 cls=0.0215
+[2026-02-08 13:15:28,956] INFO - Train epoch=1 step=1820/301147 loss=0.3767 seg=0.1433 cls=0.2335
+[2026-02-08 13:15:29,914] INFO - Train epoch=1 step=1840/301147 loss=0.1068 seg=0.0865 cls=0.0203
+[2026-02-08 13:15:30,866] INFO - Train epoch=1 step=1860/301147 loss=0.0572 seg=0.0412 cls=0.0160
+[2026-02-08 13:15:31,740] INFO - Train epoch=1 step=1880/301147 loss=0.4028 seg=0.1923 cls=0.2105
+[2026-02-08 13:15:32,610] INFO - Train epoch=1 step=1900/301147 loss=0.0548 seg=0.0122 cls=0.0426
+[2026-02-08 13:15:33,463] INFO - Train epoch=1 step=1920/301147 loss=0.0451 seg=0.0108 cls=0.0344
+[2026-02-08 13:15:34,350] INFO - Train epoch=1 step=1940/301147 loss=0.0870 seg=0.0231 cls=0.0639
+[2026-02-08 13:15:35,181] INFO - Train epoch=1 step=1960/301147 loss=0.2492 seg=0.0483 cls=0.2009
+[2026-02-08 13:15:36,054] INFO - Train epoch=1 step=1980/301147 loss=0.0608 seg=0.0132 cls=0.0477
+[2026-02-08 13:15:36,937] INFO - Train epoch=1 step=2000/301147 loss=0.3125 seg=0.0155 cls=0.2970
+[2026-02-08 13:15:37,877] INFO - Train epoch=1 step=2020/301147 loss=0.0394 seg=0.0107 cls=0.0287
+[2026-02-08 13:15:38,835] INFO - Train epoch=1 step=2040/301147 loss=0.6108 seg=0.1657 cls=0.4451
+[2026-02-08 13:15:39,791] INFO - Train epoch=1 step=2060/301147 loss=0.0414 seg=0.0093 cls=0.0321
+[2026-02-08 13:15:40,718] INFO - Train epoch=1 step=2080/301147 loss=0.0319 seg=0.0085 cls=0.0234
+[2026-02-08 13:15:41,681] INFO - Train epoch=1 step=2100/301147 loss=0.3718 seg=0.1552 cls=0.2166
+[2026-02-08 13:15:42,686] INFO - Train epoch=1 step=2120/301147 loss=0.3416 seg=0.0422 cls=0.2994
+[2026-02-08 13:15:43,629] INFO - Train epoch=1 step=2140/301147 loss=0.0788 seg=0.0427 cls=0.0361
+[2026-02-08 13:15:44,559] INFO - Train epoch=1 step=2160/301147 loss=0.0421 seg=0.0093 cls=0.0328
+[2026-02-08 13:15:45,499] INFO - Train epoch=1 step=2180/301147 loss=0.0263 seg=0.0083 cls=0.0179
+[2026-02-08 13:15:46,420] INFO - Train epoch=1 step=2200/301147 loss=0.0256 seg=0.0077 cls=0.0179
+[2026-02-08 13:15:47,344] INFO - Train epoch=1 step=2220/301147 loss=0.2652 seg=0.0085 cls=0.2567
+[2026-02-08 13:15:48,307] INFO - Train epoch=1 step=2240/301147 loss=0.0441 seg=0.0078 cls=0.0363
+[2026-02-08 13:15:49,262] INFO - Train epoch=1 step=2260/301147 loss=0.4418 seg=0.1634 cls=0.2783
+[2026-02-08 13:15:50,255] INFO - Train epoch=1 step=2280/301147 loss=0.0542 seg=0.0121 cls=0.0420
+[2026-02-08 13:15:51,215] INFO - Train epoch=1 step=2300/301147 loss=0.7259 seg=0.1886 cls=0.5372
+[2026-02-08 13:15:52,200] INFO - Train epoch=1 step=2320/301147 loss=0.0344 seg=0.0089 cls=0.0255
+[2026-02-08 13:15:53,140] INFO - Train epoch=1 step=2340/301147 loss=0.0353 seg=0.0091 cls=0.0262
+[2026-02-08 13:15:54,105] INFO - Train epoch=1 step=2360/301147 loss=0.0362 seg=0.0079 cls=0.0283
+[2026-02-08 13:15:55,055] INFO - Train epoch=1 step=2380/301147 loss=0.7166 seg=0.3067 cls=0.4100
+[2026-02-08 13:15:56,026] INFO - Train epoch=1 step=2400/301147 loss=0.0391 seg=0.0097 cls=0.0294
+[2026-02-08 13:15:57,012] INFO - Train epoch=1 step=2420/301147 loss=0.0709 seg=0.0414 cls=0.0295
+[2026-02-08 13:15:58,040] INFO - Train epoch=1 step=2440/301147 loss=0.1130 seg=0.0794 cls=0.0337
+[2026-02-08 13:15:58,981] INFO - Train epoch=1 step=2460/301147 loss=0.5880 seg=0.1673 cls=0.4208
+[2026-02-08 13:15:59,920] INFO - Train epoch=1 step=2480/301147 loss=0.0506 seg=0.0100 cls=0.0407
+[2026-02-08 13:16:00,892] INFO - Train epoch=1 step=2500/301147 loss=0.0377 seg=0.0100 cls=0.0277
+[2026-02-08 13:16:01,865] INFO - Train epoch=1 step=2520/301147 loss=0.0343 seg=0.0087 cls=0.0256
+[2026-02-08 13:16:02,820] INFO - Train epoch=1 step=2540/301147 loss=0.0626 seg=0.0383 cls=0.0244
+[2026-02-08 13:16:03,769] INFO - Train epoch=1 step=2560/301147 loss=0.2575 seg=0.0097 cls=0.2477
+[2026-02-08 13:16:04,772] INFO - Train epoch=1 step=2580/301147 loss=0.0678 seg=0.0097 cls=0.0581
+[2026-02-08 13:16:05,773] INFO - Train epoch=1 step=2600/301147 loss=0.0495 seg=0.0099 cls=0.0396
+[2026-02-08 13:16:06,728] INFO - Train epoch=1 step=2620/301147 loss=0.0396 seg=0.0095 cls=0.0301
+[2026-02-08 13:16:07,717] INFO - Train epoch=1 step=2640/301147 loss=0.3315 seg=0.0502 cls=0.2813
+[2026-02-08 13:16:08,669] INFO - Train epoch=1 step=2660/301147 loss=0.2401 seg=0.0093 cls=0.2308
+[2026-02-08 13:16:09,615] INFO - Train epoch=1 step=2680/301147 loss=0.0510 seg=0.0100 cls=0.0409
+[2026-02-08 13:16:10,615] INFO - Train epoch=1 step=2700/301147 loss=0.0385 seg=0.0091 cls=0.0294
+[2026-02-08 13:16:11,574] INFO - Train epoch=1 step=2720/301147 loss=0.0889 seg=0.0149 cls=0.0740
+[2026-02-08 13:16:12,508] INFO - Train epoch=1 step=2740/301147 loss=0.0455 seg=0.0103 cls=0.0352
+[2026-02-08 13:16:13,469] INFO - Train epoch=1 step=2760/301147 loss=0.0334 seg=0.0098 cls=0.0236
+[2026-02-08 13:16:14,462] INFO - Train epoch=1 step=2780/301147 loss=0.4179 seg=0.1519 cls=0.2660
+[2026-02-08 13:16:15,406] INFO - Train epoch=1 step=2800/301147 loss=0.0331 seg=0.0091 cls=0.0239
+[2026-02-08 13:16:16,380] INFO - Train epoch=1 step=2820/301147 loss=0.0377 seg=0.0083 cls=0.0294
+[2026-02-08 13:16:17,359] INFO - Train epoch=1 step=2840/301147 loss=0.0278 seg=0.0079 cls=0.0199
+[2026-02-08 13:16:18,797] INFO - Train epoch=1 step=2860/301147 loss=0.0335 seg=0.0085 cls=0.0250
+[2026-02-08 13:16:19,744] INFO - Train epoch=1 step=2880/301147 loss=0.0916 seg=0.0120 cls=0.0796
+[2026-02-08 13:16:20,703] INFO - Train epoch=1 step=2900/301147 loss=0.4523 seg=0.2043 cls=0.2481
+[2026-02-08 13:16:22,005] INFO - Train epoch=1 step=2920/301147 loss=0.0465 seg=0.0112 cls=0.0353
+[2026-02-08 13:16:23,336] INFO - Train epoch=1 step=2940/301147 loss=0.0497 seg=0.0109 cls=0.0388
+[2026-02-08 13:16:24,284] INFO - Train epoch=1 step=2960/301147 loss=0.8293 seg=0.3378 cls=0.4916
+[2026-02-08 13:16:25,218] INFO - Train epoch=1 step=2980/301147 loss=0.0395 seg=0.0095 cls=0.0300
+[2026-02-08 13:16:26,170] INFO - Train epoch=1 step=3000/301147 loss=0.2583 seg=0.0092 cls=0.2491
+[2026-02-08 13:16:27,133] INFO - Train epoch=1 step=3020/301147 loss=0.0477 seg=0.0114 cls=0.0362
+[2026-02-08 13:16:28,121] INFO - Train epoch=1 step=3040/301147 loss=0.9060 seg=0.3392 cls=0.5669
+[2026-02-08 13:16:29,127] INFO - Train epoch=1 step=3060/301147 loss=0.0441 seg=0.0115 cls=0.0326
+[2026-02-08 13:16:30,095] INFO - Train epoch=1 step=3080/301147 loss=0.0317 seg=0.0080 cls=0.0238
+[2026-02-08 13:16:30,978] INFO - Train epoch=1 step=3100/301147 loss=0.6490 seg=0.1830 cls=0.4660
+[2026-02-08 13:16:31,967] INFO - Train epoch=1 step=3120/301147 loss=0.6466 seg=0.1696 cls=0.4770
+[2026-02-08 13:16:32,891] INFO - Train epoch=1 step=3140/301147 loss=0.0380 seg=0.0087 cls=0.0292
+[2026-02-08 13:16:33,837] INFO - Train epoch=1 step=3160/301147 loss=0.0487 seg=0.0119 cls=0.0368
+[2026-02-08 13:16:34,798] INFO - Train epoch=1 step=3180/301147 loss=0.1246 seg=0.0802 cls=0.0445
+[2026-02-08 13:16:35,734] INFO - Train epoch=1 step=3200/301147 loss=0.0524 seg=0.0114 cls=0.0410
+[2026-02-08 13:16:36,716] INFO - Train epoch=1 step=3220/301147 loss=0.4046 seg=0.1593 cls=0.2452
+[2026-02-08 13:16:37,665] INFO - Train epoch=1 step=3240/301147 loss=0.3024 seg=0.0110 cls=0.2914
+[2026-02-08 13:16:38,623] INFO - Train epoch=1 step=3260/301147 loss=0.0544 seg=0.0096 cls=0.0448
+[2026-02-08 13:16:39,574] INFO - Train epoch=1 step=3280/301147 loss=0.0775 seg=0.0396 cls=0.0378
+[2026-02-08 13:16:40,507] INFO - Train epoch=1 step=3300/301147 loss=0.0422 seg=0.0114 cls=0.0308
+[2026-02-08 13:16:41,467] INFO - Train epoch=1 step=3320/301147 loss=0.0386 seg=0.0100 cls=0.0286
+[2026-02-08 13:16:42,503] INFO - Train epoch=1 step=3340/301147 loss=0.0513 seg=0.0126 cls=0.0387
+[2026-02-08 13:16:43,529] INFO - Train epoch=1 step=3360/301147 loss=0.0698 seg=0.0398 cls=0.0301
+[2026-02-08 13:16:44,483] INFO - Train epoch=1 step=3380/301147 loss=0.3789 seg=0.1687 cls=0.2101
+[2026-02-08 13:16:45,442] INFO - Train epoch=1 step=3400/301147 loss=0.2333 seg=0.0091 cls=0.2242
+[2026-02-08 13:16:46,411] INFO - Train epoch=1 step=3420/301147 loss=0.1193 seg=0.0847 cls=0.0346
+[2026-02-08 13:16:47,375] INFO - Train epoch=1 step=3440/301147 loss=0.3095 seg=0.0410 cls=0.2685
+[2026-02-08 13:16:48,343] INFO - Train epoch=1 step=3460/301147 loss=0.4074 seg=0.1539 cls=0.2536
+[2026-02-08 13:16:49,283] INFO - Train epoch=1 step=3480/301147 loss=0.0576 seg=0.0388 cls=0.0188
+[2026-02-08 13:16:50,210] INFO - Train epoch=1 step=3500/301147 loss=0.0644 seg=0.0398 cls=0.0245
+[2026-02-08 13:16:51,188] INFO - Train epoch=1 step=3520/301147 loss=0.2479 seg=0.0103 cls=0.2376
+[2026-02-08 13:16:52,137] INFO - Train epoch=1 step=3540/301147 loss=0.4275 seg=0.1800 cls=0.2475
+[2026-02-08 13:16:53,086] INFO - Train epoch=1 step=3560/301147 loss=0.0450 seg=0.0108 cls=0.0342
+[2026-02-08 13:16:54,015] INFO - Train epoch=1 step=3580/301147 loss=0.0298 seg=0.0093 cls=0.0205
+[2026-02-08 13:16:54,975] INFO - Train epoch=1 step=3600/301147 loss=0.0342 seg=0.0075 cls=0.0268
+[2026-02-08 13:16:55,950] INFO - Train epoch=1 step=3620/301147 loss=0.2206 seg=0.0076 cls=0.2130
+[2026-02-08 13:16:56,921] INFO - Train epoch=1 step=3640/301147 loss=0.0325 seg=0.0082 cls=0.0242
+[2026-02-08 13:16:57,886] INFO - Train epoch=1 step=3660/301147 loss=0.0360 seg=0.0094 cls=0.0267
+[2026-02-08 13:16:58,882] INFO - Train epoch=1 step=3680/301147 loss=0.9796 seg=0.4436 cls=0.5361
+[2026-02-08 13:16:59,822] INFO - Train epoch=1 step=3700/301147 loss=0.5693 seg=0.2864 cls=0.2830
+[2026-02-08 13:17:00,789] INFO - Train epoch=1 step=3720/301147 loss=0.3140 seg=0.0385 cls=0.2755
+[2026-02-08 13:17:01,791] INFO - Train epoch=1 step=3740/301147 loss=0.0431 seg=0.0119 cls=0.0312
+[2026-02-08 13:17:02,756] INFO - Train epoch=1 step=3760/301147 loss=0.0552 seg=0.0111 cls=0.0441
+[2026-02-08 13:17:03,705] INFO - Train epoch=1 step=3780/301147 loss=0.4510 seg=0.2045 cls=0.2465
+[2026-02-08 13:17:04,640] INFO - Train epoch=1 step=3800/301147 loss=0.1673 seg=0.0507 cls=0.1165
+[2026-02-08 13:17:05,590] INFO - Train epoch=1 step=3820/301147 loss=0.0447 seg=0.0081 cls=0.0366
+[2026-02-08 13:17:06,555] INFO - Train epoch=1 step=3840/301147 loss=0.4484 seg=0.1930 cls=0.2554
+[2026-02-08 13:17:07,501] INFO - Train epoch=1 step=3860/301147 loss=0.0613 seg=0.0378 cls=0.0235
+[2026-02-08 13:17:08,445] INFO - Train epoch=1 step=3880/301147 loss=0.0538 seg=0.0115 cls=0.0423
+[2026-02-08 13:17:09,391] INFO - Train epoch=1 step=3900/301147 loss=0.0772 seg=0.0171 cls=0.0602
+[2026-02-08 13:17:10,370] INFO - Train epoch=1 step=3920/301147 loss=0.0475 seg=0.0133 cls=0.0343
+[2026-02-08 13:17:11,330] INFO - Train epoch=1 step=3940/301147 loss=0.0448 seg=0.0160 cls=0.0288
+[2026-02-08 13:17:12,296] INFO - Train epoch=1 step=3960/301147 loss=0.5474 seg=0.1411 cls=0.4063
+[2026-02-08 13:17:13,263] INFO - Train epoch=1 step=3980/301147 loss=0.2093 seg=0.0390 cls=0.1703
+[2026-02-08 13:17:14,188] INFO - Train epoch=1 step=4000/301147 loss=0.3412 seg=0.1342 cls=0.2070
+[2026-02-08 13:17:15,155] INFO - Train epoch=1 step=4020/301147 loss=0.0812 seg=0.0432 cls=0.0380
+[2026-02-08 13:17:16,125] INFO - Train epoch=1 step=4040/301147 loss=0.7515 seg=0.3035 cls=0.4480
+[2026-02-08 13:17:17,094] INFO - Train epoch=1 step=4060/301147 loss=0.0350 seg=0.0094 cls=0.0257
+[2026-02-08 13:17:18,043] INFO - Train epoch=1 step=4080/301147 loss=0.0369 seg=0.0094 cls=0.0275
+[2026-02-08 13:17:19,015] INFO - Train epoch=1 step=4100/301147 loss=0.2872 seg=0.0079 cls=0.2793
+[2026-02-08 13:17:19,902] INFO - Train epoch=1 step=4120/301147 loss=0.2515 seg=0.0466 cls=0.2049
+[2026-02-08 13:17:20,857] INFO - Train epoch=1 step=4140/301147 loss=0.0563 seg=0.0112 cls=0.0452
+[2026-02-08 13:17:21,882] INFO - Train epoch=1 step=4160/301147 loss=0.2242 seg=0.0106 cls=0.2136
+[2026-02-08 13:17:22,886] INFO - Train epoch=1 step=4180/301147 loss=0.0355 seg=0.0094 cls=0.0262
+[2026-02-08 13:17:23,836] INFO - Train epoch=1 step=4200/301147 loss=0.4728 seg=0.0099 cls=0.4629
+[2026-02-08 13:17:24,810] INFO - Train epoch=1 step=4220/301147 loss=0.0614 seg=0.0090 cls=0.0525
+[2026-02-08 13:17:25,760] INFO - Train epoch=1 step=4240/301147 loss=0.0568 seg=0.0381 cls=0.0187
+[2026-02-08 13:17:26,746] INFO - Train epoch=1 step=4260/301147 loss=0.3598 seg=0.1585 cls=0.2013
+[2026-02-08 13:17:27,743] INFO - Train epoch=1 step=4280/301147 loss=1.0321 seg=0.3074 cls=0.7247
+[2026-02-08 13:17:28,747] INFO - Train epoch=1 step=4300/301147 loss=0.0476 seg=0.0101 cls=0.0375
+[2026-02-08 13:17:29,746] INFO - Train epoch=1 step=4320/301147 loss=0.3150 seg=0.1092 cls=0.2057
+[2026-02-08 13:17:30,789] INFO - Train epoch=1 step=4340/301147 loss=0.3955 seg=0.1702 cls=0.2253
+[2026-02-08 13:17:31,804] INFO - Train epoch=1 step=4360/301147 loss=0.0510 seg=0.0127 cls=0.0382
+[2026-02-08 13:17:32,847] INFO - Train epoch=1 step=4380/301147 loss=0.4445 seg=0.2012 cls=0.2434
+[2026-02-08 13:17:33,812] INFO - Train epoch=1 step=4400/301147 loss=0.5936 seg=0.1516 cls=0.4420
+[2026-02-08 13:17:34,827] INFO - Train epoch=1 step=4420/301147 loss=0.0448 seg=0.0111 cls=0.0338
+[2026-02-08 13:17:35,817] INFO - Train epoch=1 step=4440/301147 loss=0.0491 seg=0.0095 cls=0.0396
+[2026-02-08 13:17:36,787] INFO - Train epoch=1 step=4460/301147 loss=0.0655 seg=0.0390 cls=0.0264
+[2026-02-08 13:17:37,721] INFO - Train epoch=1 step=4480/301147 loss=0.0897 seg=0.0117 cls=0.0780
+[2026-02-08 13:17:38,662] INFO - Train epoch=1 step=4500/301147 loss=0.0472 seg=0.0072 cls=0.0400
+[2026-02-08 13:17:39,614] INFO - Train epoch=1 step=4520/301147 loss=0.0447 seg=0.0072 cls=0.0376
+[2026-02-08 13:17:40,547] INFO - Train epoch=1 step=4540/301147 loss=0.3591 seg=0.1383 cls=0.2208
+[2026-02-08 13:17:41,438] INFO - Train epoch=1 step=4560/301147 loss=0.0427 seg=0.0111 cls=0.0315
+[2026-02-08 13:17:42,374] INFO - Train epoch=1 step=4580/301147 loss=0.4213 seg=0.1579 cls=0.2634
+[2026-02-08 13:17:43,322] INFO - Train epoch=1 step=4600/301147 loss=0.3817 seg=0.1426 cls=0.2390
+[2026-02-08 13:17:44,316] INFO - Train epoch=1 step=4620/301147 loss=0.3049 seg=0.0396 cls=0.2654
+[2026-02-08 13:17:45,328] INFO - Train epoch=1 step=4640/301147 loss=0.0349 seg=0.0088 cls=0.0261
+[2026-02-08 13:17:46,347] INFO - Train epoch=1 step=4660/301147 loss=0.2021 seg=0.0143 cls=0.1878
+[2026-02-08 13:17:47,311] INFO - Train epoch=1 step=4680/301147 loss=0.0364 seg=0.0087 cls=0.0277
+[2026-02-08 13:17:48,271] INFO - Train epoch=1 step=4700/301147 loss=0.0322 seg=0.0090 cls=0.0233
+[2026-02-08 13:17:49,253] INFO - Train epoch=1 step=4720/301147 loss=0.4849 seg=0.1715 cls=0.3134
+[2026-02-08 13:17:50,280] INFO - Train epoch=1 step=4740/301147 loss=0.0722 seg=0.0142 cls=0.0580
+[2026-02-08 13:17:51,618] INFO - Train epoch=1 step=4760/301147 loss=0.2428 seg=0.0158 cls=0.2270
+[2026-02-08 13:17:52,636] INFO - Train epoch=1 step=4780/301147 loss=0.0484 seg=0.0120 cls=0.0364
+[2026-02-08 13:17:53,604] INFO - Train epoch=1 step=4800/301147 loss=0.4148 seg=0.1616 cls=0.2531
+[2026-02-08 13:17:54,879] INFO - Train epoch=1 step=4820/301147 loss=0.3415 seg=0.1514 cls=0.1901
+[2026-02-08 13:17:56,255] INFO - Train epoch=1 step=4840/301147 loss=0.0440 seg=0.0139 cls=0.0302
+[2026-02-08 13:17:57,584] INFO - Train epoch=1 step=4860/301147 loss=0.0333 seg=0.0068 cls=0.0265
+[2026-02-08 13:17:58,548] INFO - Train epoch=1 step=4880/301147 loss=0.4645 seg=0.1783 cls=0.2863
+[2026-02-08 13:17:59,493] INFO - Train epoch=1 step=4900/301147 loss=0.2462 seg=0.0083 cls=0.2378
+[2026-02-08 13:18:00,480] INFO - Train epoch=1 step=4920/301147 loss=0.6088 seg=0.1578 cls=0.4510
+[2026-02-08 13:18:01,417] INFO - Train epoch=1 step=4940/301147 loss=0.2337 seg=0.0091 cls=0.2245
+[2026-02-08 13:18:02,364] INFO - Train epoch=1 step=4960/301147 loss=0.0542 seg=0.0094 cls=0.0449
+[2026-02-08 13:18:03,316] INFO - Train epoch=1 step=4980/301147 loss=0.1521 seg=0.0809 cls=0.0712
+[2026-02-08 13:18:04,265] INFO - Train epoch=1 step=5000/301147 loss=1.0958 seg=0.3079 cls=0.7878
+[2026-02-08 13:18:05,184] INFO - Train epoch=1 step=5020/301147 loss=0.3532 seg=0.1414 cls=0.2117
+[2026-02-08 13:18:06,094] INFO - Train epoch=1 step=5040/301147 loss=0.2223 seg=0.0196 cls=0.2027
+[2026-02-08 13:18:07,051] INFO - Train epoch=1 step=5060/301147 loss=0.4824 seg=0.2003 cls=0.2821
+[2026-02-08 13:18:08,013] INFO - Train epoch=1 step=5080/301147 loss=0.0602 seg=0.0398 cls=0.0204
+[2026-02-08 13:18:09,002] INFO - Train epoch=1 step=5100/301147 loss=0.4109 seg=0.1693 cls=0.2416
+[2026-02-08 13:18:09,988] INFO - Train epoch=1 step=5120/301147 loss=0.4413 seg=0.1699 cls=0.2714
+[2026-02-08 13:18:10,898] INFO - Train epoch=1 step=5140/301147 loss=1.0458 seg=0.2234 cls=0.8224
+[2026-02-08 13:18:11,875] INFO - Train epoch=1 step=5160/301147 loss=0.0640 seg=0.0145 cls=0.0495
+[2026-02-08 13:18:12,796] INFO - Train epoch=1 step=5180/301147 loss=0.3848 seg=0.1564 cls=0.2284
+[2026-02-08 13:18:13,771] INFO - Train epoch=1 step=5200/301147 loss=0.0341 seg=0.0089 cls=0.0251
+[2026-02-08 13:18:14,750] INFO - Train epoch=1 step=5220/301147 loss=0.0361 seg=0.0095 cls=0.0267
+[2026-02-08 13:18:15,713] INFO - Train epoch=1 step=5240/301147 loss=0.0555 seg=0.0389 cls=0.0166
+[2026-02-08 13:18:16,696] INFO - Train epoch=1 step=5260/301147 loss=0.0412 seg=0.0090 cls=0.0322
+[2026-02-08 13:18:17,665] INFO - Train epoch=1 step=5280/301147 loss=0.0596 seg=0.0108 cls=0.0488
+[2026-02-08 13:18:18,614] INFO - Train epoch=1 step=5300/301147 loss=0.0370 seg=0.0087 cls=0.0283
+[2026-02-08 13:18:19,567] INFO - Train epoch=1 step=5320/301147 loss=0.3888 seg=0.1465 cls=0.2423
+[2026-02-08 13:18:20,443] INFO - Train epoch=1 step=5340/301147 loss=0.0584 seg=0.0097 cls=0.0486
+[2026-02-08 13:18:21,401] INFO - Train epoch=1 step=5360/301147 loss=0.0672 seg=0.0412 cls=0.0260
+[2026-02-08 13:18:22,321] INFO - Train epoch=1 step=5380/301147 loss=0.0530 seg=0.0375 cls=0.0155
+[2026-02-08 13:18:23,269] INFO - Train epoch=1 step=5400/301147 loss=0.0307 seg=0.0073 cls=0.0234
+[2026-02-08 13:18:23,997] INFO - Train epoch=1 step=5420/301147 loss=0.3821 seg=0.1590 cls=0.2231
+[2026-02-08 13:18:24,827] INFO - Train epoch=1 step=5440/301147 loss=0.0857 seg=0.0697 cls=0.0161
+[2026-02-08 13:18:25,838] INFO - Train epoch=1 step=5460/301147 loss=0.0376 seg=0.0095 cls=0.0281
+[2026-02-08 13:18:26,806] INFO - Train epoch=1 step=5480/301147 loss=0.2787 seg=0.1497 cls=0.1289
+[2026-02-08 13:18:27,772] INFO - Train epoch=1 step=5500/301147 loss=0.0460 seg=0.0109 cls=0.0351
+[2026-02-08 13:18:28,800] INFO - Train epoch=1 step=5520/301147 loss=0.0416 seg=0.0087 cls=0.0329
+[2026-02-08 13:18:29,795] INFO - Train epoch=1 step=5540/301147 loss=0.3177 seg=0.0381 cls=0.2796
+[2026-02-08 13:18:30,788] INFO - Train epoch=1 step=5560/301147 loss=0.0587 seg=0.0118 cls=0.0469
+[2026-02-08 13:18:31,754] INFO - Train epoch=1 step=5580/301147 loss=0.0789 seg=0.0443 cls=0.0346
+[2026-02-08 13:18:32,680] INFO - Train epoch=1 step=5600/301147 loss=0.0899 seg=0.0748 cls=0.0151
+[2026-02-08 13:18:33,635] INFO - Train epoch=1 step=5620/301147 loss=0.3924 seg=0.1480 cls=0.2445
+[2026-02-08 13:18:34,622] INFO - Train epoch=1 step=5640/301147 loss=0.3479 seg=0.1478 cls=0.2001
+[2026-02-08 13:18:35,569] INFO - Train epoch=1 step=5660/301147 loss=0.2803 seg=0.0409 cls=0.2394
+[2026-02-08 13:18:36,530] INFO - Train epoch=1 step=5680/301147 loss=0.0788 seg=0.0454 cls=0.0335
+[2026-02-08 13:18:37,556] INFO - Train epoch=1 step=5700/301147 loss=0.4045 seg=0.1866 cls=0.2180
+[2026-02-08 13:18:38,513] INFO - Train epoch=1 step=5720/301147 loss=0.0614 seg=0.0398 cls=0.0216
+[2026-02-08 13:18:39,470] INFO - Train epoch=1 step=5740/301147 loss=0.0704 seg=0.0430 cls=0.0274
+[2026-02-08 13:18:40,422] INFO - Train epoch=1 step=5760/301147 loss=0.0311 seg=0.0075 cls=0.0236
+[2026-02-08 13:18:41,366] INFO - Train epoch=1 step=5780/301147 loss=0.7509 seg=0.2858 cls=0.4651
+[2026-02-08 13:18:42,332] INFO - Train epoch=1 step=5800/301147 loss=0.0385 seg=0.0074 cls=0.0311
+[2026-02-08 13:18:43,285] INFO - Train epoch=1 step=5820/301147 loss=0.0645 seg=0.0379 cls=0.0266
+[2026-02-08 13:18:44,224] INFO - Train epoch=1 step=5840/301147 loss=0.2651 seg=0.0075 cls=0.2576
+[2026-02-08 13:18:45,191] INFO - Train epoch=1 step=5860/301147 loss=0.0724 seg=0.0415 cls=0.0309
+[2026-02-08 13:18:46,197] INFO - Train epoch=1 step=5880/301147 loss=0.2379 seg=0.0152 cls=0.2227
+[2026-02-08 13:18:47,160] INFO - Train epoch=1 step=5900/301147 loss=0.6421 seg=0.1908 cls=0.4513
+[2026-02-08 13:18:48,132] INFO - Train epoch=1 step=5920/301147 loss=0.4197 seg=0.1590 cls=0.2607
+[2026-02-08 13:18:48,984] INFO - Train epoch=1 step=5940/301147 loss=0.0432 seg=0.0104 cls=0.0327
+[2026-02-08 13:18:49,926] INFO - Train epoch=1 step=5960/301147 loss=0.8613 seg=0.3335 cls=0.5277
+[2026-02-08 13:18:50,893] INFO - Train epoch=1 step=5980/301147 loss=0.0549 seg=0.0086 cls=0.0464
+[2026-02-08 13:18:51,846] INFO - Train epoch=1 step=6000/301147 loss=0.0530 seg=0.0112 cls=0.0418
+[2026-02-08 13:18:52,792] INFO - Train epoch=1 step=6020/301147 loss=0.2312 seg=0.0106 cls=0.2206
+[2026-02-08 13:18:53,743] INFO - Train epoch=1 step=6040/301147 loss=0.0425 seg=0.0129 cls=0.0295
+[2026-02-08 13:18:54,695] INFO - Train epoch=1 step=6060/301147 loss=0.0387 seg=0.0101 cls=0.0286
+[2026-02-08 13:18:55,647] INFO - Train epoch=1 step=6080/301147 loss=0.0358 seg=0.0118 cls=0.0240
+[2026-02-08 13:18:56,594] INFO - Train epoch=1 step=6100/301147 loss=0.2560 seg=0.0407 cls=0.2153
+[2026-02-08 13:18:57,562] INFO - Train epoch=1 step=6120/301147 loss=0.0303 seg=0.0080 cls=0.0223
+[2026-02-08 13:18:58,574] INFO - Train epoch=1 step=6140/301147 loss=0.0331 seg=0.0101 cls=0.0230
+[2026-02-08 13:18:59,563] INFO - Train epoch=1 step=6160/301147 loss=0.3639 seg=0.1424 cls=0.2215
+[2026-02-08 13:19:00,541] INFO - Train epoch=1 step=6180/301147 loss=0.0364 seg=0.0070 cls=0.0294
+[2026-02-08 13:19:01,517] INFO - Train epoch=1 step=6200/301147 loss=0.0292 seg=0.0061 cls=0.0231
+[2026-02-08 13:19:02,469] INFO - Train epoch=1 step=6220/301147 loss=0.0473 seg=0.0071 cls=0.0402
+[2026-02-08 13:19:03,422] INFO - Train epoch=1 step=6240/301147 loss=0.3424 seg=0.1367 cls=0.2057
+[2026-02-08 13:19:04,408] INFO - Train epoch=1 step=6260/301147 loss=0.1455 seg=0.0099 cls=0.1356
+[2026-02-08 13:19:05,370] INFO - Train epoch=1 step=6280/301147 loss=0.0421 seg=0.0072 cls=0.0348
+[2026-02-08 13:19:06,308] INFO - Train epoch=1 step=6300/301147 loss=0.0267 seg=0.0080 cls=0.0187
+[2026-02-08 13:19:07,249] INFO - Train epoch=1 step=6320/301147 loss=0.0588 seg=0.0396 cls=0.0191
+[2026-02-08 13:19:08,224] INFO - Train epoch=1 step=6340/301147 loss=0.0480 seg=0.0089 cls=0.0390
+[2026-02-08 13:19:09,156] INFO - Train epoch=1 step=6360/301147 loss=0.0371 seg=0.0083 cls=0.0289
+[2026-02-08 13:19:10,170] INFO - Train epoch=1 step=6380/301147 loss=0.0922 seg=0.0707 cls=0.0215
+[2026-02-08 13:19:11,114] INFO - Train epoch=1 step=6400/301147 loss=0.2055 seg=0.0116 cls=0.1939
+[2026-02-08 13:19:12,071] INFO - Train epoch=1 step=6420/301147 loss=0.5132 seg=0.0516 cls=0.4616
+[2026-02-08 13:19:13,008] INFO - Train epoch=1 step=6440/301147 loss=0.3239 seg=0.1354 cls=0.1885
+[2026-02-08 13:19:13,938] INFO - Train epoch=1 step=6460/301147 loss=0.0244 seg=0.0074 cls=0.0170
+[2026-02-08 13:19:14,841] INFO - Train epoch=1 step=6480/301147 loss=0.0229 seg=0.0061 cls=0.0168
+[2026-02-08 13:19:15,772] INFO - Train epoch=1 step=6500/301147 loss=0.8113 seg=0.2409 cls=0.5704
+[2026-02-08 13:19:16,745] INFO - Train epoch=1 step=6520/301147 loss=0.0350 seg=0.0054 cls=0.0296
+[2026-02-08 13:19:17,747] INFO - Train epoch=1 step=6540/301147 loss=0.8814 seg=0.3173 cls=0.5641
+[2026-02-08 13:19:18,685] INFO - Train epoch=1 step=6560/301147 loss=0.0359 seg=0.0065 cls=0.0294
+[2026-02-08 13:19:19,464] INFO - Train epoch=1 step=6580/301147 loss=0.0529 seg=0.0075 cls=0.0454
+[2026-02-08 13:19:20,206] INFO - Train epoch=1 step=6600/301147 loss=0.3834 seg=0.1526 cls=0.2309
+[2026-02-08 13:19:21,168] INFO - Train epoch=1 step=6620/301147 loss=0.5737 seg=0.1643 cls=0.4094
+[2026-02-08 13:19:22,546] INFO - Train epoch=1 step=6640/301147 loss=0.3457 seg=0.1475 cls=0.1983
+[2026-02-08 13:19:23,486] INFO - Train epoch=1 step=6660/301147 loss=0.0365 seg=0.0092 cls=0.0272
+[2026-02-08 13:19:24,454] INFO - Train epoch=1 step=6680/301147 loss=0.0296 seg=0.0085 cls=0.0211
+[2026-02-08 13:19:25,798] INFO - Train epoch=1 step=6700/301147 loss=0.7281 seg=0.2875 cls=0.4406
+[2026-02-08 13:19:27,253] INFO - Train epoch=1 step=6720/301147 loss=0.0644 seg=0.0404 cls=0.0240
+[2026-02-08 13:19:28,246] INFO - Train epoch=1 step=6740/301147 loss=0.4260 seg=0.2048 cls=0.2212
+[2026-02-08 13:19:29,201] INFO - Train epoch=1 step=6760/301147 loss=0.0744 seg=0.0413 cls=0.0331
+[2026-02-08 13:19:30,128] INFO - Train epoch=1 step=6780/301147 loss=0.4433 seg=0.1605 cls=0.2829
+[2026-02-08 13:19:31,109] INFO - Train epoch=1 step=6800/301147 loss=0.3157 seg=0.0770 cls=0.2388
+[2026-02-08 13:19:32,028] INFO - Train epoch=1 step=6820/301147 loss=0.3500 seg=0.1561 cls=0.1939
+[2026-02-08 13:19:33,015] INFO - Train epoch=1 step=6840/301147 loss=0.0438 seg=0.0098 cls=0.0341
+[2026-02-08 13:19:33,975] INFO - Train epoch=1 step=6860/301147 loss=0.0344 seg=0.0104 cls=0.0240
+[2026-02-08 13:19:34,930] INFO - Train epoch=1 step=6880/301147 loss=0.4790 seg=0.1262 cls=0.3528
+[2026-02-08 13:19:35,898] INFO - Train epoch=1 step=6900/301147 loss=0.0342 seg=0.0062 cls=0.0280
+[2026-02-08 13:19:36,855] INFO - Train epoch=1 step=6920/301147 loss=0.2164 seg=0.0080 cls=0.2085
+[2026-02-08 13:19:37,870] INFO - Train epoch=1 step=6940/301147 loss=0.6811 seg=0.1938 cls=0.4872
+[2026-02-08 13:19:38,834] INFO - Train epoch=1 step=6960/301147 loss=0.0584 seg=0.0106 cls=0.0478
+[2026-02-08 13:19:39,774] INFO - Train epoch=1 step=6980/301147 loss=0.3566 seg=0.1443 cls=0.2123
+[2026-02-08 13:19:40,750] INFO - Train epoch=1 step=7000/301147 loss=0.8756 seg=0.3941 cls=0.4815
+[2026-02-08 13:19:41,728] INFO - Train epoch=1 step=7020/301147 loss=0.0411 seg=0.0095 cls=0.0316
+[2026-02-08 13:19:42,689] INFO - Train epoch=1 step=7040/301147 loss=0.1111 seg=0.0645 cls=0.0465
+[2026-02-08 13:19:43,646] INFO - Train epoch=1 step=7060/301147 loss=0.3606 seg=0.1314 cls=0.2292
+[2026-02-08 13:19:44,598] INFO - Train epoch=1 step=7080/301147 loss=0.5073 seg=0.2092 cls=0.2982
+[2026-02-08 13:19:45,558] INFO - Train epoch=1 step=7100/301147 loss=0.4586 seg=0.2046 cls=0.2540
+[2026-02-08 13:19:46,522] INFO - Train epoch=1 step=7120/301147 loss=0.0453 seg=0.0109 cls=0.0344
+[2026-02-08 13:19:47,497] INFO - Train epoch=1 step=7140/301147 loss=0.0336 seg=0.0093 cls=0.0243
+[2026-02-08 13:19:48,448] INFO - Train epoch=1 step=7160/301147 loss=0.0349 seg=0.0085 cls=0.0263
+[2026-02-08 13:19:49,434] INFO - Train epoch=1 step=7180/301147 loss=0.0996 seg=0.0388 cls=0.0608
+[2026-02-08 13:19:50,389] INFO - Train epoch=1 step=7200/301147 loss=0.3519 seg=0.1382 cls=0.2137
+[2026-02-08 13:19:51,347] INFO - Train epoch=1 step=7220/301147 loss=0.5767 seg=0.1564 cls=0.4203
+[2026-02-08 13:19:52,321] INFO - Train epoch=1 step=7240/301147 loss=0.0485 seg=0.0117 cls=0.0368
+[2026-02-08 13:19:53,258] INFO - Train epoch=1 step=7260/301147 loss=0.3538 seg=0.1435 cls=0.2103
+[2026-02-08 13:19:54,209] INFO - Train epoch=1 step=7280/301147 loss=0.0653 seg=0.0111 cls=0.0541
+[2026-02-08 13:19:55,181] INFO - Train epoch=1 step=7300/301147 loss=0.4471 seg=0.1779 cls=0.2692
+[2026-02-08 13:19:56,156] INFO - Train epoch=1 step=7320/301147 loss=0.3628 seg=0.1487 cls=0.2141
+[2026-02-08 13:19:57,167] INFO - Train epoch=1 step=7340/301147 loss=1.0639 seg=0.3314 cls=0.7325
+[2026-02-08 13:19:58,195] INFO - Train epoch=1 step=7360/301147 loss=0.5824 seg=0.1407 cls=0.4417
+[2026-02-08 13:19:59,196] INFO - Train epoch=1 step=7380/301147 loss=0.0914 seg=0.0458 cls=0.0457
+[2026-02-08 13:20:00,184] INFO - Train epoch=1 step=7400/301147 loss=0.0485 seg=0.0115 cls=0.0370
+[2026-02-08 13:20:01,176] INFO - Train epoch=1 step=7420/301147 loss=0.4175 seg=0.1779 cls=0.2397
+[2026-02-08 13:20:02,136] INFO - Train epoch=1 step=7440/301147 loss=1.2271 seg=0.5106 cls=0.7165
+[2026-02-08 13:20:03,089] INFO - Train epoch=1 step=7460/301147 loss=0.3983 seg=0.1600 cls=0.2383
+[2026-02-08 13:20:04,053] INFO - Train epoch=1 step=7480/301147 loss=0.0345 seg=0.0088 cls=0.0257
+[2026-02-08 13:20:05,014] INFO - Train epoch=1 step=7500/301147 loss=0.0743 seg=0.0286 cls=0.0457
+[2026-02-08 13:20:05,982] INFO - Train epoch=1 step=7520/301147 loss=0.4416 seg=0.1547 cls=0.2870
+[2026-02-08 13:20:06,939] INFO - Train epoch=1 step=7540/301147 loss=0.0562 seg=0.0110 cls=0.0452
+[2026-02-08 13:20:07,876] INFO - Train epoch=1 step=7560/301147 loss=0.0412 seg=0.0083 cls=0.0329
+[2026-02-08 13:20:08,832] INFO - Train epoch=1 step=7580/301147 loss=0.4620 seg=0.1988 cls=0.2631
+[2026-02-08 13:20:09,752] INFO - Train epoch=1 step=7600/301147 loss=1.6351 seg=0.6246 cls=1.0105
+[2026-02-08 13:20:10,725] INFO - Train epoch=1 step=7620/301147 loss=0.2226 seg=0.0084 cls=0.2142
+[2026-02-08 13:20:11,654] INFO - Train epoch=1 step=7640/301147 loss=0.0359 seg=0.0075 cls=0.0284
+[2026-02-08 13:20:12,625] INFO - Train epoch=1 step=7660/301147 loss=0.0643 seg=0.0415 cls=0.0228
+[2026-02-08 13:20:13,577] INFO - Train epoch=1 step=7680/301147 loss=0.0327 seg=0.0073 cls=0.0253
+[2026-02-08 13:20:14,494] INFO - Train epoch=1 step=7700/301147 loss=0.2077 seg=0.0072 cls=0.2006
+[2026-02-08 13:20:15,459] INFO - Train epoch=1 step=7720/301147 loss=0.0346 seg=0.0077 cls=0.0269
+[2026-02-08 13:20:16,424] INFO - Train epoch=1 step=7740/301147 loss=0.7924 seg=0.3152 cls=0.4771
+[2026-02-08 13:20:17,407] INFO - Train epoch=1 step=7760/301147 loss=0.2249 seg=0.0107 cls=0.2142
+[2026-02-08 13:20:18,426] INFO - Train epoch=1 step=7780/301147 loss=0.0601 seg=0.0387 cls=0.0214
+[2026-02-08 13:20:19,389] INFO - Train epoch=1 step=7800/301147 loss=0.0376 seg=0.0077 cls=0.0299
+[2026-02-08 13:20:20,352] INFO - Train epoch=1 step=7820/301147 loss=0.4179 seg=0.1854 cls=0.2326
+[2026-02-08 13:20:21,368] INFO - Train epoch=1 step=7840/301147 loss=0.7665 seg=0.1703 cls=0.5962
+[2026-02-08 13:20:22,344] INFO - Train epoch=1 step=7860/301147 loss=0.0668 seg=0.0402 cls=0.0266
+[2026-02-08 13:20:23,316] INFO - Train epoch=1 step=7880/301147 loss=0.0431 seg=0.0089 cls=0.0342
+[2026-02-08 13:20:24,274] INFO - Train epoch=1 step=7900/301147 loss=0.4540 seg=0.1939 cls=0.2601
+[2026-02-08 13:20:25,224] INFO - Train epoch=1 step=7920/301147 loss=0.4447 seg=0.1572 cls=0.2876
+[2026-02-08 13:20:26,158] INFO - Train epoch=1 step=7940/301147 loss=0.0430 seg=0.0075 cls=0.0355
+[2026-02-08 13:20:27,106] INFO - Train epoch=1 step=7960/301147 loss=0.2741 seg=0.1454 cls=0.1287
+[2026-02-08 13:20:28,115] INFO - Train epoch=1 step=7980/301147 loss=0.0421 seg=0.0088 cls=0.0333
+[2026-02-08 13:20:29,080] INFO - Train epoch=1 step=8000/301147 loss=0.0332 seg=0.0106 cls=0.0226
+[2026-02-08 13:20:30,018] INFO - Train epoch=1 step=8020/301147 loss=0.4304 seg=0.1546 cls=0.2758
+[2026-02-08 13:20:30,941] INFO - Train epoch=1 step=8040/301147 loss=0.0327 seg=0.0094 cls=0.0233
+[2026-02-08 13:20:31,878] INFO - Train epoch=1 step=8060/301147 loss=0.0766 seg=0.0438 cls=0.0328
+[2026-02-08 13:20:32,803] INFO - Train epoch=1 step=8080/301147 loss=0.0308 seg=0.0107 cls=0.0201
+[2026-02-08 13:20:33,745] INFO - Train epoch=1 step=8100/301147 loss=0.0406 seg=0.0118 cls=0.0288
+[2026-02-08 13:20:34,706] INFO - Train epoch=1 step=8120/301147 loss=0.0697 seg=0.0181 cls=0.0516
+[2026-02-08 13:20:35,705] INFO - Train epoch=1 step=8140/301147 loss=0.0345 seg=0.0102 cls=0.0244
+[2026-02-08 13:20:36,648] INFO - Train epoch=1 step=8160/301147 loss=0.4745 seg=0.2333 cls=0.2412
+[2026-02-08 13:20:37,586] INFO - Train epoch=1 step=8180/301147 loss=0.6430 seg=0.1640 cls=0.4790
+[2026-02-08 13:20:38,527] INFO - Train epoch=1 step=8200/301147 loss=0.0474 seg=0.0101 cls=0.0373
+[2026-02-08 13:20:39,481] INFO - Train epoch=1 step=8220/301147 loss=0.3997 seg=0.1552 cls=0.2445
+[2026-02-08 13:20:40,462] INFO - Train epoch=1 step=8240/301147 loss=0.4436 seg=0.1999 cls=0.2437
+[2026-02-08 13:20:41,437] INFO - Train epoch=1 step=8260/301147 loss=0.3708 seg=0.1438 cls=0.2270
+[2026-02-08 13:20:42,461] INFO - Train epoch=1 step=8280/301147 loss=0.0671 seg=0.0126 cls=0.0544
+[2026-02-08 13:20:43,438] INFO - Train epoch=1 step=8300/301147 loss=0.1400 seg=0.0758 cls=0.0642
+[2026-02-08 13:20:44,400] INFO - Train epoch=1 step=8320/301147 loss=0.0318 seg=0.0092 cls=0.0226
+[2026-02-08 13:20:45,407] INFO - Train epoch=1 step=8340/301147 loss=0.0408 seg=0.0091 cls=0.0318
+[2026-02-08 13:20:46,377] INFO - Train epoch=1 step=8360/301147 loss=0.5025 seg=0.0081 cls=0.4944
+[2026-02-08 13:20:47,327] INFO - Train epoch=1 step=8380/301147 loss=0.0416 seg=0.0097 cls=0.0320
+[2026-02-08 13:20:48,278] INFO - Train epoch=1 step=8400/301147 loss=0.0754 seg=0.0411 cls=0.0343
+[2026-02-08 13:20:49,230] INFO - Train epoch=1 step=8420/301147 loss=0.1727 seg=0.0102 cls=0.1625
+[2026-02-08 13:20:50,180] INFO - Train epoch=1 step=8440/301147 loss=0.0681 seg=0.0379 cls=0.0302
+[2026-02-08 13:20:51,130] INFO - Train epoch=1 step=8460/301147 loss=0.0494 seg=0.0368 cls=0.0126
+[2026-02-08 13:20:52,054] INFO - Train epoch=1 step=8480/301147 loss=0.0318 seg=0.0064 cls=0.0254
+[2026-02-08 13:20:52,909] INFO - Train epoch=1 step=8500/301147 loss=0.4293 seg=0.1692 cls=0.2601
+[2026-02-08 13:20:54,283] INFO - Train epoch=1 step=8520/301147 loss=0.0870 seg=0.0685 cls=0.0185
+[2026-02-08 13:20:55,228] INFO - Train epoch=1 step=8540/301147 loss=0.0584 seg=0.0378 cls=0.0206
+[2026-02-08 13:20:56,165] INFO - Train epoch=1 step=8560/301147 loss=0.0342 seg=0.0075 cls=0.0268
+[2026-02-08 13:20:57,405] INFO - Train epoch=1 step=8580/301147 loss=0.0390 seg=0.0082 cls=0.0308
+[2026-02-08 13:20:58,211] INFO - Train epoch=1 step=8600/301147 loss=0.0390 seg=0.0081 cls=0.0309
+[2026-02-08 13:20:59,195] INFO - Train epoch=1 step=8620/301147 loss=0.4391 seg=0.1619 cls=0.2773
+[2026-02-08 13:21:00,505] INFO - Train epoch=1 step=8640/301147 loss=0.0549 seg=0.0109 cls=0.0440
+[2026-02-08 13:21:01,481] INFO - Train epoch=1 step=8660/301147 loss=0.0324 seg=0.0085 cls=0.0239
+[2026-02-08 13:21:02,428] INFO - Train epoch=1 step=8680/301147 loss=0.4035 seg=0.1542 cls=0.2493
+[2026-02-08 13:21:03,400] INFO - Train epoch=1 step=8700/301147 loss=0.0504 seg=0.0112 cls=0.0391
+[2026-02-08 13:21:04,362] INFO - Train epoch=1 step=8720/301147 loss=0.0451 seg=0.0085 cls=0.0367
+[2026-02-08 13:21:05,358] INFO - Train epoch=1 step=8740/301147 loss=0.0525 seg=0.0099 cls=0.0425
+[2026-02-08 13:21:06,393] INFO - Train epoch=1 step=8760/301147 loss=0.4138 seg=0.1519 cls=0.2619
+[2026-02-08 13:21:07,420] INFO - Train epoch=1 step=8780/301147 loss=0.0295 seg=0.0079 cls=0.0216
+[2026-02-08 13:21:08,437] INFO - Train epoch=1 step=8800/301147 loss=0.0287 seg=0.0079 cls=0.0209
+[2026-02-08 13:21:09,393] INFO - Train epoch=1 step=8820/301147 loss=0.1000 seg=0.0717 cls=0.0284
+[2026-02-08 13:21:10,356] INFO - Train epoch=1 step=8840/301147 loss=0.1100 seg=0.0435 cls=0.0665
+[2026-02-08 13:21:11,300] INFO - Train epoch=1 step=8860/301147 loss=0.2760 seg=0.0405 cls=0.2356
+[2026-02-08 13:21:12,250] INFO - Train epoch=1 step=8880/301147 loss=0.0256 seg=0.0083 cls=0.0174
+[2026-02-08 13:21:13,197] INFO - Train epoch=1 step=8900/301147 loss=0.0427 seg=0.0130 cls=0.0297
+[2026-02-08 13:21:14,166] INFO - Train epoch=1 step=8920/301147 loss=0.3935 seg=0.1427 cls=0.2509
+[2026-02-08 13:21:15,111] INFO - Train epoch=1 step=8940/301147 loss=0.0958 seg=0.0427 cls=0.0531
+[2026-02-08 13:21:16,103] INFO - Train epoch=1 step=8960/301147 loss=0.0384 seg=0.0101 cls=0.0283
+[2026-02-08 13:21:17,102] INFO - Train epoch=1 step=8980/301147 loss=0.3658 seg=0.1308 cls=0.2350
+[2026-02-08 13:21:18,126] INFO - Train epoch=1 step=9000/301147 loss=0.0413 seg=0.0107 cls=0.0307
+[2026-02-08 13:21:19,106] INFO - Train epoch=1 step=9020/301147 loss=0.3699 seg=0.1399 cls=0.2300
+[2026-02-08 13:21:20,048] INFO - Train epoch=1 step=9040/301147 loss=0.0509 seg=0.0116 cls=0.0393
+[2026-02-08 13:21:21,019] INFO - Train epoch=1 step=9060/301147 loss=0.3418 seg=0.1384 cls=0.2034
+[2026-02-08 13:21:21,979] INFO - Train epoch=1 step=9080/301147 loss=0.0519 seg=0.0122 cls=0.0397
+[2026-02-08 13:21:22,954] INFO - Train epoch=1 step=9100/301147 loss=0.0282 seg=0.0087 cls=0.0195
+[2026-02-08 13:21:23,876] INFO - Train epoch=1 step=9120/301147 loss=0.4222 seg=0.1509 cls=0.2713
+[2026-02-08 13:21:24,809] INFO - Train epoch=1 step=9140/301147 loss=0.3173 seg=0.0414 cls=0.2759
+[2026-02-08 13:21:25,760] INFO - Train epoch=1 step=9160/301147 loss=0.4004 seg=0.1536 cls=0.2468
+[2026-02-08 13:21:26,643] INFO - Train epoch=1 step=9180/301147 loss=0.0733 seg=0.0396 cls=0.0337
+[2026-02-08 13:21:27,594] INFO - Train epoch=1 step=9200/301147 loss=0.0352 seg=0.0080 cls=0.0272
+[2026-02-08 13:21:28,554] INFO - Train epoch=1 step=9220/301147 loss=0.0376 seg=0.0091 cls=0.0285
+[2026-02-08 13:21:29,502] INFO - Train epoch=1 step=9240/301147 loss=0.3643 seg=0.1283 cls=0.2360
+[2026-02-08 13:21:30,455] INFO - Train epoch=1 step=9260/301147 loss=0.3713 seg=0.1474 cls=0.2239
+[2026-02-08 13:21:31,401] INFO - Train epoch=1 step=9280/301147 loss=0.0740 seg=0.0399 cls=0.0341
+[2026-02-08 13:21:32,299] INFO - Train epoch=1 step=9300/301147 loss=0.1653 seg=0.0086 cls=0.1567
+[2026-02-08 13:21:33,320] INFO - Train epoch=1 step=9320/301147 loss=0.4094 seg=0.1662 cls=0.2432
+[2026-02-08 13:21:34,341] INFO - Train epoch=1 step=9340/301147 loss=0.0733 seg=0.0381 cls=0.0353
+[2026-02-08 13:21:35,327] INFO - Train epoch=1 step=9360/301147 loss=0.0677 seg=0.0404 cls=0.0273
+[2026-02-08 13:21:36,298] INFO - Train epoch=1 step=9380/301147 loss=0.0363 seg=0.0080 cls=0.0283
+[2026-02-08 13:21:37,271] INFO - Train epoch=1 step=9400/301147 loss=0.4955 seg=0.0076 cls=0.4879
+[2026-02-08 13:21:38,229] INFO - Train epoch=1 step=9420/301147 loss=0.0297 seg=0.0068 cls=0.0229
+[2026-02-08 13:21:39,172] INFO - Train epoch=1 step=9440/301147 loss=0.0843 seg=0.0408 cls=0.0435
+[2026-02-08 13:21:40,111] INFO - Train epoch=1 step=9460/301147 loss=0.4743 seg=0.2047 cls=0.2696
+[2026-02-08 13:21:41,063] INFO - Train epoch=1 step=9480/301147 loss=0.0525 seg=0.0115 cls=0.0410
+[2026-02-08 13:21:42,046] INFO - Train epoch=1 step=9500/301147 loss=0.0390 seg=0.0082 cls=0.0308
+[2026-02-08 13:21:43,027] INFO - Train epoch=1 step=9520/301147 loss=0.0606 seg=0.0381 cls=0.0224
+[2026-02-08 13:21:44,067] INFO - Train epoch=1 step=9540/301147 loss=0.0581 seg=0.0378 cls=0.0203
+[2026-02-08 13:21:44,969] INFO - Train epoch=1 step=9560/301147 loss=0.0455 seg=0.0083 cls=0.0372
+[2026-02-08 13:21:45,940] INFO - Train epoch=1 step=9580/301147 loss=0.0362 seg=0.0084 cls=0.0278
+[2026-02-08 13:21:46,867] INFO - Train epoch=1 step=9600/301147 loss=0.4095 seg=0.1495 cls=0.2600
+[2026-02-08 13:21:47,559] INFO - Train epoch=1 step=9620/301147 loss=0.5145 seg=0.1744 cls=0.3402
+[2026-02-08 13:21:48,414] INFO - Train epoch=1 step=9640/301147 loss=0.0323 seg=0.0075 cls=0.0248
+[2026-02-08 13:21:49,311] INFO - Train epoch=1 step=9660/301147 loss=0.0353 seg=0.0083 cls=0.0270
+[2026-02-08 13:21:50,256] INFO - Train epoch=1 step=9680/301147 loss=0.4680 seg=0.2135 cls=0.2545
+[2026-02-08 13:21:51,234] INFO - Train epoch=1 step=9700/301147 loss=0.0656 seg=0.0143 cls=0.0513
+[2026-02-08 13:21:52,192] INFO - Train epoch=1 step=9720/301147 loss=0.7799 seg=0.3143 cls=0.4656
+[2026-02-08 13:21:53,105] INFO - Train epoch=1 step=9740/301147 loss=0.2277 seg=0.0085 cls=0.2192
+[2026-02-08 13:21:53,783] INFO - Train epoch=1 step=9760/301147 loss=0.0264 seg=0.0070 cls=0.0194
+[2026-02-08 13:21:54,597] INFO - Train epoch=1 step=9780/301147 loss=0.4707 seg=0.1855 cls=0.2852
+[2026-02-08 13:21:55,627] INFO - Train epoch=1 step=9800/301147 loss=0.0382 seg=0.0096 cls=0.0286
+[2026-02-08 13:21:56,492] INFO - Train epoch=1 step=9820/301147 loss=0.0371 seg=0.0073 cls=0.0297
+[2026-02-08 13:21:57,232] INFO - Train epoch=1 step=9840/301147 loss=0.6783 seg=0.2018 cls=0.4765
+[2026-02-08 13:21:58,041] INFO - Train epoch=1 step=9860/301147 loss=0.0379 seg=0.0076 cls=0.0302
+[2026-02-08 13:21:58,872] INFO - Train epoch=1 step=9880/301147 loss=0.4192 seg=0.1815 cls=0.2377
+[2026-02-08 13:21:59,858] INFO - Train epoch=1 step=9900/301147 loss=0.0339 seg=0.0087 cls=0.0252
+[2026-02-08 13:22:00,799] INFO - Train epoch=1 step=9920/301147 loss=0.0603 seg=0.0398 cls=0.0205
+[2026-02-08 13:22:01,677] INFO - Train epoch=1 step=9940/301147 loss=0.4466 seg=0.1656 cls=0.2810
+[2026-02-08 13:22:02,544] INFO - Train epoch=1 step=9960/301147 loss=0.0350 seg=0.0077 cls=0.0274
+[2026-02-08 13:22:03,443] INFO - Train epoch=1 step=9980/301147 loss=0.2579 seg=0.0091 cls=0.2488
+[2026-02-08 13:22:04,386] INFO - Train epoch=1 step=10000/301147 loss=0.0388 seg=0.0103 cls=0.0284
+[2026-02-08 13:22:05,280] INFO - Train epoch=1 step=10020/301147 loss=0.4048 seg=0.1580 cls=0.2468
+[2026-02-08 13:22:06,269] INFO - Train epoch=1 step=10040/301147 loss=0.0806 seg=0.0392 cls=0.0413
+[2026-02-08 13:22:07,239] INFO - Train epoch=1 step=10060/301147 loss=0.0348 seg=0.0089 cls=0.0259
+[2026-02-08 13:22:08,236] INFO - Train epoch=1 step=10080/301147 loss=0.3942 seg=0.1599 cls=0.2342
+[2026-02-08 13:22:09,039] INFO - Train epoch=1 step=10100/301147 loss=0.0375 seg=0.0105 cls=0.0270
+[2026-02-08 13:22:10,041] INFO - Train epoch=1 step=10120/301147 loss=0.2428 seg=0.0098 cls=0.2331
+[2026-02-08 13:22:11,011] INFO - Train epoch=1 step=10140/301147 loss=0.0541 seg=0.0085 cls=0.0456
+[2026-02-08 13:22:12,007] INFO - Train epoch=1 step=10160/301147 loss=0.0440 seg=0.0093 cls=0.0347
+[2026-02-08 13:22:12,838] INFO - Train epoch=1 step=10180/301147 loss=0.5511 seg=0.0292 cls=0.5219
+[2026-02-08 13:22:13,633] INFO - Train epoch=1 step=10200/301147 loss=0.3357 seg=0.0119 cls=0.3238
+[2026-02-08 13:22:14,432] INFO - Train epoch=1 step=10220/301147 loss=0.7325 seg=0.2903 cls=0.4423
+[2026-02-08 13:22:15,230] INFO - Train epoch=1 step=10240/301147 loss=0.0592 seg=0.0114 cls=0.0478
+[2026-02-08 13:22:16,124] INFO - Train epoch=1 step=10260/301147 loss=0.4431 seg=0.1507 cls=0.2923
+[2026-02-08 13:22:16,906] INFO - Train epoch=1 step=10280/301147 loss=0.0395 seg=0.0087 cls=0.0308
+[2026-02-08 13:22:17,757] INFO - Train epoch=1 step=10300/301147 loss=0.3766 seg=0.1602 cls=0.2164
+[2026-02-08 13:22:18,650] INFO - Train epoch=1 step=10320/301147 loss=0.8632 seg=0.2724 cls=0.5908
+[2026-02-08 13:22:19,534] INFO - Train epoch=1 step=10340/301147 loss=0.3762 seg=0.1454 cls=0.2308
+[2026-02-08 13:22:20,308] INFO - Train epoch=1 step=10360/301147 loss=0.0543 seg=0.0133 cls=0.0410
+[2026-02-08 13:22:21,043] INFO - Train epoch=1 step=10380/301147 loss=0.0562 seg=0.0187 cls=0.0375
+[2026-02-08 13:22:22,325] INFO - Train epoch=1 step=10400/301147 loss=0.0385 seg=0.0092 cls=0.0293
+[2026-02-08 13:22:23,184] INFO - Train epoch=1 step=10420/301147 loss=0.0625 seg=0.0380 cls=0.0245
+[2026-02-08 13:22:24,172] INFO - Train epoch=1 step=10440/301147 loss=0.0409 seg=0.0088 cls=0.0321
+[2026-02-08 13:22:25,538] INFO - Train epoch=1 step=10460/301147 loss=0.0492 seg=0.0108 cls=0.0384
+[2026-02-08 13:22:26,518] INFO - Train epoch=1 step=10480/301147 loss=0.0784 seg=0.0451 cls=0.0334
+[2026-02-08 13:22:27,818] INFO - Train epoch=1 step=10500/301147 loss=0.4474 seg=0.1988 cls=0.2486
+[2026-02-08 13:22:28,786] INFO - Train epoch=1 step=10520/301147 loss=0.0689 seg=0.0401 cls=0.0288
+[2026-02-08 13:22:30,069] INFO - Train epoch=1 step=10540/301147 loss=0.0717 seg=0.0397 cls=0.0320
+[2026-02-08 13:22:30,925] INFO - Train epoch=1 step=10560/301147 loss=0.0359 seg=0.0082 cls=0.0277
+[2026-02-08 13:22:31,792] INFO - Train epoch=1 step=10580/301147 loss=0.7905 seg=0.3436 cls=0.4469
+[2026-02-08 13:22:32,780] INFO - Train epoch=1 step=10600/301147 loss=0.0462 seg=0.0093 cls=0.0370
+[2026-02-08 13:22:33,802] INFO - Train epoch=1 step=10620/301147 loss=0.0558 seg=0.0111 cls=0.0446
+[2026-02-08 13:22:34,787] INFO - Train epoch=1 step=10640/301147 loss=0.0395 seg=0.0100 cls=0.0295
+[2026-02-08 13:22:35,740] INFO - Train epoch=1 step=10660/301147 loss=0.0370 seg=0.0083 cls=0.0287
+[2026-02-08 13:22:36,699] INFO - Train epoch=1 step=10680/301147 loss=0.3008 seg=0.0400 cls=0.2608
+[2026-02-08 13:22:37,647] INFO - Train epoch=1 step=10700/301147 loss=0.1055 seg=0.0722 cls=0.0333
+[2026-02-08 13:22:38,599] INFO - Train epoch=1 step=10720/301147 loss=0.0450 seg=0.0083 cls=0.0367
+[2026-02-08 13:22:39,559] INFO - Train epoch=1 step=10740/301147 loss=0.0444 seg=0.0089 cls=0.0354
+[2026-02-08 13:22:40,536] INFO - Train epoch=1 step=10760/301147 loss=0.0391 seg=0.0082 cls=0.0309
+[2026-02-08 13:22:41,486] INFO - Train epoch=1 step=10780/301147 loss=0.0855 seg=0.0406 cls=0.0449
+[2026-02-08 13:22:42,490] INFO - Train epoch=1 step=10800/301147 loss=0.0427 seg=0.0071 cls=0.0355
+[2026-02-08 13:22:43,444] INFO - Train epoch=1 step=10820/301147 loss=0.2332 seg=0.0403 cls=0.1930
+[2026-02-08 13:22:44,441] INFO - Train epoch=1 step=10840/301147 loss=0.3953 seg=0.1154 cls=0.2799
+[2026-02-08 13:22:45,428] INFO - Train epoch=1 step=10860/301147 loss=0.0474 seg=0.0114 cls=0.0360
+[2026-02-08 13:22:46,381] INFO - Train epoch=1 step=10880/301147 loss=0.0332 seg=0.0065 cls=0.0267
+[2026-02-08 13:22:47,379] INFO - Train epoch=1 step=10900/301147 loss=0.0349 seg=0.0071 cls=0.0278
+[2026-02-08 13:22:48,298] INFO - Train epoch=1 step=10920/301147 loss=0.0675 seg=0.0404 cls=0.0272
+[2026-02-08 13:22:49,174] INFO - Train epoch=1 step=10940/301147 loss=0.4138 seg=0.1629 cls=0.2509
+[2026-02-08 13:22:50,108] INFO - Train epoch=1 step=10960/301147 loss=0.0383 seg=0.0072 cls=0.0311
+[2026-02-08 13:22:51,043] INFO - Train epoch=1 step=10980/301147 loss=0.3059 seg=0.0730 cls=0.2329
+[2026-02-08 13:22:52,013] INFO - Train epoch=1 step=11000/301147 loss=0.4226 seg=0.1875 cls=0.2350
+[2026-02-08 13:22:52,994] INFO - Train epoch=1 step=11020/301147 loss=0.0323 seg=0.0078 cls=0.0245
+[2026-02-08 13:22:54,025] INFO - Train epoch=1 step=11040/301147 loss=0.0333 seg=0.0076 cls=0.0257
+[2026-02-08 13:22:55,063] INFO - Train epoch=1 step=11060/301147 loss=0.1060 seg=0.0724 cls=0.0336
+[2026-02-08 13:22:56,029] INFO - Train epoch=1 step=11080/301147 loss=0.5086 seg=0.0871 cls=0.4214
+[2026-02-08 13:22:56,976] INFO - Train epoch=1 step=11100/301147 loss=0.8653 seg=0.2861 cls=0.5791
+[2026-02-08 13:22:57,937] INFO - Train epoch=1 step=11120/301147 loss=0.0893 seg=0.0404 cls=0.0488
+[2026-02-08 13:22:58,913] INFO - Train epoch=1 step=11140/301147 loss=0.0581 seg=0.0389 cls=0.0191
+[2026-02-08 13:22:59,886] INFO - Train epoch=1 step=11160/301147 loss=0.0447 seg=0.0121 cls=0.0327
+[2026-02-08 13:23:00,766] INFO - Train epoch=1 step=11180/301147 loss=0.1102 seg=0.0697 cls=0.0405
+[2026-02-08 13:23:01,610] INFO - Train epoch=1 step=11200/301147 loss=0.0512 seg=0.0099 cls=0.0413
+[2026-02-08 13:23:02,548] INFO - Train epoch=1 step=11220/301147 loss=0.4611 seg=0.1963 cls=0.2648
+[2026-02-08 13:23:03,526] INFO - Train epoch=1 step=11240/301147 loss=0.2535 seg=0.0082 cls=0.2453
+[2026-02-08 13:23:04,508] INFO - Train epoch=1 step=11260/301147 loss=0.2521 seg=0.0107 cls=0.2414
+[2026-02-08 13:23:05,451] INFO - Train epoch=1 step=11280/301147 loss=0.2894 seg=0.1402 cls=0.1492
+[2026-02-08 13:23:06,404] INFO - Train epoch=1 step=11300/301147 loss=0.0458 seg=0.0139 cls=0.0319
+[2026-02-08 13:23:07,361] INFO - Train epoch=1 step=11320/301147 loss=0.4257 seg=0.1510 cls=0.2747
+[2026-02-08 13:23:08,330] INFO - Train epoch=1 step=11340/301147 loss=0.5652 seg=0.1583 cls=0.4069
+[2026-02-08 13:23:09,270] INFO - Train epoch=1 step=11360/301147 loss=0.6666 seg=0.2132 cls=0.4533
+[2026-02-08 13:23:10,229] INFO - Train epoch=1 step=11380/301147 loss=0.0496 seg=0.0117 cls=0.0379
+[2026-02-08 13:23:11,220] INFO - Train epoch=1 step=11400/301147 loss=0.3481 seg=0.1375 cls=0.2106
+[2026-02-08 13:23:12,209] INFO - Train epoch=1 step=11420/301147 loss=0.0334 seg=0.0096 cls=0.0239
+[2026-02-08 13:23:13,171] INFO - Train epoch=1 step=11440/301147 loss=0.0306 seg=0.0081 cls=0.0225
+[2026-02-08 13:23:14,206] INFO - Train epoch=1 step=11460/301147 loss=0.4981 seg=0.0072 cls=0.4909
+[2026-02-08 13:23:15,182] INFO - Train epoch=1 step=11480/301147 loss=0.0386 seg=0.0066 cls=0.0320
+[2026-02-08 13:23:16,169] INFO - Train epoch=1 step=11500/301147 loss=0.0655 seg=0.0375 cls=0.0280
+[2026-02-08 13:23:17,140] INFO - Train epoch=1 step=11520/301147 loss=0.0622 seg=0.0327 cls=0.0296
+[2026-02-08 13:23:18,085] INFO - Train epoch=1 step=11540/301147 loss=0.0721 seg=0.0417 cls=0.0305
+[2026-02-08 13:23:19,059] INFO - Train epoch=1 step=11560/301147 loss=0.0715 seg=0.0408 cls=0.0306
+[2026-02-08 13:23:20,015] INFO - Train epoch=1 step=11580/301147 loss=0.0553 seg=0.0410 cls=0.0143
+[2026-02-08 13:23:20,992] INFO - Train epoch=1 step=11600/301147 loss=0.6537 seg=0.1832 cls=0.4704
+[2026-02-08 13:23:21,966] INFO - Train epoch=1 step=11620/301147 loss=0.0659 seg=0.0411 cls=0.0247
+[2026-02-08 13:23:22,910] INFO - Train epoch=1 step=11640/301147 loss=0.2767 seg=0.0096 cls=0.2672
+[2026-02-08 13:23:23,847] INFO - Train epoch=1 step=11660/301147 loss=0.0618 seg=0.0110 cls=0.0508
+[2026-02-08 13:23:24,791] INFO - Train epoch=1 step=11680/301147 loss=0.0438 seg=0.0101 cls=0.0338
+[2026-02-08 13:23:25,744] INFO - Train epoch=1 step=11700/301147 loss=0.3968 seg=0.0075 cls=0.3894
+[2026-02-08 13:23:26,687] INFO - Train epoch=1 step=11720/301147 loss=0.0416 seg=0.0102 cls=0.0313
+[2026-02-08 13:23:27,660] INFO - Train epoch=1 step=11740/301147 loss=0.0509 seg=0.0087 cls=0.0422
+[2026-02-08 13:23:28,631] INFO - Train epoch=1 step=11760/301147 loss=0.7187 seg=0.2717 cls=0.4470
+[2026-02-08 13:23:29,580] INFO - Train epoch=1 step=11780/301147 loss=0.0341 seg=0.0072 cls=0.0269
+[2026-02-08 13:23:30,536] INFO - Train epoch=1 step=11800/301147 loss=0.0371 seg=0.0082 cls=0.0289
+[2026-02-08 13:23:31,496] INFO - Train epoch=1 step=11820/301147 loss=0.0349 seg=0.0085 cls=0.0264
+[2026-02-08 13:23:32,360] INFO - Train epoch=1 step=11840/301147 loss=0.0270 seg=0.0077 cls=0.0193
+[2026-02-08 13:23:33,389] INFO - Train epoch=1 step=11860/301147 loss=0.0317 seg=0.0091 cls=0.0226
+[2026-02-08 13:23:34,343] INFO - Train epoch=1 step=11880/301147 loss=0.0644 seg=0.0414 cls=0.0230
+[2026-02-08 13:23:35,344] INFO - Train epoch=1 step=11900/301147 loss=0.4603 seg=0.1745 cls=0.2858
+[2026-02-08 13:23:36,343] INFO - Train epoch=1 step=11920/301147 loss=0.0627 seg=0.0151 cls=0.0475
+[2026-02-08 13:23:37,325] INFO - Train epoch=1 step=11940/301147 loss=0.0449 seg=0.0069 cls=0.0380
+[2026-02-08 13:23:38,273] INFO - Train epoch=1 step=11960/301147 loss=0.0392 seg=0.0103 cls=0.0289
+[2026-02-08 13:23:39,270] INFO - Train epoch=1 step=11980/301147 loss=0.7771 seg=0.2983 cls=0.4788
+[2026-02-08 13:23:40,258] INFO - Train epoch=1 step=12000/301147 loss=0.2722 seg=0.0386 cls=0.2336
+[2026-02-08 13:23:41,175] INFO - Train epoch=1 step=12020/301147 loss=0.7148 seg=0.3042 cls=0.4106
+[2026-02-08 13:23:42,174] INFO - Train epoch=1 step=12040/301147 loss=0.2539 seg=0.0102 cls=0.2436
+[2026-02-08 13:23:43,106] INFO - Train epoch=1 step=12060/301147 loss=0.0333 seg=0.0086 cls=0.0247
+[2026-02-08 13:23:44,141] INFO - Train epoch=1 step=12080/301147 loss=0.2331 seg=0.0125 cls=0.2207
+[2026-02-08 13:23:45,115] INFO - Train epoch=1 step=12100/301147 loss=0.2204 seg=0.0086 cls=0.2117
+[2026-02-08 13:23:46,066] INFO - Train epoch=1 step=12120/301147 loss=0.0657 seg=0.0384 cls=0.0273
+[2026-02-08 13:23:47,017] INFO - Train epoch=1 step=12140/301147 loss=0.0659 seg=0.0392 cls=0.0267
+[2026-02-08 13:23:48,004] INFO - Train epoch=1 step=12160/301147 loss=0.2414 seg=0.0087 cls=0.2327
+[2026-02-08 13:23:49,004] INFO - Train epoch=1 step=12180/301147 loss=0.2411 seg=0.0105 cls=0.2305
+[2026-02-08 13:23:49,970] INFO - Train epoch=1 step=12200/301147 loss=0.3506 seg=0.1276 cls=0.2230
+[2026-02-08 13:23:50,950] INFO - Train epoch=1 step=12220/301147 loss=0.0482 seg=0.0152 cls=0.0330
+[2026-02-08 13:23:51,855] INFO - Train epoch=1 step=12240/301147 loss=0.0455 seg=0.0136 cls=0.0320
+[2026-02-08 13:23:52,732] INFO - Train epoch=1 step=12260/301147 loss=0.0416 seg=0.0107 cls=0.0309
+[2026-02-08 13:23:53,694] INFO - Train epoch=1 step=12280/301147 loss=0.0743 seg=0.0496 cls=0.0248
+[2026-02-08 13:23:54,649] INFO - Train epoch=1 step=12300/301147 loss=0.3910 seg=0.1492 cls=0.2417
+[2026-02-08 13:23:55,951] INFO - Train epoch=1 step=12320/301147 loss=0.0729 seg=0.0408 cls=0.0321
+[2026-02-08 13:23:57,260] INFO - Train epoch=1 step=12340/301147 loss=0.0786 seg=0.0389 cls=0.0398
+[2026-02-08 13:23:58,305] INFO - Train epoch=1 step=12360/301147 loss=0.0415 seg=0.0068 cls=0.0347
+[2026-02-08 13:23:59,306] INFO - Train epoch=1 step=12380/301147 loss=0.4520 seg=0.1909 cls=0.2611
+[2026-02-08 13:24:00,267] INFO - Train epoch=1 step=12400/301147 loss=0.0410 seg=0.0106 cls=0.0303
+[2026-02-08 13:24:01,570] INFO - Train epoch=1 step=12420/301147 loss=0.4386 seg=0.1637 cls=0.2749
+[2026-02-08 13:24:02,972] INFO - Train epoch=1 step=12440/301147 loss=0.0350 seg=0.0073 cls=0.0277
+[2026-02-08 13:24:03,938] INFO - Train epoch=1 step=12460/301147 loss=0.4027 seg=0.1618 cls=0.2409
+[2026-02-08 13:24:04,859] INFO - Train epoch=1 step=12480/301147 loss=0.6131 seg=0.1485 cls=0.4646
+[2026-02-08 13:24:05,809] INFO - Train epoch=1 step=12500/301147 loss=0.0449 seg=0.0131 cls=0.0318
+[2026-02-08 13:24:06,787] INFO - Train epoch=1 step=12520/301147 loss=0.0429 seg=0.0089 cls=0.0339
+[2026-02-08 13:24:07,773] INFO - Train epoch=1 step=12540/301147 loss=0.7270 seg=0.2552 cls=0.4718
+[2026-02-08 13:24:08,714] INFO - Train epoch=1 step=12560/301147 loss=0.4651 seg=0.2764 cls=0.1887
+[2026-02-08 13:24:09,667] INFO - Train epoch=1 step=12580/301147 loss=0.0711 seg=0.0416 cls=0.0295
+[2026-02-08 13:24:10,458] INFO - Train epoch=1 step=12600/301147 loss=0.0859 seg=0.0567 cls=0.0292
+[2026-02-08 13:24:11,363] INFO - Train epoch=1 step=12620/301147 loss=0.2553 seg=0.0182 cls=0.2370
+[2026-02-08 13:24:12,363] INFO - Train epoch=1 step=12640/301147 loss=0.7051 seg=0.2710 cls=0.4341
+[2026-02-08 13:24:13,323] INFO - Train epoch=1 step=12660/301147 loss=0.4467 seg=0.2246 cls=0.2221
+[2026-02-08 13:24:14,286] INFO - Train epoch=1 step=12680/301147 loss=0.2216 seg=0.0082 cls=0.2134
+[2026-02-08 13:24:15,247] INFO - Train epoch=1 step=12700/301147 loss=0.0388 seg=0.0098 cls=0.0290
+[2026-02-08 13:24:16,219] INFO - Train epoch=1 step=12720/301147 loss=0.3686 seg=0.1265 cls=0.2421
+[2026-02-08 13:24:17,012] INFO - Train epoch=1 step=12740/301147 loss=0.4322 seg=0.1772 cls=0.2550
+[2026-02-08 13:24:17,808] INFO - Train epoch=1 step=12760/301147 loss=0.0368 seg=0.0082 cls=0.0286
+[2026-02-08 13:24:18,673] INFO - Train epoch=1 step=12780/301147 loss=0.0344 seg=0.0100 cls=0.0244
+[2026-02-08 13:24:19,560] INFO - Train epoch=1 step=12800/301147 loss=0.2519 seg=0.0093 cls=0.2426
+[2026-02-08 13:24:20,424] INFO - Train epoch=1 step=12820/301147 loss=0.1215 seg=0.0437 cls=0.0778
+[2026-02-08 13:24:21,308] INFO - Train epoch=1 step=12840/301147 loss=0.0505 seg=0.0088 cls=0.0418
+[2026-02-08 13:24:22,328] INFO - Train epoch=1 step=12860/301147 loss=0.0344 seg=0.0086 cls=0.0258
+[2026-02-08 13:24:23,308] INFO - Train epoch=1 step=12880/301147 loss=0.0848 seg=0.0569 cls=0.0279
+[2026-02-08 13:24:24,313] INFO - Train epoch=1 step=12900/301147 loss=0.0652 seg=0.0403 cls=0.0249
+[2026-02-08 13:24:25,249] INFO - Train epoch=1 step=12920/301147 loss=0.0663 seg=0.0412 cls=0.0251
+[2026-02-08 13:24:26,220] INFO - Train epoch=1 step=12940/301147 loss=0.1000 seg=0.0703 cls=0.0297
+[2026-02-08 13:24:27,178] INFO - Train epoch=1 step=12960/301147 loss=0.0586 seg=0.0093 cls=0.0493
+[2026-02-08 13:24:28,131] INFO - Train epoch=1 step=12980/301147 loss=0.3795 seg=0.1433 cls=0.2362
+[2026-02-08 13:24:29,146] INFO - Train epoch=1 step=13000/301147 loss=0.5295 seg=0.2105 cls=0.3190
+[2026-02-08 13:24:30,135] INFO - Train epoch=1 step=13020/301147 loss=0.0478 seg=0.0106 cls=0.0373
+[2026-02-08 13:24:31,101] INFO - Train epoch=1 step=13040/301147 loss=0.0684 seg=0.0409 cls=0.0275
+[2026-02-08 13:24:32,056] INFO - Train epoch=1 step=13060/301147 loss=0.0364 seg=0.0106 cls=0.0258
+[2026-02-08 13:24:33,036] INFO - Train epoch=1 step=13080/301147 loss=0.0362 seg=0.0078 cls=0.0284
+[2026-02-08 13:24:34,016] INFO - Train epoch=1 step=13100/301147 loss=0.0484 seg=0.0103 cls=0.0381
+[2026-02-08 13:24:34,974] INFO - Train epoch=1 step=13120/301147 loss=0.0578 seg=0.0122 cls=0.0456
+[2026-02-08 13:24:36,010] INFO - Train epoch=1 step=13140/301147 loss=0.0503 seg=0.0103 cls=0.0401
+[2026-02-08 13:24:36,980] INFO - Train epoch=1 step=13160/301147 loss=0.0545 seg=0.0098 cls=0.0447
+[2026-02-08 13:24:37,977] INFO - Train epoch=1 step=13180/301147 loss=0.4011 seg=0.1592 cls=0.2419
+[2026-02-08 13:24:38,978] INFO - Train epoch=1 step=13200/301147 loss=0.0690 seg=0.0391 cls=0.0299
+[2026-02-08 13:24:39,968] INFO - Train epoch=1 step=13220/301147 loss=0.6555 seg=0.1612 cls=0.4943
+[2026-02-08 13:24:40,817] INFO - Train epoch=1 step=13240/301147 loss=0.2458 seg=0.0093 cls=0.2365
+[2026-02-08 13:24:41,831] INFO - Train epoch=1 step=13260/301147 loss=0.3052 seg=0.1188 cls=0.1864
+[2026-02-08 13:24:42,803] INFO - Train epoch=1 step=13280/301147 loss=0.4249 seg=0.1626 cls=0.2623
+[2026-02-08 13:24:43,755] INFO - Train epoch=1 step=13300/301147 loss=0.2093 seg=0.0111 cls=0.1982
+[2026-02-08 13:24:44,778] INFO - Train epoch=1 step=13320/301147 loss=0.0326 seg=0.0080 cls=0.0247
+[2026-02-08 13:24:45,785] INFO - Train epoch=1 step=13340/301147 loss=0.5650 seg=0.1566 cls=0.4083
+[2026-02-08 13:24:46,843] INFO - Train epoch=1 step=13360/301147 loss=0.0534 seg=0.0112 cls=0.0421
+[2026-02-08 13:24:47,805] INFO - Train epoch=1 step=13380/301147 loss=0.2373 seg=0.0416 cls=0.1958
+[2026-02-08 13:24:48,790] INFO - Train epoch=1 step=13400/301147 loss=0.0792 seg=0.0487 cls=0.0304
+[2026-02-08 13:24:49,736] INFO - Train epoch=1 step=13420/301147 loss=0.0558 seg=0.0110 cls=0.0448
+[2026-02-08 13:24:50,672] INFO - Train epoch=1 step=13440/301147 loss=0.2660 seg=0.0127 cls=0.2534
+[2026-02-08 13:24:51,620] INFO - Train epoch=1 step=13460/301147 loss=0.3665 seg=0.1368 cls=0.2297
+[2026-02-08 13:24:52,580] INFO - Train epoch=1 step=13480/301147 loss=0.0750 seg=0.0453 cls=0.0297
+[2026-02-08 13:24:53,532] INFO - Train epoch=1 step=13500/301147 loss=0.5212 seg=0.1368 cls=0.3844
+[2026-02-08 13:24:54,484] INFO - Train epoch=1 step=13520/301147 loss=0.4979 seg=0.1213 cls=0.3766
+[2026-02-08 13:24:55,500] INFO - Train epoch=1 step=13540/301147 loss=0.2569 seg=0.0409 cls=0.2160

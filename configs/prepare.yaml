@@ -1,7 +1,8 @@
 prepare:
-  slides_dir: 'D:\pathology-multitask-project\camelyon16\images'
-  masks_dir: 'D:\pathology-multitask-project\camelyon16\masks'
-  annotations_dir: null
+  slides_dir: '/root/autodl-tmp/pathology-multitask-project/data/camelyon16/images'
+  masks_dir: '/root/autodl-tmp/pathology-multitask-project/data/camelyon16/masks'
+  # 开启 XML 标注读取（病灶多边形、可忽略区、几何统计都依赖它）
+  annotations_dir: '/root/autodl-tmp/pathology-multitask-project/data/camelyon16/annotations'
   manifest_path: data/processed/patch_manifest.csv
   patch_level: 0
   patch_size: 256
@@ -13,6 +14,23 @@ prepare:
   neg_keep_prob: 1.0
   seed: 42
   groups: Tumor
+  # 可忽略区组：与该组重叠超过阈值的 patch 会被剔除
+  ignore_groups: Exclusion
+  ignore_overlap_threshold: 0.05
+  # 开启几何统计写入 slide manifest（面积、占比、周长）
+  enable_geometry_stats: true
+  # train/val 中仅 tumor slide 应用 XML 规则（normal 走原逻辑）
+  apply_xml_rules_for_tumor_only: true
+  # manifest 内部抽样策略（与训练期几何重采样不是同一层）
+  sampling_mode: stratified_random
+  target_pos_ratio: 0.5
   max_patches_per_slide: null
   mask_suffix: _mask.tif
-  prefer_masks: true
+  prefer_masks: false
+  progress_interval: 2000
+  mask_level: null
+  mask_max_size: null
+  tissue_max_size: 4096
+  coords_out_dir: data/processed/coords
+  slide_manifest_path: data/processed/manifest_slides.csv
+  write_patch_manifest: false
